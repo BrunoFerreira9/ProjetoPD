@@ -1,16 +1,16 @@
 package tp_cliente;
 
 public class Musica {
-    
+    static int contaMusicas=1;
     String nome;
     String autor;
     String album;
     int ano;
     double duracao ;
     String genero;
-    String ficheiro;
-    boolean eliminada;
+    String ficheiro;  
     int idUserMusica;
+    int idMusica;
     
     public Musica(String nome,String autor,String album,int ano,double duracao,String genero,String ficheiro,int idUser){
         this.nome = nome;
@@ -20,8 +20,9 @@ public class Musica {
         this.duracao = duracao;
         this.genero = genero;
         this.ficheiro = ficheiro;
-        this.eliminada = false;
+       
         this.idUserMusica = idUser;
+        idMusica = contaMusicas++;
     }
     
     //------GETS------
@@ -31,8 +32,7 @@ public class Musica {
     public String getGenero(){return genero;}
     public String getFicheiro(){return ficheiro;}
     public int getAno(){return ano;}
-    public double getDuracao(){return duracao;}
-    public boolean getEliminada(){return eliminada;}
+    public double getDuracao(){return duracao;}   
     public int getIdUserMusica(){return idUserMusica;} 
 
     //---------SETS---------
@@ -43,7 +43,7 @@ public class Musica {
     public void setFicheiro(String value){ ficheiro=value;}
     public void setAno(int value){ano=value;}
     public void setDuracao(double value){ duracao=value;}
-    public void setEliminado(){eliminada=true;}
+    
     
     @Override
     public String toString(){

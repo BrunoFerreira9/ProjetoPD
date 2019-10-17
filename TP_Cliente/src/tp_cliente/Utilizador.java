@@ -10,14 +10,23 @@ public class Utilizador implements Serializable{
     String password;
     String nome;
     int idUtilizador;
-
+    boolean ativo;
+    
     public Utilizador(String username, String password, String nome) {
         this.username = username;
         this.password = password;
         this.nome = nome;
         idUtilizador = contaUsers++;
+        ativo = false;
     }
 
+    public boolean isAtivo(){return ativo;}
+    public void setAtivo(){
+        if(ativo)
+            ativo=false;
+        else
+            ativo=true;
+    }
     public String getNome() {
         return nome;
     }

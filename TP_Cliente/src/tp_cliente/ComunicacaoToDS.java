@@ -6,10 +6,9 @@ public class ComunicacaoToDS {
     
     //recebe o ip e porto do servidor a que ligam
      String endereco;
-     int porto;
      
-     public ComunicacaoToDS(String endereco, int porto) {
+     
+     public ComunicacaoToDS(String endereco) {
         this.endereco = endereco;
-        this.porto = porto;      
-    }
+     }
 }
