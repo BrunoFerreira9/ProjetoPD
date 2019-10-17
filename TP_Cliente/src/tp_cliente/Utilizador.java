@@ -5,12 +5,12 @@ import java.io.Serializable;
 
 public class Utilizador implements Serializable{
    
-    static int contaUsers = 1;
-    String username;
-    String password;
-    String nome;
-    int idUtilizador;
-    boolean ativo;
+    private static int contaUsers = 1;
+    private final String username;
+    private final String password;
+    private final String nome;
+    private final int idUtilizador;
+    private boolean ativo;
     
     public Utilizador(String username, String password, String nome) {
         this.username = username;
@@ -21,11 +21,9 @@ public class Utilizador implements Serializable{
     }
 
     public boolean isAtivo(){return ativo;}
+    
     public void setAtivo(){
-        if(ativo)
-            ativo=false;
-        else
-            ativo=true;
+        ativo = !ativo;
     }
     public String getNome() {
         return nome;

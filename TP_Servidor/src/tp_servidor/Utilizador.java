@@ -6,10 +6,10 @@ import java.io.Serializable;
 public class Utilizador implements Serializable{
    
     static int contaUsers = 1;
-    private String username;
-    private String password;
-    private String nome;
-    private int idUtilizador;
+    private final String username;
+    private final String password;
+    private final String nome;
+    private final int idUtilizador;
     private boolean ativo;
     
     public Utilizador(String username, String password, String nome) {
@@ -25,10 +25,7 @@ public class Utilizador implements Serializable{
     }
     
     public void setAtivo(){
-        if(ativo)
-            ativo=false;
-        else
-            ativo=true;
+        ativo = !ativo;
     }
     
     public String getNome() {
