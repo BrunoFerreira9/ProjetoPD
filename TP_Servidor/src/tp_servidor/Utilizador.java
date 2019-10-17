@@ -6,11 +6,11 @@ import java.io.Serializable;
 public class Utilizador implements Serializable{
    
     static int contaUsers = 1;
-    String username;
-    String password;
-    String nome;
-    int idUtilizador;
-    boolean ativo;
+    private String username;
+    private String password;
+    private String nome;
+    private int idUtilizador;
+    private boolean ativo;
     
     public Utilizador(String username, String password, String nome) {
         this.username = username;
@@ -20,13 +20,17 @@ public class Utilizador implements Serializable{
         ativo = false;
     }
 
-    public boolean isAtivo(){return ativo;}
+    public boolean isAtivo() {
+        return ativo;
+    }
+    
     public void setAtivo(){
         if(ativo)
             ativo=false;
         else
             ativo=true;
     }
+    
     public String getNome() {
         return nome;
     }
@@ -38,5 +42,8 @@ public class Utilizador implements Serializable{
     public String getPassword() {
         return password;
     }
-    public int getIdUser(){return idUtilizador;}
+    
+    public int getIdUser(){
+        return idUtilizador;
+    }
 }

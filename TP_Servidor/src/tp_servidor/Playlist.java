@@ -5,11 +5,11 @@ import java.util.List;
  
 public class Playlist {
    
-    String nome;
-    List<Musica> listaMusicas;   
-    int idUserPlaylist;
-    static int contaPlaylist = 1;
-    int idPlaylist;
+    private String nome;
+    private List<Musica> listaMusicas;   
+    private int idUserPlaylist;
+    private static int contaPlaylist = 1;
+    private int idPlaylist;
 
     public Playlist(String nome, List<Musica> lista,int idUserPlaylist){
         this.nome=nome;

@@ -2,15 +2,15 @@ package tp_servidor;
 
 public class Musica {
     static int contaMusicas=1;
-    String nome;
-    String autor;
-    String album;
-    int ano;
-    double duracao ;
-    String genero;
-    String ficheiro;  
-    int idUserMusica;
-    int idMusica;
+    private String nome;
+    private String autor;
+    private String album;
+    private int ano;
+    private double duracao;
+    private String genero;
+    private String ficheiro;  
+    private int idUserMusica;
+    private int idMusica;
     
     public Musica(String nome,String autor,String album,int ano,double duracao,String genero,String ficheiro,int idUser){
         this.nome = nome;
