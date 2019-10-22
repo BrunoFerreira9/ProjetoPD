@@ -3,7 +3,7 @@ package tp_cliente;
 
 import java.util.Observable;
 
-public class ComunicacaoToServidor extends Observable {
+public class ComunicacaoToServidor extends Observable implements InterfaceGestao {
     
     
     //ligacao TCP com o servidor
