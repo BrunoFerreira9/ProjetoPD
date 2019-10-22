@@ -1,9 +1,19 @@
 package tp_servidor;
 
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+
 public class TP_Servidor {
 
     public static void main(String[] args) {
-        // TODO code application logic here
+        
+         LigacaoToBD ligacao = new LigacaoToBD("localhost");
+
+         ligacao.criarLigacaoBD();
+         
+        
+        
+        }
     }
     
-}
+

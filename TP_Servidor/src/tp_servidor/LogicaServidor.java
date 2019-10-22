@@ -5,10 +5,13 @@
  */
 package tp_servidor;
 
+import java.util.Observable;
+
 /**
  *
  * @author Bruno Ferreira
  */
-public class LogicaServidor implements IServer{
+public class LogicaServidor extends Observable implements InterfaceGestao{
+
     
 }

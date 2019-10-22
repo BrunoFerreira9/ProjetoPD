@@ -11,6 +11,8 @@ public class Utilizador implements Serializable{
     private final String nome;
     private final int idUtilizador;
     private boolean ativo;
+   
+    
     
     public Utilizador(String username, String password, String nome) {
         this.username = username;
