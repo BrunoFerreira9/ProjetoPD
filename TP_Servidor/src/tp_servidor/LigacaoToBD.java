@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 public class LigacaoToBD {
         
     static final String NOME_BD = "db_pd1920";
-    String ip;
+    private String ip;
     static final String USER_BD = "tp_pd1920";
     static final String PASS_USER_BD = "pd1920";
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
