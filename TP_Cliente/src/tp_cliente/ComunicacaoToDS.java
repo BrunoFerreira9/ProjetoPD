@@ -21,7 +21,7 @@ public class ComunicacaoToDS {
     
     //mensagem a enviar
     byte[] data = new byte[128];
-    private String dados = "TIME";
+    private String dados = "Cliente";
     
     //recebe o ip e porto do servidor a que ligam
     private int portoServer;
@@ -32,7 +32,7 @@ public class ComunicacaoToDS {
         this.endereco = endereco;
      }
      
-    public void inicializaUDP() {
+    public void inicializaUDP() throws IOException {
         
         try{
             addr = InetAddress.getByName(endereco);
@@ -41,7 +41,12 @@ public class ComunicacaoToDS {
             
             packet = new DatagramPacket( data, data.length,addr,portoDS);
             
-            
+            socketUDP.send(packet);
+            byte[] recbuf = new byte[BUFSIZE]; 
+            DatagramPacket receivePacket=new DatagramPacket(recbuf,BUFSIZE);
+            socketUDP.receive(packet);
+               
+        System.out.println(new String(recbuf).toString());
            
         }catch (UnknownHostException e){
             System.err.println ("Unable to resolve host");
@@ -49,18 +54,7 @@ public class ComunicacaoToDS {
             Logger.getLogger(ComunicacaoToDS.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void enviaMensagem() throws IOException{
-         socketUDP.send(packet);
-    }
-    
-    public void esperaResposta() throws IOException{
-        byte[] recbuf = new byte[BUFSIZE]; 
-        DatagramPacket receivePacket=new DatagramPacket(recbuf,BUFSIZE);
-        socketUDP.receive(packet);
-               
-        System.out.println(new String(recbuf).toString());
-    }
+   
     
     public String getIpServer(){return ipServer;}
     public int getPortoServer(){return portoServer;}

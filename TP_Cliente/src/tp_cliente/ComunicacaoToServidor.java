@@ -1,9 +1,17 @@
 package tp_cliente;
 
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Observable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ComunicacaoToServidor extends Observable implements InterfaceGestao {
     
@@ -13,6 +21,12 @@ public class ComunicacaoToServidor extends Observable implements InterfaceGestao
     Socket socketTCP ;
     String endereco;
     int porto;
+    
+    ObjectInputStream in = null;
+    ObjectOutputStream out = null;
+    
+    String resposta;
+    String pedido;
     
     public ComunicacaoToServidor(String endereco, int porto) {
         this.endereco = endereco;
@@ -27,5 +41,56 @@ public class ComunicacaoToServidor extends Observable implements InterfaceGestao
         } catch(IOException e){
             System.out.println("Ocorreu um erro no acesso ao socket"+e);
         }
+    }
+    
+    @Override
+    public boolean efetuaRegisto(Utilizador user) {
+       
+        try {          
+
+            out = new ObjectOutputStream(socketTCP.getOutputStream());
+
+            pedido = "tipo | registo ; nome | "+user.getNome() +
+                    "; username | "+user.getUsername() +" ;password | "+ user.getPassword()+" \n";
+            out.writeObject(pedido);
+            out.flush();
+            out.reset();
+
+            in = new ObjectInputStream(socketTCP.getInputStream());
+           
+            resposta = (String) in.readObject();
+                               
+        } catch (IOException ex) {
+            Logger.getLogger(TP_Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ComunicacaoToServidor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean efetuaLogin(Utilizador user) {
+       
+        try {          
+
+            out = new ObjectOutputStream(socketTCP.getOutputStream());
+
+            pedido = "tipo | login ; username | "+user.getUsername() +" ;password | "+ user.getPassword()+" \n";
+            out.writeObject(pedido);
+            out.flush();
+            out.reset();
+
+            in = new ObjectInputStream(socketTCP.getInputStream());
+         
+            resposta = (String) in.readObject();
+          
+        } catch (IOException ex) {
+            Logger.getLogger(TP_Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ComunicacaoToServidor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return true;
     }
 }
