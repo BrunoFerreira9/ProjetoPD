@@ -21,7 +21,7 @@ public class ComunicacaoToDS {
     
     //mensagem a enviar
     byte[] data = new byte[128];
-    private String dados = "server";
+    private String dados = "tipo | Servidor";
     
     //recebe o ip e porto do servidor a que ligam
     private int portoServer;

@@ -6,6 +6,8 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static tp_cliente.ConstantesCliente.BUFSIZE;
@@ -21,7 +23,7 @@ public class ComunicacaoToDS {
     
     //mensagem a enviar
     byte[] data = new byte[128];
-    private String dados = "Cliente";
+    private String dados = "tipo | Cliente";
     
     //recebe o ip e porto do servidor a que ligam
     private int portoServer;
@@ -33,7 +35,8 @@ public class ComunicacaoToDS {
      }
      
     public void inicializaUDP() throws IOException {
-        
+        String resposta;
+        HashMap <String,String> message;
         try{
             addr = InetAddress.getByName(endereco);
             data= dados.getBytes();
@@ -45,8 +48,20 @@ public class ComunicacaoToDS {
             byte[] recbuf = new byte[BUFSIZE]; 
             DatagramPacket receivePacket=new DatagramPacket(recbuf,BUFSIZE);
             socketUDP.receive(packet);
-               
-        System.out.println(new String(recbuf).toString());
+            resposta = new String(receivePacket.getData(),0,receivePacket.getLength());
+            message = ResolveMessages(resposta);
+            switch(message.get("tipo")){
+                case "resposta":
+                                if(message.containsValue("sim")){
+                                    ipServer = message.get("ip");
+                                    portoServer = Integer.parseInt(message.get("porto"));
+                                }
+                                else{
+                                    System.out.println(message.get("msg"));
+                                }
+                                break;
+            }
+            
            
         }catch (UnknownHostException e){
             System.err.println ("Unable to resolve host");
@@ -59,6 +74,17 @@ public class ComunicacaoToDS {
     public String getIpServer(){return ipServer;}
     public int getPortoServer(){return portoServer;}
     
-     
+     public static HashMap<String,String> ResolveMessages(String message){
+        StringTokenizer t,tokens = new StringTokenizer(message,";");
+        String key,val;
+        HashMap<String,String> messages = new HashMap<>();
+        while (tokens.hasMoreElements()) {
+            t = new StringTokenizer(tokens.nextElement().toString()," | ");  
+            key = t.nextElement().toString();
+            val = t.nextElement().toString();
+            messages.put(key, val);
+        }
+        return messages;
+    }
      
 }
