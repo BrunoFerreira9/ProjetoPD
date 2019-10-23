@@ -32,7 +32,7 @@ public class ComunicacaoToDS {
         this.endereco = endereco;
      }
      
-    public void inicializaUDP() {
+    public void inicializaUDP() throws IOException {
         
         try{
             addr = InetAddress.getByName(endereco);
@@ -40,26 +40,20 @@ public class ComunicacaoToDS {
             socketUDP = new DatagramSocket();
             
             packet = new DatagramPacket( data, data.length,addr,portoDS);
-            
-            
            
+            socketUDP.send(packet);
+            
+            byte[] recbuf = new byte[BUFSIZE]; 
+            DatagramPacket receivePacket=new DatagramPacket(recbuf,BUFSIZE);
+            socketUDP.receive(packet);
+               
+            System.out.println(new String(recbuf).toString());
+            
         }catch (UnknownHostException e){
             System.err.println ("Unable to resolve host");
         } catch (SocketException ex) {
             Logger.getLogger(ComunicacaoToDS.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-    
-    public void enviaMensagem() throws IOException{
-         socketUDP.send(packet);
-    }
-    
-    public void esperaResposta() throws IOException{
-        byte[] recbuf = new byte[BUFSIZE]; 
-        DatagramPacket receivePacket=new DatagramPacket(recbuf,BUFSIZE);
-        socketUDP.receive(packet);
-               
-        System.out.println(new String(recbuf).toString());
     }
     
     public String getIpServer(){return ipServer;}

@@ -16,19 +16,9 @@ public class TP_Servidor {
         ipDS = args[0];
         ipMaquinaBD = args[1];
         
+        LogicaServidor servidores = new LogicaServidor(ipDS,ipMaquinaBD);
         
-         
-        ComunicacaoToDS cds = new ComunicacaoToDS(ipDS);
-        
-        cds.inicializaUDP();
-        
-        cds.enviaMensagem();
-        cds.esperaResposta();
-        
-        
-        LigacaoToBD ligacao = new LigacaoToBD("ipMaquinaBD");
-        ligacao.criarLigacaoBD();
-        
+      
         }
     }
     
