@@ -45,9 +45,8 @@ public class ComunicacaoToDS {
             
             byte[] recbuf = new byte[BUFSIZE]; 
             DatagramPacket receivePacket=new DatagramPacket(recbuf,BUFSIZE);
-            socketUDP.receive(packet);
-               
-            System.out.println(new String(recbuf).toString());
+            socketUDP.receive(receivePacket);
+            System.out.println(new String(receivePacket.getData(),0,receivePacket.getLength()));
             
         }catch (UnknownHostException e){
             System.err.println ("Unable to resolve host");
