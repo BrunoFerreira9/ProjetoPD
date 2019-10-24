@@ -15,13 +15,12 @@ import java.util.logging.Logger;
 public class TP_DS {
 
     public static void main(String[] args){
-        //HashMap <String,String> message1 = ResolveMessages("tipo | login ; username | pd_user ; password | pd_1234");
-        //HashMap <String,String> message2 =ResolveMessages("tipo | resposta ; sucesso | sim ; msg | Autenticação realizada com sucesso.");
-       
+        HashMap <String,String> message1 = ResolveMessages("tipo | login ; username | pd_user ; password | pd_1234");
+        HashMap <String,String> message2 =ResolveMessages("tipo | resposta ; sucesso | sim ; msg | Autenticação realizada com sucesso.");
         ComunicacaoToCliente ComToCli = new ComunicacaoToCliente();
         ComunicacaoToServidor ComToSer = new ComunicacaoToServidor();
         byte []info = new byte[128];
-        String dados,resposta;
+        String dados,resposta = null;
         HashMap <String,String> message;
         List<Servidor> listservers = new ArrayList<>();
         int numClientes = 0,numbasedados = 0;
@@ -37,14 +36,15 @@ public class TP_DS {
                 message = ResolveMessages(dados);
                 System.out.println("Recebi "+dados+" de "+pkt.getAddress()+" porto: "+pkt.getPort());
                 switch(message.get("tipo")){
-                    case "Servidor": listservers.add(new Servidor(pkt.getAddress().toString(),pkt.getPort(),true, (listservers.isEmpty()))); 
-                                    resposta = "tipo | resposta ; sucesso | sim ; numbd | "+numbasedados;   
-                                    numbasedados++;
-                                    pkt.setData(resposta.getBytes());
-                                    pkt.setLength(resposta.length());
-                                    sock.send(pkt);
+                    case "Servidor":
+                                    System.out.print("Servidor");
+                                    listservers.add(new Servidor(pkt.getAddress().getHostAddress(),pkt.getPort(),true, (listservers.isEmpty()))); 
+                                    resposta = "tipo | resposta ; sucesso | sim ; numbd | "+numbasedados++;
+                                  
                         break; 
-                    case "Cliente": if(numClientes < listservers.size()){
+                    case "Cliente":
+                                    System.out.print("Cliente");
+                                    if(numClientes < listservers.size()){
                                         Servidor aux = listservers.get(listservers.size()-1);
                                         resposta = "tipo | resposta ; sucesso | sim ; ip | "+aux.getIp()+" ; porto | "+aux.getPorto();
                                         numClientes++;
@@ -52,11 +52,13 @@ public class TP_DS {
                                     else{
                                         resposta = "tipo | resposta ; sucesso | não ; msg | Nenhum servidor disponivel";    
                                     }
-                                    pkt.setData(resposta.getBytes());
-                                    pkt.setLength(resposta.length());
-                                    sock.send(pkt);
+                                   
                         break;
                 }
+                System.out.println(resposta);
+                pkt.setData(resposta.getBytes());
+                pkt.setLength(resposta.length());
+                sock.send(pkt);
             }
         }catch(SocketException e) {
             System.out.println ("Error "+e);
