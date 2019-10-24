@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 public class TP_DS {
 
     public static void main(String[] args){
+        
         HashMap <String,String> message1 = ResolveMessages("tipo | login ; username | pd_user ; password | pd_1234");
         HashMap <String,String> message2 =ResolveMessages("tipo | resposta ; sucesso | sim ; msg | Autenticação realizada com sucesso.");
         ComunicacaoToCliente ComToCli = new ComunicacaoToCliente();
