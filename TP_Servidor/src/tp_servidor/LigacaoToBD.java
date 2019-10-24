@@ -21,15 +21,17 @@ public class LigacaoToBD {
     
     public LigacaoToBD(String ip) {
         this.ip=ip;
+       
     }
     
     public boolean criarLigacaoBD()
-    {
+    {        
         try {
+           
             Class.forName(JDBC_DRIVER);
             
             System.out.println("Ligando à base de dados ...\n");
-            conn_ligacao = DriverManager.getConnection("jdbc:mysql://"+ip+"/"+NOME_BD+"?useTimezone=true&serverTimezone=UTC", USER_BD, PASS_USER_BD);
+            conn_ligacao = DriverManager.getConnection("jdbc:mysql://localhost/db_pd1920", USER_BD, PASS_USER_BD);
             
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(LigacaoToBD.class.getName()).log(Level.SEVERE, null, ex);

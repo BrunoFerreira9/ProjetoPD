@@ -45,10 +45,15 @@ public class ComunicacaoToDS {
             packet = new DatagramPacket( data, data.length,addr,portoDS);
             
             socketUDP.send(packet);
+            
             byte[] recbuf = new byte[BUFSIZE]; 
             DatagramPacket receivePacket=new DatagramPacket(recbuf,BUFSIZE);
-            socketUDP.receive(packet);
+            socketUDP.receive(receivePacket);
             resposta = new String(receivePacket.getData(),0,receivePacket.getLength());
+            
+            System.out.println(resposta);
+            
+            
             message = ResolveMessages(resposta);
             switch(message.get("tipo")){
                 case "resposta":

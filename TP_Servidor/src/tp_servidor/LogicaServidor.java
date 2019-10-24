@@ -18,14 +18,18 @@ public class LogicaServidor extends Observable implements InterfaceGestao{
     LigacaoToBD ligacao ;
     LogicaServidor este;
      
-    ComunicacaoToDS cds;             
+    ComunicacaoToDS cds;  
+    ComunicacaoToCliente cc;
                 
-    public LogicaServidor(String ipDS, String ipMaquinaBD  ) throws IOException {       
-        ligacao = new LigacaoToBD(ipMaquinaBD);
-        ligacao.criarLigacaoBD();
+    public LogicaServidor(String ipDS, String ipMaquinaBD  ) throws IOException {  
         este = this;
         cds = new ComunicacaoToDS(ipDS);
+        
         cds.inicializaUDP();
+        
+               
+        //ligacao = new LigacaoToBD(ipMaquinaBD);
+        //ligacao.criarLigacaoBD();
     }
     
     
