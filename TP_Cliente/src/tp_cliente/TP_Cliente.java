@@ -14,7 +14,7 @@ public class TP_Cliente  implements Observer {
         ComunicacaoToDS cds = new ComunicacaoToDS(ipDS);
         
         cds.inicializaUDP();
-                   
+        System.out.println("ip :"+cds.getIpServer()+" porto :"+cds.getPortoServer());           
         ComunicacaoToServidor cs = new ComunicacaoToServidor(cds.getIpServer(),cds.getPortoServer());
         
         cs.inicializaTCP();

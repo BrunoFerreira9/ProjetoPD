@@ -16,8 +16,8 @@ public class TP_DS {
 
     public static void main(String[] args){
         
-        HashMap <String,String> message1 = ResolveMessages("tipo | login ; username | pd_user ; password | pd_1234");
-        HashMap <String,String> message2 =ResolveMessages("tipo | resposta ; sucesso | sim ; msg | Autenticação realizada com sucesso.");
+//        HashMap <String,String> message1 = ResolveMessages("tipo | login ; username | pd_user ; password | pd_1234");
+//        HashMap <String,String> message2 =ResolveMessages("tipo | resposta ; sucesso | sim ; msg | Autenticação realizada com sucesso.");
         ComunicacaoToCliente ComToCli = new ComunicacaoToCliente();
         ComunicacaoToServidor ComToSer = new ComunicacaoToServidor();
         byte []info = new byte[128];
@@ -38,13 +38,13 @@ public class TP_DS {
                 System.out.println("Recebi "+dados+" de "+pkt.getAddress()+" porto: "+pkt.getPort());
                 switch(message.get("tipo")){
                     case "Servidor":
-                                    System.out.print("Servidor");
+                                    System.out.print("Servidor -");
                                     listservers.add(new Servidor(pkt.getAddress().getHostAddress(),pkt.getPort(),true, (listservers.isEmpty()))); 
                                     resposta = "tipo | resposta ; sucesso | sim ; numbd | "+numbasedados++;
                                   
                         break; 
                     case "Cliente":
-                                    System.out.print("Cliente");
+                                    System.out.print("Cliente -");
                                     if(numClientes < listservers.size()){
                                         Servidor aux = listservers.get(listservers.size()-1);
                                         resposta = "tipo | resposta ; sucesso | sim ; ip | "+aux.getIp()+" ; porto | "+aux.getPorto();

@@ -19,6 +19,7 @@ public class ComunicacaoToDS {
     InetAddress addr = null;     
     private String endereco;
     
+    
     //mensagem a enviar
     byte[] data = new byte[128];
     private String dados = "tipo | Servidor";
@@ -38,7 +39,8 @@ public class ComunicacaoToDS {
             addr = InetAddress.getByName(endereco);
             data= dados.getBytes();
             socketUDP = new DatagramSocket();
-            
+            portoServer = socketUDP.getLocalPort();
+            System.out.println("port"+getPortoServer());
             packet = new DatagramPacket( data, data.length,addr,portoDS);
            
             socketUDP.send(packet);
@@ -60,6 +62,8 @@ public class ComunicacaoToDS {
     
     public String getIpServer(){return ipServer;}
     public int getPortoServer(){return portoServer;}
+
+    
     
      
      
