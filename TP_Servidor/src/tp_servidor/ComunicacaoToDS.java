@@ -33,20 +33,24 @@ public class ComunicacaoToDS {
      }
      
     public void inicializaUDP() throws IOException {
-        
+        String resposta ;
         try{
             addr = InetAddress.getByName(endereco);
             data= dados.getBytes();
             socketUDP = new DatagramSocket();
             
             packet = new DatagramPacket( data, data.length,addr,portoDS);
-           
+           System.out.println("3\n");
             socketUDP.send(packet);
             
             byte[] recbuf = new byte[BUFSIZE]; 
             DatagramPacket receivePacket=new DatagramPacket(recbuf,BUFSIZE);
             socketUDP.receive(receivePacket);
-            System.out.println(new String(receivePacket.getData(),0,receivePacket.getLength()));
+            System.out.println("4\n");
+            System.out.println("aqui"+recbuf.length);
+            resposta = new String(receivePacket.getData(),0,receivePacket.getLength());
+            
+            System.out.println(resposta);
             
         }catch (UnknownHostException e){
             System.err.println ("Unable to resolve host");
