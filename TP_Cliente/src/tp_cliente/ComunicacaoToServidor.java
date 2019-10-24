@@ -34,10 +34,20 @@ public class ComunicacaoToServidor extends Observable implements InterfaceGestao
     
     }
     
-    public void inicializaTCP() throws IOException {
+    public void inicializaTCP() throws IOException, ClassNotFoundException {
         try {
             socketTCP = new Socket(endereco,porto);
            
+             in = new ObjectInputStream(socketTCP.getInputStream());
+                
+            // CONNECT A PRINT STREAM 
+             out = new ObjectOutputStream(socketTCP.getOutputStream());
+            String msg = "Cliente a ligar";   
+            out.writeObject(msg);
+            out.flush();
+                
+            System.out.print((String)in.readObject());
+                
         } catch(IOException e){
             System.out.println("Ocorreu um erro no acesso ao socket"+e);
         }

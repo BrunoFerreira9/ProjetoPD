@@ -7,21 +7,19 @@ import java.util.Observer;
 
 public class TP_Cliente  implements Observer {
 
-    public static void main(String[] args) throws IOException {
-        // TODO code application logic here
-        
-        //verificar args para receber ip do DS
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+       
         String ipDS = args[0];
         
         ComunicacaoToDS cds = new ComunicacaoToDS(ipDS);
         
         cds.inicializaUDP();
-        
+                   
         ComunicacaoToServidor cs = new ComunicacaoToServidor(cds.getIpServer(),cds.getPortoServer());
         
         cs.inicializaTCP();
         Utilizador xpto = new Utilizador("Bruno","123","Bruno F");
-        cs.efetuaLogin(xpto);
+        //cs.efetuaLogin(xpto);
         
     }
 
