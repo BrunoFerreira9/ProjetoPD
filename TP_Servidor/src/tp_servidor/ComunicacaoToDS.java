@@ -40,14 +40,13 @@ public class ComunicacaoToDS {
             socketUDP = new DatagramSocket();
             
             packet = new DatagramPacket( data, data.length,addr,portoDS);
-           System.out.println("3\n");
+           
             socketUDP.send(packet);
             
             byte[] recbuf = new byte[BUFSIZE]; 
             DatagramPacket receivePacket=new DatagramPacket(recbuf,BUFSIZE);
             socketUDP.receive(receivePacket);
-            System.out.println("4\n");
-            System.out.println("aqui"+recbuf.length);
+            
             resposta = new String(receivePacket.getData(),0,receivePacket.getLength());
             
             System.out.println(resposta);

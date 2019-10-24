@@ -23,19 +23,18 @@ public class TP_Servidor {
         
         LogicaServidor servidores = new LogicaServidor(ipDS,ipMaquinaBD);
         BufferedReader in  = null;
-       
         OutputStream out = null;
-        Socket clientSocket ;
-        ServerSocket  ss = new ServerSocket(6001);
+        
+        Socket clientSocket;
+        ServerSocket ss = new ServerSocket();
         
         while(true){
-            
+            System.out.print("11");
             clientSocket = ss.accept();            
             in = new BufferedReader(new InputStreamReader( clientSocket.getInputStream())); 
             out = clientSocket.getOutputStream();
             String resp = in.readLine();
             System.out.print(resp);
-         
         }
         
         }
