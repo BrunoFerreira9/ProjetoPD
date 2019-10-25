@@ -28,8 +28,8 @@ public class LogicaServidor extends Observable implements InterfaceGestao{
         cds.inicializaUDP();
         
                
-        //ligacao = new LigacaoToBD(ipMaquinaBD);
-        //ligacao.criarLigacaoBD();
+        ligacao = new LigacaoToBD(ipMaquinaBD);
+        ligacao.criarLigacaoBD();
     }
     
     

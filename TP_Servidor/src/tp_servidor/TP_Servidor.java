@@ -30,16 +30,17 @@ public class TP_Servidor {
         Socket clientSocket;
         ServerSocket ss = new ServerSocket(servidores.cds.getPortoServer());
         System.out.println("ServerSocket no porto: "+ss.getLocalPort());
-
-        System.out.println("Antes de aceitar o cliente!");
-        clientSocket = ss.accept();            
-        System.out.println("Estou à espera ....");
-        System.out.println("Cliente: "+clientSocket.getInetAddress()+" no porto: "+clientSocket.getPort());
-        out = new ObjectOutputStream(clientSocket.getOutputStream()); 
-        in = new ObjectInputStream(clientSocket.getInputStream());
-        //out.flush();
-        System.out.print((String) in.readObject());
-        clientSocket.close();
+        while(true){
+            System.out.println("Antes de aceitar o cliente!");
+            clientSocket = ss.accept();            
+            System.out.println("Estou à espera ....");
+            System.out.println("Cliente: "+clientSocket.getInetAddress()+" no porto: "+clientSocket.getPort());
+            out = new ObjectOutputStream(clientSocket.getOutputStream()); 
+            in = new ObjectInputStream(clientSocket.getInputStream());
+            //out.flush();
+            System.out.print((String) in.readObject());
+        }
+      //  clientSocket.close();
 
     }
         
