@@ -22,8 +22,8 @@ public class ComunicacaoToServidor extends Observable implements InterfaceGestao
     String endereco;
     int porto;
     
-    ObjectInputStream in = null;
-    ObjectOutputStream out = null;
+    BufferedReader reader = null;
+    PrintWriter out = null;
     
     String resposta;
     String pedido;
@@ -37,17 +37,12 @@ public class ComunicacaoToServidor extends Observable implements InterfaceGestao
     public void inicializaTCP() throws IOException, ClassNotFoundException {
         try {
             socketTCP = new Socket(endereco,porto);
-           
-             in = new ObjectInputStream(socketTCP.getInputStream());
-                
-            // CONNECT A PRINT STREAM 
-             out = new ObjectOutputStream(socketTCP.getOutputStream());
+            reader  = new BufferedReader(new InputStreamReader(socketTCP.getInputStream()));
+            out = new PrintWriter(socketTCP.getOutputStream());
             String msg = "Cliente a ligar";   
-            out.writeObject(msg);
+            out.println(msg);
             out.flush();
-                
-            System.out.print((String)in.readObject());
-                
+            System.out.println("Resultado: "+ reader.readLine());
         } catch(IOException e){
             System.out.println("Ocorreu um erro no acesso ao socket"+e);
         }
@@ -56,49 +51,34 @@ public class ComunicacaoToServidor extends Observable implements InterfaceGestao
     @Override
     public boolean efetuaRegisto(Utilizador user) {
        
-        try {          
-
-            out = new ObjectOutputStream(socketTCP.getOutputStream());
-
+        try {
+            out = new PrintWriter(socketTCP.getOutputStream());
             pedido = "tipo | registo ; nome | "+user.getNome() +
                     "; username | "+user.getUsername() +" ;password | "+ user.getPassword()+" \n";
-            out.writeObject(pedido);
+            out.println(pedido);
             out.flush();
-            out.reset();
-
-            in = new ObjectInputStream(socketTCP.getInputStream());
-           
-            resposta = (String) in.readObject();
+            reader = new BufferedReader(new InputStreamReader(socketTCP.getInputStream()));
+            resposta = reader.readLine();
                                
         } catch (IOException ex) {
             Logger.getLogger(TP_Cliente.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ComunicacaoToServidor.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return true;
     }
 
     @Override
     public boolean efetuaLogin(Utilizador user) {
        
-        try {          
-
-            out = new ObjectOutputStream(socketTCP.getOutputStream());
-
+        try {
+            out = new PrintWriter(socketTCP.getOutputStream());
             pedido = "tipo | login ; username | "+user.getUsername() +" ;password | "+ user.getPassword()+" \n";
-            out.writeObject(pedido);
+            out.println(pedido);
             out.flush();
-            out.reset();
-
-            in = new ObjectInputStream(socketTCP.getInputStream());
-         
-            resposta = (String) in.readObject();
+            reader = new BufferedReader(new InputStreamReader(socketTCP.getInputStream()));
+            resposta = reader.readLine();
           
         } catch (IOException ex) {
             Logger.getLogger(TP_Cliente.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ComunicacaoToServidor.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return true;

@@ -3,9 +3,8 @@ package tp_servidor;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -24,8 +23,9 @@ public class TP_Servidor {
         ipMaquinaBD = args[1];
         
         LogicaServidor servidores = new LogicaServidor(ipDS,ipMaquinaBD);
-        ObjectInputStream in = null;
-        ObjectOutputStream out = null;
+        BufferedReader in = null;
+        OutputStream out = null;
+        PrintWriter pout = null;
        
         Socket clientSocket;
         ServerSocket ss = new ServerSocket(servidores.cds.getPortoServer());
@@ -35,10 +35,12 @@ public class TP_Servidor {
             clientSocket = ss.accept();            
             System.out.println("Estou à espera ....");
             System.out.println("Cliente: "+clientSocket.getInetAddress()+" no porto: "+clientSocket.getPort());
-            out = new ObjectOutputStream(clientSocket.getOutputStream()); 
-            in = new ObjectInputStream(clientSocket.getInputStream());
-            //out.flush();
-            System.out.print((String) in.readObject());
+            out = clientSocket.getOutputStream(); 
+            pout = new PrintWriter(out);
+            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            System.out.println("Recebi do Cliente: "+ in.readLine());
+            pout.println("O servidor está te a ouvir");
+            pout.flush();
         }
       //  clientSocket.close();
 
