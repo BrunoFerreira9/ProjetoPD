@@ -1,0 +1,8 @@
+java -cp "D:\LEIGIT\ProjetoPD\TP_Servidor\dist\lib\mysql-connector-java-8.0.18.jar;.\build\classes" tp_servidor.TP_Servidor localhost localhost
+
+
+na pasta \dist
+
+java -jar TP_Servidor.jar localhost localhost
+
+
