@@ -22,6 +22,10 @@ public class Utilizador implements Serializable{
         ativo = false;
     }
 
+    Utilizador(String get, String get0, String get1, String get2) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public boolean isAtivo() {
         return ativo;
     }

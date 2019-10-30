@@ -53,8 +53,7 @@ public class ComunicacaoToServidor extends Observable implements InterfaceGestao
        
         try {
             out = new PrintWriter(socketTCP.getOutputStream());
-            pedido = "tipo | registo ; nome | "+user.getNome() +
-                    "; username | "+user.getUsername() +" ;password | "+ user.getPassword()+" \n";
+            pedido = "tipo | registo ; id | "+user.getIdUser()+ " ; username | "+user.getUsername() +" ; password | "+ user.getPassword()+" ; nome | "+user.getNome() + "\n";
             out.println(pedido);
             out.flush();
             reader = new BufferedReader(new InputStreamReader(socketTCP.getInputStream()));
@@ -82,5 +81,15 @@ public class ComunicacaoToServidor extends Observable implements InterfaceGestao
         }
 
         return true;
+    }
+
+    @Override
+    public boolean trataPedido(String mensagem) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean atualizaMusicas() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

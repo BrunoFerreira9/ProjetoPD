@@ -36,8 +36,8 @@ public class LogicaServidor extends Observable implements InterfaceGestao{
     
     @Override
     public boolean efetuaRegisto(Utilizador user) {
-        String query = "Insert into Utilizador values(\'" + user.getUsername() + "\',\'" + user.getPassword() + "\', \'" + user.getNome() + ");";
-        
+        String query = "Insert into Utilizador values(" + user.getIdUser()+ ",\'"  + user.getUsername() + "\',\'" + user.getPassword() + "\', \'" + user.getNome() + "\',false);";
+        System.out.print(query);
         String resultado = ligacao.executarInsert(query);
         if (resultado == "ERRO" || resultado == "") {
             System.out.println("Erro ao inserir o utilizador na BD\n");
@@ -48,7 +48,7 @@ public class LogicaServidor extends Observable implements InterfaceGestao{
 
     @Override
     public boolean efetuaLogin(Utilizador user) {
-        String query = "Select * from Utilizador where username = \'" + user.getUsername() + "\' and password = \'" + user.getPassword() + "\';";
+        String query = "Select * from Utilizador where username = \'" + user.getUsername() + "\' and password = \'" + user.getPassword() + "\' AND ativo=false;";
 
         String resultado = ligacao.executarSelect(query);
 
