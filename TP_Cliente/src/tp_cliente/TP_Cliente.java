@@ -88,10 +88,10 @@ public class TP_Cliente  implements Observer {
                 case 1:
                      user = dadosUser();
                      
-                     cs.efetuaRegisto(user);
+                     cs.efetuaRegisto(user); break;
                 case 2:
                      user = dadosUser();
-                    cs.efetuaLogin(user);
+                    cs.efetuaLogin(user);break;
                 case 3:break;
 
             }

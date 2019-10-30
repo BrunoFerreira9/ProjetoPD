@@ -36,7 +36,7 @@ public class LogicaServidor extends Observable implements InterfaceGestao{
     
     @Override
     public boolean efetuaRegisto(Utilizador user) {
-        String query = "Insert into Utilizador values(" + user.getIdUser()+ ",\'"  + user.getUsername() + "\',\'" + user.getPassword() + "\', \'" + user.getNome() + "\',false);";
+        String query = "Insert into Utilizador (username, password, nome, ativo)  values(\'"  + user.getUsername() + "\',\'" + user.getPassword() + "\', \'" + user.getNome() + "\',false);";
         System.out.print(query);
         String resultado = ligacao.executarInsert(query);
         if (resultado == "ERRO" || resultado == "") {

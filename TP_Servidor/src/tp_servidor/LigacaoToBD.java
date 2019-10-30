@@ -65,7 +65,7 @@ public class LigacaoToBD {
             ResultSet rs = stmt.executeQuery(query);
 
             while (rs.next()) {
-                s_resposta += rs.getString(1) + "-" + rs.getString(2); //neste caso ainda só é feito um select, será atualizado conforme as necessidades
+                s_resposta += rs.getString(1); //neste caso ainda só é feito um select, será atualizado conforme as necessidades
             }                                              //aparecerem ao longo do programa
 
         }catch(SQLException e){

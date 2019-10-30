@@ -67,7 +67,9 @@ public class TP_Servidor {
                     if(message.get("tipo").equals("registo")){
                                             
                         if(servidores.efetuaRegisto(new Utilizador(message.get("username"),message.get("password"),message.get("nome")))){
-                               pout.println("sucesso");
+                            
+                            int id = Integer.parseInt(servidores.ligacao.executarSelect("Select idUtilizador from utilizador where username = \'" + message.get("username") + "\';"));
+                               pout.println("tipo | resposta ; msg | sucesso ; id | " + id);
                                 pout.flush();
                         }
                     }

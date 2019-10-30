@@ -5,25 +5,25 @@ import java.io.Serializable;
 
 public class Utilizador implements Serializable{
    
-    static int contaUsers = 1;
+   
     private final String username;
     private final String password;
     private final String nome;
-    private final int idUtilizador;
+    private  int idUtilizador;
     private boolean ativo;
    
-    
     
     public Utilizador(String username, String password, String nome) {
         this.username = username;
         this.password = password;
-        this.nome = nome;
-        idUtilizador = contaUsers++;
+        this.nome = nome;        
         ativo = false;
     }
 
-    Utilizador(String get, String get0, String get1, String get2) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int getIdUtilizador(){return idUtilizador;}
+    
+    public void setIdUtilizador(int val){
+        idUtilizador = val;
     }
 
     public boolean isAtivo() {

@@ -53,11 +53,12 @@ public class ComunicacaoToServidor extends Observable implements InterfaceGestao
        
         try {
             out = new PrintWriter(socketTCP.getOutputStream());
-            pedido = "tipo | registo ; id | "+user.getIdUser()+ " ; username | "+user.getUsername() +" ; password | "+ user.getPassword()+" ; nome | "+user.getNome() + "\n";
+            pedido = "tipo | registo ; username | "+user.getUsername() +" ; password | "+ user.getPassword()+" ; nome | "+user.getNome() + "\n";
             out.println(pedido);
             out.flush();
             reader = new BufferedReader(new InputStreamReader(socketTCP.getInputStream()));
             resposta = reader.readLine();
+                        
                                
         } catch (IOException ex) {
             Logger.getLogger(TP_Cliente.class.getName()).log(Level.SEVERE, null, ex);
@@ -75,6 +76,8 @@ public class ComunicacaoToServidor extends Observable implements InterfaceGestao
             out.flush();
             reader = new BufferedReader(new InputStreamReader(socketTCP.getInputStream()));
             resposta = reader.readLine();
+            
+            
           
         } catch (IOException ex) {
             Logger.getLogger(TP_Cliente.class.getName()).log(Level.SEVERE, null, ex);
