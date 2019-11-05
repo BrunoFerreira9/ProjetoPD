@@ -1,6 +1,7 @@
 package tp_cliente;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
@@ -42,19 +43,31 @@ public class TP_Cliente  implements Observer {
         System.out.println("3 - Sair");
     }
     
-     public static Utilizador dadosUser(){
+     public static HashMap<String,String> dadosRegisto(){
         
-          String nome, username, password;
+           HashMap<String,String> registo = new HashMap<>();
+        
           Scanner in = new Scanner(System.in);
           
           System.out.println("username");
-          username= in.nextLine();
+          registo.put("username", in.nextLine());
           System.out.println("password");
-          password= in.nextLine();
+          registo.put("password", in.nextLine());
           System.out.println("nome:");
-          nome = in.nextLine();
+          registo.put("nome", in.nextLine());
+         return registo;
+    }
+     public static HashMap<String,String> dadosLogin(){
+        
+            HashMap<String,String> login = new HashMap<>();
+          Scanner in = new Scanner(System.in);
+          
+          System.out.println("username");
+           login.put("username", in.nextLine());
+          System.out.println("password");
+           login.put("password", in.nextLine());
        
-          return new Utilizador(username,password,nome);
+          return login;
     }
     
     public static void main(String[] args) {
@@ -65,33 +78,28 @@ public class TP_Cliente  implements Observer {
         Scanner in = new Scanner(System.in);
         ComunicacaoToServidor cs = null;
         ComunicacaoToDS cds = null;
-        Utilizador user;
-       
+               
         try{
-             cds = new ComunicacaoToDS(ipDS);
+            cds = new ComunicacaoToDS(ipDS);
             cds.inicializaUDP();
-            //System.out.println("ip :"+cds.getIpServer()+" porto :"+cds.getPortoServer());           
-             cs = new ComunicacaoToServidor(cds.getIpServer(),cds.getPortoServer());
-
+            cs = new ComunicacaoToServidor(cds.getIpServer(),cds.getPortoServer());
             cs.inicializaTCP();
         }catch(IOException e){
              Logger.getLogger(TP_Cliente.class.getName()).log(Level.SEVERE, null, e);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(TP_Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         do{
             apresentaMenuInicial();
             op = in.nextInt();
 
             switch(op){
 
-                case 1:
-                     user = dadosUser();
-                     
-                     cs.efetuaRegisto(user); break;
+                case 1:                       
+                        cs.efetuaRegisto(dadosRegisto()); break;
                 case 2:
-                     user = dadosUser();
-                    cs.efetuaLogin(user);break;
+                        cs.efetuaLogin(dadosLogin());break;
                 case 3:break;
 
             }
@@ -107,6 +115,7 @@ public class TP_Cliente  implements Observer {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+   
    
     
 }

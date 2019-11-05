@@ -1,8 +1,10 @@
 package tp_cliente;
 
+import java.util.HashMap;
+
 public interface InterfaceGestao {
-     public boolean efetuaRegisto(Utilizador user);
-     public boolean efetuaLogin(Utilizador user);
+     public boolean efetuaRegisto(HashMap<String,String> user);
+     public boolean efetuaLogin(HashMap<String,String> user);
      public boolean trataPedido(String mensagem);
      public boolean atualizaMusicas();
      

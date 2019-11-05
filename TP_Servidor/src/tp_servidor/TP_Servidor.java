@@ -29,7 +29,7 @@ public class TP_Servidor {
         LogicaServidor servidores = null;
         ServerSocket ss = null;
         
-        
+         String pedido;
         PrintWriter pout = null;
         BufferedReader in = null;
        
@@ -59,26 +59,35 @@ public class TP_Servidor {
                 pout.flush();
                 while(true){
                 
-                    String pedido = in.readLine();
-                    
-                    HashMap <String,String> message = ResolveMessages(pedido);
-                   
-                    
-                    if(message.get("tipo").equals("registo")){
-                                            
-                        if(servidores.efetuaRegisto(new Utilizador(message.get("username"),message.get("password"),message.get("nome")))){
-                            
-                            int id = Integer.parseInt(servidores.ligacao.executarSelect("Select idUtilizador from utilizador where username = \'" + message.get("username") + "\';"));
-                               pout.println("tipo | resposta ; msg | sucesso ; id | " + id);
+                    try {
+                        pedido = in.readLine();
+                        HashMap <String,String> message = ResolveMessages(pedido);
+
+                        if(message.get("tipo").equals("registo")){
+                            if(servidores.efetuaRegisto(new Utilizador(message.get("username"),message.get("password"),message.get("nome")))){
+                                String q = "Select idUtilizador from utilizador where username = \'" + message.get("username") + "\';";
+                                String id = servidores.ligacao.executarSelect(q);
+                                System.out.print("tipo | resposta ; msg | sucesso ; id | " + id);
+                                pout.println("tipo | resposta ; msg | sucesso ; id | " + id);
                                 pout.flush();
+                            }
+                        }else if(message.get("tipo").equals("login")){
+                            System.out.print("tsadsad");
+                            if(servidores.efetuaLogin(new Utilizador(message.get("username"),message.get("password"),message.get("nome")))){
+                                pout.println("tipo | resposta ; msg | sucesso ;");
+                                pout.flush();
+                            }
                         }
+                    } catch (IOException ex) {
+                        System.out.print(ex);
+                        Logger.getLogger(TP_Servidor.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     
                 }
                 
             } catch (IOException ex) {
                 Logger.getLogger(TP_Servidor.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            } 
         }
         
         

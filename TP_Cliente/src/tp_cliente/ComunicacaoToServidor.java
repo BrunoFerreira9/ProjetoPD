@@ -9,13 +9,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.Observable;
+import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ComunicacaoToServidor extends Observable implements InterfaceGestao {
     
-    
+    private int idUser;
     //ligacao TCP com o servidor
     
     Socket socketTCP ;
@@ -49,15 +51,21 @@ public class ComunicacaoToServidor extends Observable implements InterfaceGestao
     }
     
     @Override
-    public boolean efetuaRegisto(Utilizador user) {
+    public boolean efetuaRegisto(HashMap <String,String> user) {
        
         try {
             out = new PrintWriter(socketTCP.getOutputStream());
-            pedido = "tipo | registo ; username | "+user.getUsername() +" ; password | "+ user.getPassword()+" ; nome | "+user.getNome() + "\n";
+            pedido = "tipo | registo ; username | "+user.get("username") +" ; password | "+ user.get("password")+" ; nome | "+user.get("nome") + "\n";
             out.println(pedido);
             out.flush();
             reader = new BufferedReader(new InputStreamReader(socketTCP.getInputStream()));
             resposta = reader.readLine();
+            
+             HashMap <String,String> message = ResolveMessages(pedido);
+            
+               if(message.get("tipo").equals("resposta") && message.get("sucesso").equals("sim")){
+                    idUser = Integer.parseInt(message.get("id").toString());
+               }
                         
                                
         } catch (IOException ex) {
@@ -67,16 +75,21 @@ public class ComunicacaoToServidor extends Observable implements InterfaceGestao
     }
 
     @Override
-    public boolean efetuaLogin(Utilizador user) {
+    public boolean efetuaLogin(HashMap <String,String> user) {
        
         try {
             out = new PrintWriter(socketTCP.getOutputStream());
-            pedido = "tipo | login ; username | "+user.getUsername() +" ;password | "+ user.getPassword()+" \n";
+            pedido = "tipo | login ; username | "+user.get("username") +" ;password | "+ user.get("password")+" \n";
             out.println(pedido);
             out.flush();
             reader = new BufferedReader(new InputStreamReader(socketTCP.getInputStream()));
             resposta = reader.readLine();
             
+             HashMap <String,String> message = ResolveMessages(pedido);
+            
+               if(message.get("tipo").equals("resposta") && message.get("sucesso").equals("sim")){
+                    System.out.println("Estou logado!!");
+               }
             
           
         } catch (IOException ex) {
@@ -94,5 +107,18 @@ public class ComunicacaoToServidor extends Observable implements InterfaceGestao
     @Override
     public boolean atualizaMusicas() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public static HashMap<String,String> ResolveMessages(String message){
+        StringTokenizer t,tokens = new StringTokenizer(message,";");
+        String key,val;
+        HashMap<String,String> messages = new HashMap<>();
+        while (tokens.hasMoreElements()) {
+            t = new StringTokenizer(tokens.nextElement().toString()," | ");  
+            key = t.nextElement().toString();
+            val = t.nextElement().toString();
+            messages.put(key, val);
+        }
+        return messages;
     }
 }
