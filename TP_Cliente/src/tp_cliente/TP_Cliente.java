@@ -98,7 +98,7 @@ public class TP_Cliente  implements Observer {
         }while(op!=3);
         
         
-        //cs.efetuaLogin(xpto);
+        //cs.efetuaLogin(xpto); 
         
     }
 
