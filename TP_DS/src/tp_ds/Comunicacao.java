@@ -61,7 +61,6 @@ public class Comunicacao {
             case "ping": 
             break;
         }
-        System.out.println(resposta+" passei aqui");
     }
     
     public void enviaresposta() throws IOException{

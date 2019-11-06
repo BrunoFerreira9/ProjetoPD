@@ -55,6 +55,8 @@ public class TP_Cliente  implements Observer {
           registo.put("password", in.nextLine());
           System.out.println("nome:");
           registo.put("nome", in.nextLine());
+         
+          
          return registo;
     }
      public static HashMap<String,String> dadosLogin(){
@@ -78,6 +80,8 @@ public class TP_Cliente  implements Observer {
         Scanner in = new Scanner(System.in);
         ComunicacaoToServidor cs = null;
         ComunicacaoToDS cds = null;
+        
+        
                
         try{
             cds = new ComunicacaoToDS(ipDS);
@@ -106,7 +110,7 @@ public class TP_Cliente  implements Observer {
         }while(op!=3);
         
         
-        //cs.efetuaLogin(xpto); 
+       
         
     }
 
