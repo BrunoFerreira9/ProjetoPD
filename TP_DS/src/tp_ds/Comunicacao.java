@@ -61,10 +61,6 @@ public class Comunicacao {
             case "ping": 
             break;
         }
-<<<<<<< HEAD
-       
-=======
->>>>>>> 3abe1b3afe153382cd691128df87ddaa20adbc9d
     }
     
     public void enviaresposta() throws IOException{
