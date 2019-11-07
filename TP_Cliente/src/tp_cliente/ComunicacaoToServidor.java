@@ -14,6 +14,7 @@ import java.util.Observable;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static tp_cliente.ComunicacaoToDS.ResolveMessages;
 
 public class ComunicacaoToServidor extends Observable implements InterfaceGestao {
     
@@ -31,7 +32,7 @@ public class ComunicacaoToServidor extends Observable implements InterfaceGestao
     String pedido;
     
     public ComunicacaoToServidor(String endereco, int porto) {
-                    this.endereco = endereco;
+            this.endereco = endereco;
             this.porto = porto;
         
     
@@ -40,7 +41,7 @@ public class ComunicacaoToServidor extends Observable implements InterfaceGestao
     public void inicializaTCP() throws IOException, ClassNotFoundException {
         try {
             socketTCP = new Socket(endereco,porto);    
-             reader  = new BufferedReader(new InputStreamReader(socketTCP.getInputStream()));
+            reader  = new BufferedReader(new InputStreamReader(socketTCP.getInputStream()));
             out = new PrintWriter(socketTCP.getOutputStream());
             String msg = "Cliente a ligar";   
             out.println(msg);
@@ -54,15 +55,13 @@ public class ComunicacaoToServidor extends Observable implements InterfaceGestao
     @Override
     public boolean efetuaRegisto(HashMap <String,String> user) {
        
-        System.out.print("passei aqui");
-        
         try {
                       
             pedido = "tipo | registo ; username | "+user.get("username") +" ; password | "+ user.get("password")+" ; nome | "+user.get("nome") + "\n";
             out.println(pedido);
             out.flush();
             resposta = reader.readLine();
-            
+            System.out.print(resposta);
              HashMap <String,String> message = ResolveMessages(pedido);
             
                if(message.get("tipo").equals("resposta") && message.get("sucesso").equals("sim")){
@@ -127,25 +126,42 @@ public class ComunicacaoToServidor extends Observable implements InterfaceGestao
     }
 
     @Override
-    public boolean trataPedido(String mensagem) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean trataMusicas(String mensagem) {
+       HashMap <String,String> pedido = ResolveMessages(mensagem);
+       
+       switch(pedido.get("tipo")){
+       
+           case "criaMusica" : break;
+           case "editaMusica": break;
+           case "eliminaMusica": break;
+           case "ouvirMusica": break;
+           case "addMusPlaylist": break;
+           default:break;
+       
+       }
+       return false;
+    }
+    
+     @Override
+    public boolean trataPlaylist(String mensagem) {
+       HashMap <String,String> pedido = ResolveMessages(mensagem);
+       
+       switch(pedido.get("tipo")){       
+           case "criaPlaylist":break;
+           case "editaPlaylist": break;
+           case "eliminaPlaylist":break;
+           case "ouvirPlaylist":break;
+           default:break;
+       
+       }
+       return false;
     }
 
     @Override
     public boolean atualizaMusicas() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
     
-    public static HashMap<String,String> ResolveMessages(String message){
-        StringTokenizer t,tokens = new StringTokenizer(message,";");
-        String key,val;
-        HashMap<String,String> messages = new HashMap<>();
-        while (tokens.hasMoreElements()) {
-            t = new StringTokenizer(tokens.nextElement().toString()," | ");  
-            key = t.nextElement().toString();
-            val = t.nextElement().toString();
-            messages.put(key, val);
-        }
-        return messages;
-    }
+    
 }

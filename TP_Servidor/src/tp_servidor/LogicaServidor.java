@@ -83,6 +83,9 @@ public class LogicaServidor extends Observable implements InterfaceGestao{
     public void adicionaCliente(Socket cliente) {
         listaClientes.add(cliente);
     }
+    public void removeCliente(Socket cliente) {
+        listaClientes.remove(cliente);
+    }
     
     public void terminar(){
         if(listaClientes.isEmpty())
@@ -91,8 +94,8 @@ public class LogicaServidor extends Observable implements InterfaceGestao{
          for(Socket s : listaClientes)
         {
                                     
-            String querySelect = "UPDATE utilizador SET ativo= 'false' WHERE 1";
-
+            String querySelect = "UPDATE utilizador SET ativo= 'false' WHERE ipUser="+s.getLocalAddress().getHostAddress();
+            //cc.
            
             try {
                 s.close();
@@ -124,10 +127,10 @@ public class LogicaServidor extends Observable implements InterfaceGestao{
             return false;
         }
         
-        String update = "UPDATE Utilizador SET ativo = true WHERE username = \'" + user.get("username") + "\';";
+        String update = "UPDATE Utilizador SET ativo = true and ipUser = \'"+user.get("ip")+"\' WHERE username = \'" + user.get("username") + "\';";
 
         String resultadoupdate = ligacao.executarSelect(query);
-
+            
         if (resultado == "ERRO" || resultado == "") {
             System.out.println("Erro na atualizacao BD\n");
             return false;
@@ -136,12 +139,12 @@ public class LogicaServidor extends Observable implements InterfaceGestao{
     }
     @Override
     public boolean efetuaLogout(HashMap <String,String> user) {
-        String query = "Select * from Utilizador where username = \'" + user.get("username") + "\' and password = \'" + user.get("password") + "\' AND ativo=true;";
+        String query = "Select * from Utilizador where username = \'" + user.get("username") + "\' AND ativo=true;";
 
         String resultado = ligacao.executarSelect(query);
 
         if (resultado == "ERRO" || resultado == "") {
-            System.out.println("Nao existe o utilizador na BD\n");
+            System.out.println("Nao existe o utilizador logado na BD\n");
             return false;
         }
         

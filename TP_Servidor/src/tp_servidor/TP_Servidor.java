@@ -34,7 +34,6 @@ public class TP_Servidor {
 
         try{
             servidores = new LogicaServidor(ipDS,ipMaquinaBD);
-            // ss = new ServerSocket(servidores.cds.getPortoServer());
             clientSocket = servidores.criaNovoServidor();
         } catch (IOException ex) {
             Logger.getLogger(TP_Servidor.class.getName()).log(Level.SEVERE, null, ex);
