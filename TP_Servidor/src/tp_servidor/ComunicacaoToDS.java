@@ -6,9 +6,11 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static tp_servidor.ConstantesServer.BUFSIZE;
+import static tp_servidor.ConstantesServer.ResolveMessages;
 import static tp_servidor.ConstantesServer.portoDS;
 
 public class ComunicacaoToDS {
@@ -27,7 +29,7 @@ public class ComunicacaoToDS {
     //recebe o ip e porto do servidor a que ligam
     private int portoServer;
     private String ipServer;
-           
+    private int numBD;       
      
     public ComunicacaoToDS(String endereco) {
         this.endereco = endereco;
@@ -40,7 +42,7 @@ public class ComunicacaoToDS {
             data= dados.getBytes();
             socketUDP = new DatagramSocket();
             portoServer = socketUDP.getLocalPort();
-            System.out.println("port"+getPortoServer());
+            
             packet = new DatagramPacket( data, data.length,addr,portoDS);
            
             socketUDP.send(packet);
@@ -51,6 +53,8 @@ public class ComunicacaoToDS {
             
             resposta = new String(receivePacket.getData(),0,receivePacket.getLength());
             
+            HashMap <String,String> teste = ResolveMessages(resposta);
+            numBD = Integer.parseInt(teste.get("numbd"));
             System.out.println(resposta);
             
         }catch (UnknownHostException e){
@@ -62,6 +66,7 @@ public class ComunicacaoToDS {
     
     public String getIpServer(){return ipServer;}
     public int getPortoServer(){return portoServer;}
+     public int getnumBD(){return numBD;}
 
     
     

@@ -24,14 +24,14 @@ public class LigacaoToBD {
        
     }
     
-    public boolean criarLigacaoBD()
+    public boolean criarLigacaoBD(int bd)
     {        
         try {
            
             Class.forName(JDBC_DRIVER);
             
             System.out.println("Ligando à base de dados ...\n");
-            conn_ligacao = DriverManager.getConnection("jdbc:mysql://localhost/db_pd1920?useTimezone=true&serverTimezone=UTC", USER_BD, PASS_USER_BD);
+            conn_ligacao = DriverManager.getConnection("jdbc:mysql://"+ip+"/db_pd1920_"+bd+"?useTimezone=true&serverTimezone=UTC", USER_BD, PASS_USER_BD);
             
         } catch ( SQLException ex) {
             Logger.getLogger(LigacaoToBD.class.getName()).log(Level.SEVERE, null, ex);

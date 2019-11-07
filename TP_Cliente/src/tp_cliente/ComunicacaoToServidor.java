@@ -31,15 +31,16 @@ public class ComunicacaoToServidor extends Observable implements InterfaceGestao
     String pedido;
     
     public ComunicacaoToServidor(String endereco, int porto) {
-        this.endereco = endereco;
-        this.porto = porto;
+                    this.endereco = endereco;
+            this.porto = porto;
+        
     
     }
     
     public void inicializaTCP() throws IOException, ClassNotFoundException {
         try {
-            socketTCP = new Socket(endereco,porto);
-            reader  = new BufferedReader(new InputStreamReader(socketTCP.getInputStream()));
+            socketTCP = new Socket(endereco,porto);    
+             reader  = new BufferedReader(new InputStreamReader(socketTCP.getInputStream()));
             out = new PrintWriter(socketTCP.getOutputStream());
             String msg = "Cliente a ligar";   
             out.println(msg);
@@ -53,12 +54,13 @@ public class ComunicacaoToServidor extends Observable implements InterfaceGestao
     @Override
     public boolean efetuaRegisto(HashMap <String,String> user) {
        
+        System.out.print("passei aqui");
+        
         try {
-            out = new PrintWriter(socketTCP.getOutputStream());
+                      
             pedido = "tipo | registo ; username | "+user.get("username") +" ; password | "+ user.get("password")+" ; nome | "+user.get("nome") + "\n";
             out.println(pedido);
             out.flush();
-            reader = new BufferedReader(new InputStreamReader(socketTCP.getInputStream()));
             resposta = reader.readLine();
             
              HashMap <String,String> message = ResolveMessages(pedido);
@@ -78,11 +80,36 @@ public class ComunicacaoToServidor extends Observable implements InterfaceGestao
     public boolean efetuaLogin(HashMap <String,String> user) {
        
         try {
-            out = new PrintWriter(socketTCP.getOutputStream());
-            pedido = "tipo | login ; username | "+user.get("username") +" ;password | "+ user.get("password")+" \n";
+          
+            pedido = "tipo | login ; username | "+user.get("username") +" ; password | "+ user.get("password")+" \n";
             out.println(pedido);
             out.flush();
-            reader = new BufferedReader(new InputStreamReader(socketTCP.getInputStream()));
+         
+            resposta = reader.readLine();
+            
+             HashMap <String,String> message = ResolveMessages(pedido);
+            
+               if(message.get("tipo").equals("resposta") && message.get("sucesso").equals("sim")){
+                    System.out.println("Estou logado!!");
+               }
+            
+          
+        } catch (IOException ex) {
+            Logger.getLogger(TP_Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return true;
+    }
+    
+    @Override
+    public boolean efetuaLogout(HashMap <String,String> user) {
+       
+        try {
+          
+            pedido = "tipo | login ; username | "+user.get("username") +" ; password | "+ user.get("password")+" \n";
+            out.println(pedido);
+            out.flush();
+         
             resposta = reader.readLine();
             
              HashMap <String,String> message = ResolveMessages(pedido);

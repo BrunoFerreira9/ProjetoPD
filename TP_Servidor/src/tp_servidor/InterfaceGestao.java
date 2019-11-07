@@ -1,8 +1,11 @@
 package tp_servidor;
 
+import java.util.HashMap;
+
 
 public interface InterfaceGestao {
     
-    public boolean efetuaRegisto(Utilizador user);
-     public boolean efetuaLogin(Utilizador user);
+    public boolean efetuaRegisto(HashMap <String,String> user);
+     public boolean efetuaLogin(HashMap <String,String> user);
+     public boolean efetuaLogout(HashMap<String,String> user);
 }
