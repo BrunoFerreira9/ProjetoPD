@@ -8,6 +8,7 @@ public class ConstantesServer {
     static final int TIMEOUT = 5000;
     static final int portoDS = 5001;
     public static final int BUFSIZE = 1000;
+    
     public static HashMap<String,String> ResolveMessages(String message){
         StringTokenizer t,tokens = new StringTokenizer(message,";");
         String key,val;

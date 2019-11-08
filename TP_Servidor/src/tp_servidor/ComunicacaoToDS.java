@@ -52,10 +52,10 @@ public class ComunicacaoToDS {
             socketUDP.receive(receivePacket);
             
             resposta = new String(receivePacket.getData(),0,receivePacket.getLength());
-            
+            System.out.println(resposta);
             HashMap <String,String> teste = ResolveMessages(resposta);
             numBD = Integer.parseInt(teste.get("numbd"));
-            System.out.println(resposta);
+            
             
         }catch (UnknownHostException e){
             System.err.println ("Unable to resolve host");

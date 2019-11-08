@@ -57,11 +57,13 @@ public class ComunicacaoToCliente implements Observer {
     }
     
      public void recebeInformacaoTCP() throws IOException {
-             System.out.println("Recebi do Cliente: "+ in.readLine());
-            pout.println("O servidor está te a ouvir");
-              pout.flush();
+        System.out.println("Recebi do Cliente: "+ in.readLine());
+        pout.println("O servidor está te a ouvir");
+        pout.flush();
         while (true) {
           
+            synchronized (in) {
+            
               pedido = in.readLine();
               System.out.println("Recebi do Cliente: "+ pedido);
               HashMap <String,String> user = ResolveMessages(pedido);
@@ -69,27 +71,30 @@ public class ComunicacaoToCliente implements Observer {
              
               if(user.get("tipo").equals("registo")){
                   if(servidor.efetuaRegisto(user)){
-                      String q = "Select idUtilizador from utilizador where username = \'" + user.get("username") + "\';";
-                      String id = servidor.ligacao.executarSelect(q);
-                     
-                      pout.println("tipo | resposta ; msg | sucesso ; id | " + id);
-                      pout.flush();
+                     pout.println("tipo | resposta ; msg | sucesso");
+                     pout.flush();
                   }
               }else if(user.get("tipo").equals("login")){      
                    user.put("ip", socketCliente.getLocalAddress().getHostAddress());
                   if(servidor.efetuaLogin(user)){
-                        pout.println("tipo | resposta ; msg | sucesso");
+                        String q = "Select idUtilizador from utilizador where username = \'" + user.get("username") + "\';";
+                        String id = servidor.ligacao.executarSelect(q);
+                        System.out.print("passei o login");
+                        
+                        pout.println("tipo | resposta ; msg | sucesso ; id | " + id);
                         pout.flush();
+                        System.out.print("passei asd");
                         servidor.adicionaCliente(socketCliente);
                   }
               }else if(user.get("tipo").equals("logout")){                 
                   if(servidor.efetuaLogout(user)){
                                           
-                      pout.println("tipo | resposta ; msg | sucesso");
+                      pout.println("tipo | resposta ; msg | sucesso\n");
                       pout.flush();
                       servidor.removeCliente(socketCliente);
                   }
               }
+            }
        }
     }
      

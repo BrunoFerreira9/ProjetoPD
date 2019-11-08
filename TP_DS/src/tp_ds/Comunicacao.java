@@ -17,6 +17,7 @@ public class Comunicacao {
     byte []info = new byte[128];
     List<Servidor> listservers;
     private  int numClientes,numbasedados;
+    
     Comunicacao(List<Servidor> listservers, int numClientes, int numbasedados) {
         this.numClientes = numClientes;
         this.numbasedados = numbasedados;
@@ -43,12 +44,12 @@ public class Comunicacao {
     public void verificapedido() throws SocketException{
         switch(message.get("tipo")){
             case "Servidor":
-                System.out.print("Servidor -");
+                System.out.print("Servidor - ");
                 listservers.add(new Servidor(pkt.getAddress().getHostAddress(),pkt.getPort(),true, (listservers.isEmpty())));
                 resposta = "tipo | resposta ; sucesso | sim ; numbd | "+numbasedados++;
                 break;
             case "Cliente":
-                System.out.print("Cliente -");
+                System.out.print("Cliente - ");
                 if(numClientes < listservers.size()){
                     Servidor aux = listservers.get(listservers.size()-1);
                     resposta = "tipo | resposta ; sucesso | sim ; ip | "+aux.getIp()+" ; porto | "+aux.getPorto();

@@ -62,15 +62,11 @@ public class ComunicacaoToServidor extends Observable implements InterfaceGestao
             out.flush();
             resposta = reader.readLine();
             System.out.print(resposta);
-             HashMap <String,String> message = ResolveMessages(pedido);
-            
-               if(message.get("tipo").equals("resposta") && message.get("sucesso").equals("sim")){
-                    idUser = Integer.parseInt(message.get("id").toString());
-               }
-                        
+                
                                
         } catch (IOException ex) {
             Logger.getLogger(TP_Cliente.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
         return true;
     }
@@ -85,11 +81,12 @@ public class ComunicacaoToServidor extends Observable implements InterfaceGestao
             out.flush();
          
             resposta = reader.readLine();
+             System.out.print(resposta);
+             HashMap <String,String> message = ResolveMessages(resposta);
             
-             HashMap <String,String> message = ResolveMessages(pedido);
-            
-               if(message.get("tipo").equals("resposta") && message.get("sucesso").equals("sim")){
+               if(message.get("tipo").equals("resposta") && message.get("msg").equals("sucesso")){
                     System.out.println("Estou logado!!");
+                    idUser = Integer.parseInt(message.get("id").toString());
                }
             
           
@@ -111,10 +108,10 @@ public class ComunicacaoToServidor extends Observable implements InterfaceGestao
          
             resposta = reader.readLine();
             
-             HashMap <String,String> message = ResolveMessages(pedido);
+             HashMap <String,String> message = ResolveMessages(resposta);
             
                if(message.get("tipo").equals("resposta") && message.get("sucesso").equals("sim")){
-                    System.out.println("Estou logado!!");
+                    System.out.println("logout!!");
                }
             
           

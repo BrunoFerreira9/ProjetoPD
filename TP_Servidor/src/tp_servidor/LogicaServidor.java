@@ -15,21 +15,25 @@ import java.util.logging.Logger;
 
 public class LogicaServidor extends Observable implements InterfaceGestao{
 
-    LigacaoToBD ligacao ;
-    LogicaServidor este;
+     LigacaoToBD ligacao ;
+     LogicaServidor este;
      
-    ComunicacaoToDS cds;  
-    ComunicacaoToCliente cc;
+     ComunicacaoToDS cds;  
+     ComunicacaoToCliente cc;
     
-     ServerSocket serverSocket = null;
-     List<Socket> listaClientes;
+      ServerSocket serverSocket = null;
+      List<Socket> listaClientes;
                 
-    public LogicaServidor(String ipDS, String ipMaquinaBD  ) throws IOException {  
+    public LogicaServidor(String ipDS, String ipMaquinaBD  ) {  
         listaClientes = new ArrayList<>();
         este = this;
         cds = new ComunicacaoToDS(ipDS);
         
-        cds.inicializaUDP();
+        try {
+            cds.inicializaUDP();
+        } catch (IOException ex) {
+            Logger.getLogger(LogicaServidor.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
                
         ligacao = new LigacaoToBD(ipMaquinaBD);
@@ -106,7 +110,7 @@ public class LogicaServidor extends Observable implements InterfaceGestao{
     }
     @Override
     public boolean efetuaRegisto(HashMap <String,String> user) {
-        String query = "Insert into Utilizador (username, password, nome, ativo)  values(\'"  + user.get("username") + "\',\'" + user.get("password") + "\', \'" + user.get("nome") + "\',false);";
+        String query = "Insert into Utilizador (username, password, nome, ativo)  values(\'"  + user.get("username") + "\',\'" + user.get("password") + "\', \'" + user.get("nome") + "\',0);";
         
         String resultado = ligacao.executarInsert(query);
         if (resultado == "ERRO" || resultado == "") {
@@ -118,7 +122,7 @@ public class LogicaServidor extends Observable implements InterfaceGestao{
 
     @Override
     public boolean efetuaLogin(HashMap <String,String> user) {
-        String query = "Select * from Utilizador where username = \'" + user.get("username") + "\' and password = \'" + user.get("password") + "\' AND ativo=false;";
+        String query = "Select * from Utilizador where username = \'" + user.get("username") + "\' and password = \'" + user.get("password") + "\' AND ativo=0;";
 
         String resultado = ligacao.executarSelect(query);
 
@@ -127,11 +131,11 @@ public class LogicaServidor extends Observable implements InterfaceGestao{
             return false;
         }
         
-        String update = "UPDATE Utilizador SET ativo = true and ipUser = \'"+user.get("ip")+"\' WHERE username = \'" + user.get("username") + "\';";
+        String update = "UPDATE Utilizador SET ativo = 1 and ipUser = \'"+user.get("ip")+"\' WHERE username = \'" + user.get("username") + "\';";
 
-        String resultadoupdate = ligacao.executarSelect(query);
+        String resultadoupdate = ligacao.executarUpdate(update);
             
-        if (resultado == "ERRO" || resultado == "") {
+        if (resultadoupdate == "ERRO" || resultadoupdate == "") {
             System.out.println("Erro na atualizacao BD\n");
             return false;
         }
@@ -139,7 +143,7 @@ public class LogicaServidor extends Observable implements InterfaceGestao{
     }
     @Override
     public boolean efetuaLogout(HashMap <String,String> user) {
-        String query = "Select * from Utilizador where username = \'" + user.get("username") + "\' AND ativo=true;";
+        String query = "Select * from Utilizador where username = \'" + user.get("username") + "\' AND ativo= 1 ;";
 
         String resultado = ligacao.executarSelect(query);
 
@@ -148,11 +152,11 @@ public class LogicaServidor extends Observable implements InterfaceGestao{
             return false;
         }
         
-        String update = "UPDATE Utilizador SET ativo = false WHERE username = \'" + user.get("username") + "\';";
+        String update = "UPDATE Utilizador SET ativo = 0 WHERE username = \'" + user.get("username") + "\';";
 
-        String resultadoupdate = ligacao.executarSelect(query);
+          String resultadoupdate = ligacao.executarUpdate(update);
 
-        if (resultado == "ERRO" || resultado == "") {
+        if (resultadoupdate == "ERRO" || resultadoupdate == "") {
             System.out.println("Erro na atualizacao BD\n");
             return false;
         }

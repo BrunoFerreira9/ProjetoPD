@@ -32,12 +32,8 @@ public class TP_Servidor {
         LogicaServidor servidores = null;
         ServerSocket clientSocket = null;
 
-        try{
-            servidores = new LogicaServidor(ipDS,ipMaquinaBD);
-            clientSocket = servidores.criaNovoServidor();
-        } catch (IOException ex) {
-            Logger.getLogger(TP_Servidor.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        servidores = new LogicaServidor(ipDS,ipMaquinaBD);
+        clientSocket = servidores.criaNovoServidor(); 
 
         ControloLigacoes ligacoes = new ControloLigacoes(servidores);
         ligacoes.start();
