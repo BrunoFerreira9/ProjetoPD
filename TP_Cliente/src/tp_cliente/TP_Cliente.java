@@ -122,7 +122,7 @@ public class TP_Cliente  implements Observer {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(TP_Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+         HashMap<String,String> user = new HashMap<>();
         do{
             apresentaMenuInicial();
             op = in.nextInt();
@@ -132,9 +132,10 @@ public class TP_Cliente  implements Observer {
                 case 1:                       
                         cs.efetuaRegisto(dadosRegisto()); break;
                 case 2:
-                        if(cs.efetuaLogin(dadosLogin())){
+                        user = dadosLogin();
+                        if(cs.efetuaLogin(user)){
                         
-                        
+                                                  
                         do{
                             apresentaMenuSecundario();
                             op2 = in.nextInt();
@@ -178,7 +179,8 @@ public class TP_Cliente  implements Observer {
                         };break;
                 case 3:
                     //mandar mensagem de logout
-                    //cs.efetuaLogout();
+                    if(user!=null)
+                        cs.efetuaLogout(user);
                     break;
 
             }

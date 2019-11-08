@@ -131,8 +131,8 @@ public class LogicaServidor extends Observable implements InterfaceGestao{
             return false;
         }
         
-        String update = "UPDATE Utilizador SET ativo = 1 and ipUser = \'"+user.get("ip")+"\' WHERE username = \'" + user.get("username") + "\';";
-
+        String update = "UPDATE Utilizador SET ativo = 1 , ipUser = \'"+user.get("ip")+"\' WHERE username = \'" + user.get("username") + "\';";
+ 
         String resultadoupdate = ligacao.executarUpdate(update);
             
         if (resultadoupdate == "ERRO" || resultadoupdate == "") {

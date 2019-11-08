@@ -43,10 +43,10 @@ public class ComunicacaoToServidor extends Observable implements InterfaceGestao
             socketTCP = new Socket(endereco,porto);    
             reader  = new BufferedReader(new InputStreamReader(socketTCP.getInputStream()));
             out = new PrintWriter(socketTCP.getOutputStream());
-            String msg = "Cliente a ligar";   
-            out.println(msg);
-            out.flush();
-            System.out.println("Resultado: "+ reader.readLine());
+            //String msg = "Cliente a ligar";   
+            //out.println(msg);
+            //out.flush();
+            //System.out.println("Resultado: "+ reader.readLine());
         } catch(IOException e){
             System.out.println("Ocorreu um erro no acesso ao socket"+e);
         }
@@ -102,7 +102,7 @@ public class ComunicacaoToServidor extends Observable implements InterfaceGestao
        
         try {
           
-            pedido = "tipo | login ; username | "+user.get("username") +" ; password | "+ user.get("password")+" \n";
+            pedido = "tipo | logout ; username | "+user.get("username") +"\n";
             out.println(pedido);
             out.flush();
          
@@ -112,14 +112,16 @@ public class ComunicacaoToServidor extends Observable implements InterfaceGestao
             
                if(message.get("tipo").equals("resposta") && message.get("sucesso").equals("sim")){
                     System.out.println("logout!!");
+                    return true;
                }
             
           
         } catch (IOException ex) {
             Logger.getLogger(TP_Cliente.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
-
-        return true;
+        return false;
+        
     }
 
     @Override
