@@ -14,7 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import static tp_servidor.ConstantesServer.ResolveMessages;
 
-public class ComunicacaoToCliente implements Observer {
+public class ComunicacaoToCliente implements myObserver {
     
     //LIGACAO TCP
     Socket socketCliente ;
@@ -29,12 +29,12 @@ public class ComunicacaoToCliente implements Observer {
     String resposta;
     String pedido;
     
-    Observer obs;
+    myObserver observer;
     LogicaServidor servidor = null;
     
     public ComunicacaoToCliente(Socket cliente,LogicaServidor servidor){
        
-        obs = this;
+        observer = this;
         this.servidor = servidor;
         this.socketCliente = cliente;
             
@@ -50,11 +50,6 @@ public class ComunicacaoToCliente implements Observer {
     
     }
    
-
-    @Override
-    public void update(Observable o, Object arg) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
      public void recebeInformacaoTCP() throws IOException {
         
@@ -96,4 +91,9 @@ public class ComunicacaoToCliente implements Observer {
     }
      
      //public void 
+
+    @Override
+    public void update(myObservable s) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

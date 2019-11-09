@@ -5,18 +5,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Observable;
-import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static tp_cliente.ComunicacaoToDS.ResolveMessages;
 
-public class ComunicacaoToServidor extends Observable implements InterfaceGestao {
+public class ComunicacaoToServidor implements InterfaceGestao,myObservable {
     
     private int idUser;
     //ligacao TCP com o servidor
@@ -30,6 +27,8 @@ public class ComunicacaoToServidor extends Observable implements InterfaceGestao
     
     String resposta;
     String pedido;
+    
+    myObservable subject =null;
     
     public ComunicacaoToServidor(String endereco, int porto) {
             this.endereco = endereco;
@@ -158,6 +157,16 @@ public class ComunicacaoToServidor extends Observable implements InterfaceGestao
 
     @Override
     public boolean atualizaMusicas() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setChanged() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void notifyObservers() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

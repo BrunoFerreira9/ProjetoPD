@@ -13,7 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class LogicaServidor extends Observable implements InterfaceGestao{
+public class LogicaServidor implements InterfaceGestao, myObservable {
 
      LigacaoToBD ligacao ;
      LogicaServidor este;
@@ -161,5 +161,15 @@ public class LogicaServidor extends Observable implements InterfaceGestao{
             return false;
         }
        return true;
+    }
+
+    @Override
+    public void setChanged() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void notifyObservers() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
