@@ -52,19 +52,19 @@ public class uiTexto implements myObserver{
         StringBuilder sb = new StringBuilder();
         sb.append("tipo | criaMusica ;");
         System.out.println("Nome:");
-        sb.append("Nome | "+in.nextLine()+" ;");
+        sb.append("nome | "+in.nextLine()+" ;");
         System.out.println("Autor");
-        sb.append("Autor | "+in.nextLine()+" ;");
+        sb.append("autor | "+in.nextLine()+" ;");
         System.out.println("Album");
-        sb.append("Album | "+in.nextLine()+" ;");
+        sb.append("album | "+in.nextLine()+" ;");
         System.out.println("Ano");
-        sb.append("Ano | "+in.nextLine()+" ;");
+        sb.append("ano | "+in.nextInt()+" ;");
         System.out.println("Duracao");
-        sb.append("Duracao | "+in.nextLine()+" ;");
+        sb.append("duracao | "+in.nextDouble()+" ;");
         System.out.println("Genero");
-        sb.append("Genero | "+in.nextLine()+" ;");
+        sb.append("genero | "+in.nextLine()+" ;");
         System.out.println("Ficheiro");
-        sb.append("Ficheiro | "+in.nextLine()+" ;");
+        sb.append("ficheiro | "+in.nextLine()+" ;");
         
         return sb.toString();
     }
@@ -84,9 +84,9 @@ public class uiTexto implements myObserver{
           HashMap<String,String> registo = new HashMap<>();
           
           System.out.println("username");
-          registo.put("username", in.nextLine());
+          registo.put("username", in.next());
           System.out.println("password");
-          registo.put("password", in.nextLine());
+          registo.put("password", in.next());
           System.out.println("nome:");
           registo.put("nome", in.nextLine());
          
@@ -95,24 +95,22 @@ public class uiTexto implements myObserver{
     }
      
      
-     public HashMap<String,String> dadosLogin(){
+    public HashMap<String,String> dadosLogin(){
         
-            HashMap<String,String> login = new HashMap<>();
+        HashMap<String,String> login = new HashMap<>();
           
-            System.out.println("username");
-           login.put("username", in.nextLine());
-          System.out.println("password");
-           login.put("password", in.nextLine());
+        System.out.println("username");
+        login.put("username", in.next());
+        System.out.println("password");
+        login.put("password", in.next());
        
-          return login;
+        return login;
     }
     
     int op,op2,op3,op4;
     
     public void run() throws Exception 
     {
-              
-                    
         try{
             cds = new ComunicacaoToDS(ipDS);
             cds.inicializaUDP();

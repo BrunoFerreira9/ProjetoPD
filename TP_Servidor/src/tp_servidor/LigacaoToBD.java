@@ -29,7 +29,7 @@ public class LigacaoToBD {
            
             Class.forName(JDBC_DRIVER);
             
-            System.out.println("Ligando à base de dados ...\n"+bd);
+            System.out.println("Ligando à base de dados ...\n");
             conn_ligacao = DriverManager.getConnection("jdbc:mysql://"+ip+"/db_pd1920_"+bd+"?useTimezone=true&serverTimezone=UTC", USER_BD, PASS_USER_BD);
             
         } catch ( SQLException ex) {
@@ -89,7 +89,7 @@ public class LigacaoToBD {
         return "RESULTADO";
     }
     
-    public void executarDelete(String query)
+    public String executarDelete(String query)
     {
         
         try {
@@ -99,7 +99,8 @@ public class LigacaoToBD {
             
         }catch(SQLException e){
             System.out.println("ERRO [doInBackground]: " + e.getMessage());
+             return "ERRO";
         }
-        
+         return "RESULTADO";
     }
 }

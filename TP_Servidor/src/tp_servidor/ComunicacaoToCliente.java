@@ -3,13 +3,9 @@ package tp_servidor;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.HashMap;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static tp_servidor.ConstantesServer.ResolveMessages;
@@ -84,6 +80,15 @@ public class ComunicacaoToCliente implements myObserver {
                       pout.println("tipo | resposta ; msg | sucesso\n");
                       pout.flush();
                       servidor.removeCliente(socketCliente);
+                  }
+              }
+              else if(user.get("tipo").equals("criaMusica") || user.get("tipo").equals("editaMusica") || user.get("tipo").equals("eliminaMusica") ||user.get("tipo").equals("ouvirMusica") || user.get("tipo").equals("addMusPlaylist") ){                 
+                  if(servidor.trataMusicas(pedido)){
+                      pout.println("tipo | resposta ; msg | sucesso\n");
+                      pout.flush();                     
+                  }else{
+                       pout.println("tipo | resposta ; msg | insucesso\n");
+                       pout.flush(); 
                   }
               }
             }

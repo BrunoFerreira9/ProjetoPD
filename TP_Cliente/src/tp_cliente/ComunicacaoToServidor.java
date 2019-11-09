@@ -125,15 +125,22 @@ public class ComunicacaoToServidor implements InterfaceGestao,myObservable {
 
     @Override
     public boolean trataMusicas(String mensagem) {
+        
        HashMap <String,String> pedido = ResolveMessages(mensagem);
-       
+       pedido.put("id", ""+idUser+"");
        switch(pedido.get("tipo")){
        
-           case "criaMusica" : break;
-           case "editaMusica": break;
-           case "eliminaMusica": break;
-           case "ouvirMusica": break;
-           case "addMusPlaylist": break;
+           case "criaMusica" :
+                              out.println(pedido);
+                              out.flush(); break;
+           case "editaMusica": out.println(pedido);
+                              out.flush(); break;
+           case "eliminaMusica": out.println(pedido);
+                              out.flush(); break;
+           case "ouvirMusica": out.println(pedido);
+                              out.flush(); break;
+           case "addMusPlaylist": out.println(pedido);
+                              out.flush(); break;
            default:break;
        
        }
