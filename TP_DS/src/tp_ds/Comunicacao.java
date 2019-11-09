@@ -3,10 +3,14 @@ package tp_ds;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import static tp_ds.ConstantesDS.ResolveMessages;
 
 public class Comunicacao {
@@ -34,6 +38,18 @@ public class Comunicacao {
         pkt = p;
     }
     
+    public void criaTCPDePings(HashMap<Integer, Socket> socketsPing, int idServ){
+        ServerSocket ss;
+        try {
+            ss = new ServerSocket(ConstantesDS.portoDS);
+            Socket sck = ss.accept();
+            socketsPing.put(idServ, sck);
+        } catch (IOException ex) {
+            Logger.getLogger(Comunicacao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
     public void recebepedidos() throws IOException{
         sock.receive(pkt);
         dados = new String(pkt.getData(),0,pkt.getLength());
@@ -41,11 +57,14 @@ public class Comunicacao {
         System.out.println("Recebi "+dados+" de "+pkt.getAddress()+" porto: "+pkt.getPort());
     }
     
-    public void verificapedido() throws SocketException{
+    public int verificapedido() throws SocketException{
+        Servidor serv = null;
+        
         switch(message.get("tipo")){
             case "Servidor":
                 System.out.print("Servidor - ");
-                listservers.add(new Servidor(pkt.getAddress().getHostAddress(),pkt.getPort(),true, (listservers.isEmpty())));
+                serv = new Servidor(pkt.getAddress().getHostAddress(),pkt.getPort(),true, (listservers.isEmpty()));
+                listservers.add(serv);
                 resposta = "tipo | resposta ; sucesso | sim ; numbd | "+numbasedados++;
                 break;
             case "Cliente":
@@ -59,9 +78,9 @@ public class Comunicacao {
                     resposta = "tipo | resposta ; sucesso | não ; msg | Nenhum servidor disponivel";
                 }
             break;
-            case "ping": 
-            break;
         }
+        
+        return serv == null ? -1 : serv.getId();
     }
     
     public void enviaresposta() throws IOException{
@@ -70,7 +89,5 @@ public class Comunicacao {
         pkt.setLength(resposta.length());
         sock.send(pkt);
     }
-    
-    
     
 }

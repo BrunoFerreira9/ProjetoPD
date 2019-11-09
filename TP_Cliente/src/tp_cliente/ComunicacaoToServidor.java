@@ -39,7 +39,7 @@ public class ComunicacaoToServidor implements InterfaceGestao,myObservable {
     
     public void inicializaTCP() throws IOException, ClassNotFoundException {
         try {
-            socketTCP = new Socket(endereco,porto);    
+            socketTCP = new Socket(endereco, porto);    
             reader  = new BufferedReader(new InputStreamReader(socketTCP.getInputStream()));
             out = new PrintWriter(socketTCP.getOutputStream());
             //String msg = "Cliente a ligar";   

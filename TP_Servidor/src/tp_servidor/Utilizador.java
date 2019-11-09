@@ -4,12 +4,11 @@ package tp_servidor;
 import java.io.Serializable;
 
 public class Utilizador implements Serializable{
-   
-   
+
     private final String username;
     private final String password;
     private final String nome;
-    private  int idUtilizador;
+    private int idUtilizador;
     private boolean ativo;
    
     

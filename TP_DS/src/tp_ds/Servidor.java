@@ -5,16 +5,23 @@ public class Servidor {
     private int porto;
     private boolean ativo;
     private boolean principal;
+    private static int contaServs = 1;
+    private int idServ;
     
     Servidor(String end,int p,boolean a,boolean princ){
         ip = end;
         porto = p;
         ativo =a;
         principal = princ;
+        idServ = ++contaServs;
     }
    
     public String getIp() {
         return ip;
+    }
+    
+    public int getId(){
+        return idServ;
     }
 
     public void setIp(String ip) {
