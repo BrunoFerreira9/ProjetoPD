@@ -59,8 +59,6 @@ public class Comunicacao {
                     resposta = "tipo | resposta ; sucesso | não ; msg | Nenhum servidor disponivel";
                 }
             break;
-            case "ping": 
-            break;
         }
     }
     

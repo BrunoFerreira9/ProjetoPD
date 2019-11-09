@@ -35,7 +35,7 @@ public class ComunicacaoToDS {
         this.endereco = endereco;
      }
      
-    public void inicializaUDP() throws IOException {
+    public DatagramSocket inicializaUDP() throws IOException {
         String resposta ;
         try{
             addr = InetAddress.getByName(endereco);
@@ -44,7 +44,6 @@ public class ComunicacaoToDS {
             portoServer = socketUDP.getLocalPort();
             
             packet = new DatagramPacket( data, data.length,addr,portoDS);
-           
             socketUDP.send(packet);
             
             byte[] recbuf = new byte[BUFSIZE]; 
@@ -62,6 +61,8 @@ public class ComunicacaoToDS {
         } catch (SocketException ex) {
             Logger.getLogger(ComunicacaoToDS.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        return socketUDP;
     }
     
     public String getIpServer(){return ipServer;}

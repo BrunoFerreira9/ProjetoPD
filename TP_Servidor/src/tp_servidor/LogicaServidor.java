@@ -2,6 +2,7 @@
 package tp_servidor;
 
 import java.io.IOException;
+import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -16,22 +17,25 @@ import static tp_servidor.ConstantesServer.ResolveMessages;
 
 public class LogicaServidor implements InterfaceGestao, myObservable {
 
-     LigacaoToBD ligacao ;
-     LogicaServidor este;
+    LigacaoToBD ligacao ;
+    LogicaServidor este;
      
-     ComunicacaoToDS cds;  
-     ComunicacaoToCliente cc;
+    ComunicacaoToDS cds;  
+    ComunicacaoToCliente cc;
+    private Thread pings;
     
-      ServerSocket serverSocket = null;
-      List<Socket> listaClientes;
+    DatagramSocket dtsocket;
+    ServerSocket serverSocket = null;
+    List<Socket> listaClientes;
                 
-    public LogicaServidor(String ipDS, String ipMaquinaBD  ) {  
+    public LogicaServidor(String ipDS, String ipMaquinaBD) {  
         listaClientes = new ArrayList<>();
         este = this;
         cds = new ComunicacaoToDS(ipDS);
         
         try {
-            cds.inicializaUDP();
+            dtsocket = cds.inicializaUDP();
+            pings = new ThreadPings(dtsocket, ipDS);
         } catch (IOException ex) {
             Logger.getLogger(LogicaServidor.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -41,8 +45,7 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
         ligacao.criarLigacaoBD(cds.getnumBD());
     }
     
-    public ServerSocket criaNovoServidor()
-    {
+    public ServerSocket criaNovoServidor(){
        
         try {
             serverSocket = new ServerSocket(cds.getPortoServer());
@@ -53,8 +56,7 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
          return serverSocket;
     }
 
-    public List<Socket> obterListaClientes()
-    {
+    public List<Socket> obterListaClientes(){
         return listaClientes;
     }
     
@@ -88,6 +90,7 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
     public void adicionaCliente(Socket cliente) {
         listaClientes.add(cliente);
     }
+    
     public void removeCliente(Socket cliente) {
         listaClientes.remove(cliente);
     }
@@ -109,6 +112,7 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
             }
         }
     }
+    
     @Override
     public boolean efetuaRegisto(HashMap <String,String> user) {
         String query = "Insert into Utilizador (username, password, nome, ativo)  values(\'"  + user.get("username") + "\',\'" + user.get("password") + "\', \'" + user.get("nome") + "\',0);";
@@ -142,6 +146,7 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
         }
        return true;
     }
+    
     @Override
     public boolean efetuaLogout(HashMap <String,String> user) {
         String query = "Select * from Utilizador where username = \'" + user.get("username") + "\' AND ativo= 1 ;";
