@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
@@ -21,6 +20,7 @@ public class ComunicacaoToDS {
     DatagramPacket packet = null;
     InetAddress addr = null;     
     private String endereco;
+    
     
     //mensagem a enviar
     byte[] data = new byte[128];
@@ -64,20 +64,12 @@ public class ComunicacaoToDS {
         }
     }
     
-    public Socket inicializaTCPPings(String ip){
-        Socket sck = null;
-        try {
-            sck = new Socket(ip, ConstantesServer.portoDS);
-            sck.setSoTimeout(6000);
-            
-        } catch (IOException ex) {
-            System.out.println("Erro no socket dos pings");
-        }
-        
-        return sck;
-    }
-    
     public String getIpServer(){return ipServer;}
     public int getPortoServer(){return portoServer;}
-    public int getnumBD(){return numBD;}
+     public int getnumBD(){return numBD;}
+
+    
+    
+     
+     
 }

@@ -5,10 +5,10 @@ import java.io.Serializable;
 
 public class Utilizador implements Serializable{
    
+    private static int contaUsers = 1;
     private final String username;
     private final String password;
     private final String nome;
-    private static int contaUsers = 1;
     private  int idUtilizador;
     private boolean ativo;
     

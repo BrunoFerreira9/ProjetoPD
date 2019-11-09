@@ -16,38 +16,37 @@ import static tp_servidor.ConstantesServer.ResolveMessages;
 
 public class LogicaServidor implements InterfaceGestao, myObservable {
 
-    LigacaoToBD ligacao ;
-    LogicaServidor este;
-    Thread thPings;
+     LigacaoToBD ligacao ;
+     LogicaServidor este;
      
-    ComunicacaoToDS cds;  
-    ComunicacaoToCliente cc;
+     ComunicacaoToDS cds;  
+     ComunicacaoToCliente cc;
     
-    ServerSocket serverSocket = null;
-    Socket socketPings = null;
-    List<Socket> listaClientes;
+      ServerSocket serverSocket = null;
+      List<Socket> listaClientes;
                 
-    public LogicaServidor(String ipDS, String ipMaquinaBD) {  
+    public LogicaServidor(String ipDS, String ipMaquinaBD  ) {  
         listaClientes = new ArrayList<>();
         este = this;
         cds = new ComunicacaoToDS(ipDS);
         
         try {
             cds.inicializaUDP();
-            socketPings = cds.inicializaTCPPings(ipDS);
-            thPings = new ThreadPingsServidor(socketPings);
         } catch (IOException ex) {
             Logger.getLogger(LogicaServidor.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+               
         ligacao = new LigacaoToBD(ipMaquinaBD);
         ligacao.criarLigacaoBD(cds.getnumBD());
     }
     
     public ServerSocket criaNovoServidor()
     {
+       
         try {
             serverSocket = new ServerSocket(cds.getPortoServer());
+           
         } catch (IOException ex) {
             Logger.getLogger(LogicaServidor.class.getName()).log(Level.SEVERE, null, ex);
         }
