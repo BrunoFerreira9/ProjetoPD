@@ -31,7 +31,7 @@ public class TP_DS extends Thread{
         try {
             com.criacomunicacao();
             new ThreadRecebePedidos(com).start();
-            new ThreadPingsParaServidores(listservers).start();
+            //new ThreadPingsParaServidores(listservers).start();
         } catch (SocketException ex) {
             Logger.getLogger(TP_DS.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -109,7 +109,7 @@ public class ComunicacaoToServidor implements InterfaceGestao,myObservable {
             
              HashMap <String,String> message = ResolveMessages(resposta);
             
-               if(message.get("tipo").equals("resposta") && message.get("sucesso").equals("sim")){
+               if(message.get("tipo").equals("resposta") && message.get("msg").equals("sucesso")){
                     System.out.println("logout!!");
                     return true;
                }
@@ -125,21 +125,21 @@ public class ComunicacaoToServidor implements InterfaceGestao,myObservable {
 
     @Override
     public boolean trataMusicas(String mensagem) {
-        
+     
+       mensagem += " id | " + idUser;
        HashMap <String,String> pedido = ResolveMessages(mensagem);
-       pedido.put("id", ""+idUser+"");
        switch(pedido.get("tipo")){
        
            case "criaMusica" :
-                              out.println(pedido);
+                              out.println(mensagem);
                               out.flush(); break;
-           case "editaMusica": out.println(pedido);
+           case "editaMusica": out.println(mensagem);
                               out.flush(); break;
-           case "eliminaMusica": out.println(pedido);
+           case "eliminaMusica": out.println(mensagem);
                               out.flush(); break;
-           case "ouvirMusica": out.println(pedido);
+           case "ouvirMusica": out.println(mensagem);
                               out.flush(); break;
-           case "addMusPlaylist": out.println(pedido);
+           case "addMusPlaylist": out.println(mensagem);
                               out.flush(); break;
            default:break;
        
