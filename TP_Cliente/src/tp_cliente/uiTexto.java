@@ -177,7 +177,7 @@ public class uiTexto implements myObserver{
           System.out.println("password");
           registo.put("password", in.next());
           System.out.println("nome:");
-          registo.put("nome", in.nextLine());
+          registo.put("nome", in.next());
          
           
          return registo;

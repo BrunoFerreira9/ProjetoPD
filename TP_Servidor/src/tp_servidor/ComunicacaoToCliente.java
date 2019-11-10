@@ -50,61 +50,67 @@ public class ComunicacaoToCliente implements myObserver {
      public void recebeInformacaoTCP() {
         
         while (true) {
-          
-            synchronized (in) {
-            
-                try {
-                    pedido = in.readLine();
-                } catch (IOException ex) {
-                    Logger.getLogger(ComunicacaoToCliente.class.getName()).log(Level.SEVERE, null, ex);
-                }
-              System.out.println("Recebi do Cliente: "+ pedido);
-              HashMap <String,String> user = ResolveMessages(pedido);
+            try {
 
-                if(user.get("tipo").equals("registo")){
+                pedido = in.readLine();
+
+            } catch (IOException ex) {
+                Logger.getLogger(ComunicacaoToCliente.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            System.out.println("Recebi do Cliente: "+ pedido);
+            HashMap <String,String> user = ResolveMessages(pedido);
+
+            switch (user.get("tipo")) {
+                case "registo":
                     if(servidor.efetuaRegisto(user)){
-                       pout.println("tipo | resposta ; msg | sucesso");
-                       pout.flush();
-                    }
-                }else if(user.get("tipo").equals("login")){      
-                     user.put("ip", socketCliente.getLocalAddress().getHostAddress());
-
+                        pout.println("tipo | resposta ; msg | sucesso");
+                        pout.flush();
+                    }   break;
+                case "login":
+                    user.put("ip", socketCliente.getLocalAddress().getHostAddress());
                     if(servidor.efetuaLogin(user)){
-                          String q = "Select idUtilizador from utilizador where username = \'" + user.get("username") + "\';";
-                          String id = servidor.ligacao.executarSelect(q);
+                        String q = "Select idUtilizador from utilizador where username = \'" + user.get("username") + "\';";
+                        String id = servidor.ligacao.executarSelect(q);
 
-                          pout.println("tipo | resposta ; msg | sucesso ; id | " + id);
-                          pout.flush();
+                        pout.println("tipo | resposta ; msg | sucesso ; id | " + id);
+                        pout.flush();
 
-                          servidor.adicionaCliente(socketCliente);
-                    }
-                }else if(user.get("tipo").equals("logout")){                 
+                        servidor.adicionaCliente(socketCliente);
+                    }   break;
+                case "logout":
                     if(servidor.efetuaLogout(user)){
 
                         pout.println("tipo | resposta ; msg | sucesso\n");
                         pout.flush();
                         servidor.removeCliente(socketCliente);
-                    }
-                }
-                else if(user.get("tipo").equals("criaMusica") || user.get("tipo").equals("editaMusica") || user.get("tipo").equals("eliminaMusica") ||user.get("tipo").equals("ouvirMusica") || user.get("tipo").equals("addMusPlaylist") ){                 
+                    }   break;
+                case "criaMusica":
+                case "editaMusica":
+                case "eliminaMusica":
+                case "ouvirMusica":
+                case "addMusPlaylist":
                     if(servidor.trataMusicas(pedido)){
                         pout.println("tipo | resposta ; msg | sucesso\n");
-                        pout.flush();                     
+                        pout.flush();
                     }else{
-                         pout.println("tipo | resposta ; msg | insucesso\n");
-                         pout.flush(); 
-                    }
-                }
-                else if(user.get("tipo").equals("criaPlaylist") || user.get("tipo").equals("editaPlaylist") || user.get("tipo").equals("eliminaPlaylist") ||user.get("tipo").equals("ouvirPlaylist") || user.get("tipo").equals("eliminaMusicaPlaylist") ){                 
+                        pout.println("tipo | resposta ; msg | insucesso\n");
+                        pout.flush();
+                    }   break;
+                case "criaPlaylist":
+                case "editaPlaylist":
+                case "eliminaPlaylist":
+                case "ouvirPlaylist":
+                case "eliminaMusicaPlaylist":
                     if(servidor.trataPlaylist(pedido)){
                         pout.println("tipo | resposta ; msg | sucesso\n");
-                        pout.flush();                     
+                        pout.flush();
                     }else{
-                         pout.println("tipo | resposta ; msg | insucesso\n");
-                         pout.flush(); 
-                    }
-                }
-            }
+                        pout.println("tipo | resposta ; msg | insucesso\n");
+                        pout.flush();
+                    }   break;
+                default:
+                    break;
+            } 
        }
     }
      

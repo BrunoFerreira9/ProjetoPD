@@ -56,7 +56,7 @@ public class ComunicacaoToServidor implements InterfaceGestao,myObservable {
        
         try {
                       
-            pedido = "tipo | registo ; username | "+user.get("username") +" ; password | "+ user.get("password")+" ; nome | "+user.get("nome") + "\n";
+            pedido = "tipo | registo ; username | "+user.get("username") +" ; password | "+ user.get("password")+" ; nome | "+user.get("nome");
             out.println(pedido);
             out.flush();
             resposta = reader.readLine();
@@ -75,7 +75,7 @@ public class ComunicacaoToServidor implements InterfaceGestao,myObservable {
        
         try {
           
-            pedido = "tipo | login ; username | "+user.get("username") +" ; password | "+ user.get("password")+" \n";
+            pedido = "tipo | login ; username | "+user.get("username") +" ; password | "+ user.get("password");
             out.println(pedido);
             out.flush();
          
@@ -101,7 +101,7 @@ public class ComunicacaoToServidor implements InterfaceGestao,myObservable {
        
         try {
           
-            pedido = "tipo | logout ; username | "+user.get("username") +"\n";
+            pedido = "tipo | logout ; username | "+user.get("username");
             out.println(pedido);
             out.flush();
          
