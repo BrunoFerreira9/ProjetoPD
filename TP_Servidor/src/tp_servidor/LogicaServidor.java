@@ -75,6 +75,7 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
             
             threadCliente.start();
 
+          //  cliente.close();
         }catch (SocketException e)
         {
             System.out.println("O servidor vai terminar.\n");
@@ -95,6 +96,7 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
         if(listaClientes.isEmpty())
             return;
         
+        cc.setTerminaServidor();
         //String msg = "tipo | servidor ; msg | terminar";
         // setChanged();
         // notifyObservers(msg);
@@ -125,6 +127,7 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
         return true;
     }
 
+   
     @Override
     public boolean efetuaLogin(HashMap <String,String> user) {
         String query = "Select * from Utilizador where username = \'" + user.get("username") + "\' and password = \'" + user.get("password") + "\' AND ativo=0;";
@@ -191,8 +194,10 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
 
             if (resultado == "ERRO" || resultado == "") { //se nao existir
 
-                String insert = "Insert into musica (nome, autor, album, ano,genero,ficheiro,idUtilizador)  values(\'"  + musica.get("nome") + "\',\'" + 
+                String insert = "Insert into musica (nome, autor, album,ano,duracao,genero,ficheiro,idUtilizador)  values(\'"  + musica.get("nome") + "\',\'" + 
                         musica.get("autor") + "\', \'" + musica.get("album") + "\',"+musica.get("ano")+ ","+musica.get("duracao")+",\'"+musica.get("genero")+"\', \'"+musica.get("ficheiro")+"\',"+musica.get("id")+");";
+                
+                
                 String resultado1= ligacao.executarInsert(insert);
                  if (resultado1 == "ERRO" || resultado1 == "") { 
                      return false;
@@ -203,11 +208,12 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
         }
         else if(musica.get("tipo").equals("editaMusica")){
           
-            String query = "Select * from musica where idMusica = \'" + musica.get("idMusica")+"\' AND idUtilizador = "+musica.get("id");
+            String query = "Select * from musica where idMusica = " + musica.get("idMusica")+" AND idUtilizador = "+musica.get("id");
 
             String resultado = ligacao.executarSelect(query);
 
             if (resultado == "ERRO" || resultado == "") { //se nao existir
+                
                 return false;            
             }    
             
@@ -217,12 +223,12 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
                      "\', ano = "+musica.get("ano")+ 
                      ",duracao = "+musica.get("duracao")+
                      ",genero = \'"+musica.get("genero")+
-                     "\', ficheiro = \'"+musica.get("ficheiro")+"\' WHERE idUtilizador = " + musica.get("id") + ";";
+                     "\', ficheiro = \'"+musica.get("ficheiro")+"\' WHERE idMusica = " + musica.get("idMusica")+" AND idUtilizador = "+musica.get("id");
 
             String resultadoupdate = ligacao.executarUpdate(update);
 
             if (resultadoupdate == "ERRO" || resultadoupdate == "") {
-                System.out.println("Erro na atualizacao da musica na BD\n");
+                System.out.println("Erro na atualizacao da musica na BD");
                 return false;
             }
             return true;
@@ -231,7 +237,7 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
         else if(musica.get("tipo").equals("eliminaMusica")){
           
             String query = "Select * from musica where idMusica = \'" + musica.get("idMusica")+"\' AND idUtilizador = "+musica.get("id");
-
+            
             String resultado = ligacao.executarSelect(query);
 
             if (resultado == "ERRO" || resultado == "") { //se nao existir
@@ -239,14 +245,13 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
             }
             
             String deletePlaylist = "Delete from musica_has_playlist where idMusica = \'" + musica.get("idMusica") + "\'";
+            
             ligacao.executarDelete(deletePlaylist);
             
             String delete = "Delete from musica where idMusica = \'" + musica.get("idMusica") + "\'";
-            String resultadodelete = ligacao.executarDelete(delete);
-
-            if (resultadodelete == "ERRO" || resultadodelete == "") { //se nao existir
-                return false;            
-            }  
+            ligacao.executarDelete(delete);
+           
+            return true;
             
         }
         else if(musica.get("tipo").equals("ouvirMusica")){
@@ -266,11 +271,10 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
             String query = "Select * from musica where idMusica = \'" + musica.get("idMusica")+"\'";
 
             String resultado = ligacao.executarSelect(query);
-
             if (resultado == "ERRO" || resultado == "")  //se nao existir
                      return false;
             
-            String queryPlay = "Select idPlaylist from playlist where idUtilizador = \'" + musica.get("idUtilizador")+"\'";
+            String queryPlay = "Select * from playlist where idUtilizador = " + musica.get("id")+" and idPlaylist = "+musica.get("idPlaylist");
 
             String resultadoqueryPlay = "" ;
             resultadoqueryPlay = ligacao.executarSelect(queryPlay);
@@ -278,14 +282,12 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
             if (resultadoqueryPlay == "ERRO" || resultadoqueryPlay == "")  //se nao existir
                      return false;
                 
-            //INSERIR NA TABELA musica_has_playlist
-        /*
-            String add = "INSERT INTO musica_has_playlist(idMusica, idPlaylist) VALUES " +  musica.get("idMusica") +"," +  Integer.parseInt(resultadoqueryPlay);
+            String add = "INSERT INTO musica_has_playlist(idMusica, idPlaylist) VALUES (" +  musica.get("idMusica") +"," +  musica.get("idPlaylist")+")";
             String resultadoadd = ligacao.executarInsert(add);
-        
+            
             if (resultadoadd == "ERRO" || resultadoadd == "")  //se nao existir
                      return false;
-            */
+            
             return true;
                         
         }else if(musica.get("tipo").equals("filtro")){
@@ -320,10 +322,11 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
             String query = "Select * from playlist where nome = \'" + playlist.get("nome")+"\'";
 
             String resultado = ligacao.executarSelect(query);
-
+            System.out.print(query);
             if (resultado == "ERRO" || resultado == "") { //se nao existir
 
-                String insert = "Insert into playlist (nome, idUtilizador)  values(\'"  + playlist.get("nome") + "\',\'" + playlist.get("id")+");";
+                String insert = "Insert into playlist (nome, idUtilizador)  values(\'"  + playlist.get("nome") + "\'," + playlist.get("id")+");";
+                System.out.print(insert);
                 String resultado1= ligacao.executarInsert(insert);
                  if (resultado1 == "ERRO" || resultado1 == "") { 
                      return false;
@@ -334,7 +337,7 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
         }
         else if(playlist.get("tipo").equals("editaPlaylist")){
           
-            String query = "Select * from playlist where idPlaylist = \'" + playlist.get("idPlaylist")+"\' AND idUtilizador = "+playlist.get("id");
+            String query = "Select * from playlist where idPlaylist = " + playlist.get("idPlaylist")+" AND idUtilizador = "+playlist.get("id");
 
             String resultado = ligacao.executarSelect(query);
 
@@ -342,7 +345,7 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
                 return false;            
             }    
             
-             String update = "UPDATE playlist SET nome = \'"+ playlist.get("nome") + " WHERE idUtilizador = " + playlist.get("id") + ";";
+             String update = "UPDATE playlist SET nome = \'"+ playlist.get("nome") + "\' where idPlaylist = " + playlist.get("idPlaylist")+" AND idUtilizador = "+playlist.get("id");
 
             String resultadoupdate = ligacao.executarUpdate(update);
 
@@ -355,7 +358,7 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
         }
         else if(playlist.get("tipo").equals("eliminaPlaylist")){
           
-            String query = "Select * from playlist where idPlaylist = \'" + playlist.get("idPlaylist")+"\' AND idUtilizador = "+playlist.get("id");
+            String query = "Select * from playlist where idPlaylist = " + playlist.get("idPlaylist")+" AND idUtilizador = "+playlist.get("id");
 
             String resultado = ligacao.executarSelect(query);
 
@@ -366,12 +369,12 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
             String deletePlaylist = "Delete from musica_has_playlist where idPlaylist = \'" + playlist.get("idPlaylist") + "\'";
             ligacao.executarDelete(deletePlaylist);
             
-            String delete = "Delete from playlist where idPlaylist = \'" + playlist.get("idPlaylist") + "\'";
+            String delete = "Delete from playlist where idPlaylist = " + playlist.get("idPlaylist") ;
             String resultadodelete = ligacao.executarDelete(delete);
-
             if (resultadodelete == "ERRO" || resultadodelete == "") { //se nao existir
                 return false;            
             }  
+            return true;
             
         }
         else if(playlist.get("tipo").equals("ouvirPlaylist")){
@@ -390,7 +393,7 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
         }
         else if(playlist.get("tipo").equals("eliminaMusicaPlaylist")){
           
-            String query = "Select * from musica m , musica_has_playlist mp, playlist p where m.idMusica = mp.idMusica AND mp.idPlaylist = p.idPlaylist AND m.idMusica="+playlist.get("idMusica");
+            String query = "Select * from musica m , musica_has_playlist mp, playlist p where m.idMusica = mp.idMusica AND mp.idPlaylist = p.idPlaylist AND m.idMusica="+playlist.get("idMusica") + "and p.idPlaylist = "+playlist.get("idPlaylist");
 
             String resultado = ligacao.executarSelect(query);
 
@@ -398,7 +401,7 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
                 return false;
             }      
             
-             String deletePlaylist = "Delete from musica_has_playlist where idMusica = \'" + playlist.get("idMusica") + "\'";
+             String deletePlaylist = "Delete from musica_has_playlist where idMusica = " + playlist.get("idMusica") + " AND idPlaylist = "+playlist.get("idPlaylist");
              ligacao.executarDelete(deletePlaylist);
             
             return true;

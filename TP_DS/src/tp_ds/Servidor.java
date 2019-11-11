@@ -5,12 +5,22 @@ public class Servidor {
     private int porto;
     private boolean ativo;
     private boolean principal;
+    private int nClientes;
     
     Servidor(String end,int p,boolean a,boolean princ){
         ip = end;
         porto = p;
         ativo =a;
         principal = princ;
+        nClientes=0;
+    }
+
+    public int getnClientes() {
+        return nClientes;
+    }
+
+    public void setnClientes(int nClientes) {
+        this.nClientes += nClientes;
     }
    
     public String getIp() {

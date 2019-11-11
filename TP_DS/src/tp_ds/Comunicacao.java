@@ -50,14 +50,12 @@ public class Comunicacao {
                 break;
             case "Cliente":
                 System.out.print("Cliente - ");
-                if(numClientes < listservers.size()){
+                
+                    //FAZER ROUND ROBIN PARA SABER QUAL O SERVIDOR A ATRIBUIR!!!!
                     Servidor aux = listservers.get(listservers.size()-1);
                     resposta = "tipo | resposta ; sucesso | sim ; ip | "+aux.getIp()+" ; porto | "+aux.getPorto();
                     numClientes++;
-                }
-                else{
-                    resposta = "tipo | resposta ; sucesso | não ; msg | Nenhum servidor disponivel";
-                }
+               
             break;
         }
     }

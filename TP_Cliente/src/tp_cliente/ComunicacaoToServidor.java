@@ -42,10 +42,7 @@ public class ComunicacaoToServidor implements InterfaceGestao,myObservable {
             socketTCP = new Socket(endereco,porto);    
             reader  = new BufferedReader(new InputStreamReader(socketTCP.getInputStream()));
             out = new PrintWriter(socketTCP.getOutputStream());
-            //String msg = "Cliente a ligar";   
-            //out.println(msg);
-            //out.flush();
-            //System.out.println("Resultado: "+ reader.readLine());
+          
         } catch(IOException e){
             System.out.println("Ocorreu um erro no acesso ao socket"+e);
         }
@@ -68,6 +65,13 @@ public class ComunicacaoToServidor implements InterfaceGestao,myObservable {
             return false;
         }
         return true;
+    }
+    
+    public void terminarCliente(){
+    
+        pedido = "tipo | termina ";
+        out.println(pedido);
+        out.flush();
     }
 
     @Override
@@ -110,7 +114,6 @@ public class ComunicacaoToServidor implements InterfaceGestao,myObservable {
              HashMap <String,String> message = ResolveMessages(resposta);
             
                if(message.get("tipo").equals("resposta") && message.get("msg").equals("sucesso")){
-                    System.out.println("logout!!");
                     return true;
                }
             
@@ -122,44 +125,93 @@ public class ComunicacaoToServidor implements InterfaceGestao,myObservable {
         return false;
         
     }
+    
+    public boolean sucesso() throws IOException{
+        
+        resposta = reader.readLine();
+            
+        HashMap <String,String> message = ResolveMessages(resposta);
+
+        if(message.get("tipo").equals("resposta") && message.get("msg").equals("sucesso")){
+             return true;
+        }
+        return false;
+    }
 
     @Override
-    public boolean trataMusicas(String mensagem) {
+    public boolean trataMusicas(String mensagem){
      
-       mensagem += " id | " + idUser;
-       HashMap <String,String> pedido = ResolveMessages(mensagem);
-       switch(pedido.get("tipo")){
-       
-           case "criaMusica" :
-                              out.println(mensagem);
-                              out.flush(); break;
-           case "editaMusica": out.println(mensagem);
-                              out.flush(); break;
-           case "eliminaMusica": out.println(mensagem);
-                              out.flush(); break;
-           case "ouvirMusica": out.println(mensagem);
-                              out.flush(); break;
-           case "addMusPlaylist": out.println(mensagem);
-                              out.flush(); break;
-           default:break;
-       
-       }
-       return false;
+        try {
+            mensagem += "id | " + idUser;
+            HashMap <String,String> pedido = ResolveMessages(mensagem);
+            switch(pedido.get("tipo")){
+                
+                case "criaMusica" :
+                    out.println(mensagem);
+                    out.flush();
+                    return sucesso();
+                     
+                case "editaMusica": 
+                    out.println(mensagem);
+                    out.flush(); 
+                    return sucesso();
+                case "eliminaMusica": 
+                    out.println(mensagem);
+                    out.flush();  
+                    return sucesso();
+                case "ouvirMusica": 
+                    out.println(mensagem);
+                    out.flush();
+                    return sucesso();
+                case "addMusPlaylist":
+                    out.println(mensagem);
+                    out.flush(); 
+                    return sucesso();
+                default:return false;
+                
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(ComunicacaoToServidor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         return false;
     }
+
     
      @Override
     public boolean trataPlaylist(String mensagem) {
-       HashMap <String,String> pedido = ResolveMessages(mensagem);
-       
-       switch(pedido.get("tipo")){       
-           case "criaPlaylist":break;
-           case "editaPlaylist": break;
-           case "eliminaPlaylist":break;
-           case "ouvirPlaylist":break;
-           default:break;
-       
-       }
-       return false;
+        try {
+             mensagem += "id | " + idUser;
+            HashMap <String,String> pedido = ResolveMessages(mensagem);
+            
+            switch(pedido.get("tipo")){
+                case "criaPlaylist":
+                    out.println(mensagem);
+                    out.flush(); 
+                    return sucesso();
+                case "editaPlaylist": 
+                    out.println(mensagem);
+                    out.flush(); 
+                    return sucesso();
+                case "eliminaPlaylist":
+                    out.println(mensagem);
+                    out.flush();
+                    return sucesso();
+                case "ouvirPlaylist":
+                    out.println(mensagem);
+                    out.flush(); 
+                    return sucesso();
+                case "eliminaMusicaPlaylist":
+                    out.println(mensagem);
+                    out.flush(); 
+                    return sucesso();
+                default:
+                    return false;
+            }
+            
+        } catch (IOException ex) {
+            Logger.getLogger(ComunicacaoToServidor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 
     @Override

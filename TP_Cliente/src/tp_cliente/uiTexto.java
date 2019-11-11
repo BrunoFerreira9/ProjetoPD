@@ -49,21 +49,21 @@ public class uiTexto implements myObserver{
     public String criaMusica(){
                
         StringBuilder sb = new StringBuilder();
-        sb.append("tipo | criaMusica ;");
+        sb.append("tipo | criaMusica ; ");
         System.out.println("Nome:");
-        sb.append("nome | "+in.nextLine()+" ;");
+        sb.append("nome | "+in.next()+" ; ");
         System.out.println("Autor");
-        sb.append("autor | "+in.nextLine()+" ;");
+        sb.append("autor | "+in.next()+" ; ");
         System.out.println("Album");
-        sb.append("album | "+in.nextLine()+" ;");
+        sb.append("album | "+in.next()+" ; ");
         System.out.println("Ano");
-        sb.append("ano | "+in.nextInt()+" ;");
+        sb.append("ano | "+in.nextInt()+" ; ");
         System.out.println("Duracao");
-        sb.append("duracao | "+in.nextDouble()+" ;");
+        sb.append("duracao | "+in.nextDouble()+" ; ");
         System.out.println("Genero");
-        sb.append("genero | "+in.nextLine()+" ;");
+        sb.append("genero | "+in.next()+" ; ");
         System.out.println("Ficheiro");
-        sb.append("ficheiro | "+in.nextLine()+" ;");
+        sb.append("ficheiro | "+in.next()+" ; ");
         
         return sb.toString();
     }
@@ -71,23 +71,23 @@ public class uiTexto implements myObserver{
     public String editaMusica(){
                
         StringBuilder sb = new StringBuilder();
-        sb.append("tipo | editaMusica ;");
+        sb.append("tipo | editaMusica ; ");
         System.out.println("ID musica a editar:");
-        sb.append("idMusica | "+in.nextInt()+" ;");
+        sb.append("idMusica | "+in.nextInt()+" ; ");
         System.out.println("Nome:");
-        sb.append("nome | "+in.nextLine()+" ;");
+        sb.append("nome | "+in.next()+" ; ");
         System.out.println("Autor");
-        sb.append("autor | "+in.nextLine()+" ;");
+        sb.append("autor | "+in.next()+" ; ");
         System.out.println("Album");
-        sb.append("album | "+in.nextLine()+" ;");
+        sb.append("album | "+in.next()+" ; ");
         System.out.println("Ano");
-        sb.append("ano | "+in.nextInt()+" ;");
+        sb.append("ano | "+in.nextInt()+" ; ");
         System.out.println("Duracao");
-        sb.append("duracao | "+in.nextDouble()+" ;");
+        sb.append("duracao | "+in.nextDouble()+" ; ");
         System.out.println("Genero");
-        sb.append("genero | "+in.nextLine()+" ;");
+        sb.append("genero | "+in.next()+" ; ");
         System.out.println("Ficheiro");
-        sb.append("ficheiro | "+in.nextLine()+" ;");
+        sb.append("ficheiro | "+in.next()+" ; ");
         
         return sb.toString();
     }
@@ -95,18 +95,20 @@ public class uiTexto implements myObserver{
      public String eliminaMusica(){
                
         StringBuilder sb = new StringBuilder();
-        sb.append("tipo | eliminaMusica ;");
+        sb.append("tipo | eliminaMusica ; ");
         System.out.println("ID musica a eliminar:");
-        sb.append("idMusica | "+in.nextInt()+" ;");
+        sb.append("idMusica | "+in.nextInt()+" ; ");
         
         return sb.toString();
     }
      public String addMusicaPlaylist(){
                
         StringBuilder sb = new StringBuilder();
-        sb.append("tipo | addMusPlaylist ;");
+        sb.append("tipo | addMusPlaylist ; ");
         System.out.println("ID musica a adicionar:");
-        sb.append("idMusica | "+in.nextInt()+" ;");
+        sb.append("idMusica | "+in.nextInt()+" ; ");
+        System.out.println("ID Playlist :");
+        sb.append("idPlaylist | "+in.nextInt()+" ; ");
         
         return sb.toString();
     }
@@ -121,15 +123,16 @@ public class uiTexto implements myObserver{
         System.out.println("2 - Editar Playlist");
         System.out.println("3 - Eliminar Playlist");
         System.out.println("4 - Remover Musica");
-        System.out.println("5 - Sair");
+        System.out.println("5 - Ouvir Playlist");
+        System.out.println("6 - Sair");
     }
     
     public String criaPlaylist(){
                
         StringBuilder sb = new StringBuilder();
-        sb.append("tipo | criaPlaylist ;");
+        sb.append("tipo | criaPlaylist ; ");
         System.out.println("Nome:");
-        sb.append("nome | "+in.nextLine()+" ;");
+        sb.append("nome | "+in.next()+" ; ");
                
         return sb.toString();
     }
@@ -137,11 +140,11 @@ public class uiTexto implements myObserver{
     public String editaPlaylist(){
                
         StringBuilder sb = new StringBuilder();
-        sb.append("tipo | editaPlaylist ;");
+        sb.append("tipo | editaPlaylist ; ");
         System.out.println("ID Playlist a editar:");
-        sb.append("idPlaylist | "+in.nextInt()+" ;");
+        sb.append("idPlaylist | "+in.nextInt()+" ; ");
         System.out.println("Nome:");
-        sb.append("nome | "+in.nextLine()+" ;");
+        sb.append("nome | "+in.next()+" ; ");
         
         return sb.toString();
     }
@@ -149,9 +152,9 @@ public class uiTexto implements myObserver{
      public String eliminaPlaylist(){
                
         StringBuilder sb = new StringBuilder();
-        sb.append("tipo | eliminaPlaylist ;");
+        sb.append("tipo | eliminaPlaylist ; ");
         System.out.println("ID Playlist a eliminar:");
-        sb.append("idPlaylist | "+in.nextInt()+" ;");
+        sb.append("idPlaylist | "+in.nextInt()+" ; ");
         
         return sb.toString();
     }
@@ -159,14 +162,25 @@ public class uiTexto implements myObserver{
      public String eliminaMusicaPlaylist(){
                
         StringBuilder sb = new StringBuilder();
-        sb.append("tipo | eliminaMusicaPlaylist ;");       
+        sb.append("tipo | eliminaMusicaPlaylist ; "); 
+        System.out.println("ID Playlist:");
+        sb.append("idPlaylist | "+in.nextInt()+" ; ");
         System.out.println("ID Musica a retirar:");
-        sb.append("idMusica | "+in.nextInt()+" ;");
+        sb.append("idMusica | "+in.nextInt()+" ; ");
         
         return sb.toString();
     }
-    
-    
+     
+      public String ouvirPlaylist(){
+               
+        StringBuilder sb = new StringBuilder();
+        sb.append("tipo | ouvirPlaylist ; "); 
+        System.out.println("ID Playlist:");
+        sb.append("idPlaylist | "+in.nextInt()+" ; ");
+        
+        return sb.toString();
+    }
+     
     
      public HashMap<String,String> dadosRegisto(){
         
@@ -197,7 +211,7 @@ public class uiTexto implements myObserver{
     }
     
     int op,op2,op3,op4;
-    
+    boolean logado=false;
     public void run() throws Exception 
     {
         try{
@@ -224,7 +238,7 @@ public class uiTexto implements myObserver{
                         user = dadosLogin();
                         if(cs.efetuaLogin(user)){
                         
-                                                  
+                        logado=true;                      
                         do{
                             apresentaMenuSecundario();
                             op2 = in.nextInt();
@@ -238,14 +252,23 @@ public class uiTexto implements myObserver{
                                     
                                         switch(op3){
                                         
-                                            case 1:cs.trataMusicas(criaMusica());break;
-                                            case 2:cs.trataMusicas(editaMusica());break;
-                                            case 3:cs.trataMusicas(eliminaMusica());break;
-                                            case 4:cs.trataMusicas(addMusicaPlaylist());break;
+                                            case 1:if(!cs.trataMusicas(criaMusica()))
+                                                    System.out.println("Operação não realizada!");                                                
+                                                break;
+                                            case 2:if(!cs.trataMusicas(editaMusica()))
+                                                    System.out.println("Operação não realizada!");  
+                                                    ;break;
+                                            case 3:if(!cs.trataMusicas(eliminaMusica()))
+                                                    System.out.println("Operação não realizada!");  
+                                                    break;
+                                            case 4:if(!cs.trataMusicas(addMusicaPlaylist()))
+                                                    System.out.println("Operação não realizada!");  
+                                                    break;                                           
+                                            default : break;
                                         }
                                         
                                     }while(op3!=5);
-                                    
+                                    break;
                                 case 2 :
                                     do{
                                         apresentaMenuPlaylist();
@@ -253,24 +276,38 @@ public class uiTexto implements myObserver{
                                     
                                         switch(op3){
                                         
-                                            case 1:cs.trataPlaylist(criaPlaylist());break;
-                                            case 2:cs.trataPlaylist(editaPlaylist());break;
-                                            case 3:cs.trataPlaylist(eliminaPlaylist());break;
-                                            case 4:cs.trataPlaylist(eliminaMusicaPlaylist());break;
+                                            case 1:if(!cs.trataPlaylist(criaPlaylist()))
+                                                    System.out.println("Operação não realizada!");
+                                            break;
+                                            case 2:if(!cs.trataPlaylist(editaPlaylist()))
+                                                    System.out.println("Operação não realizada!");
+                                            break;
+                                            case 3:if(!cs.trataPlaylist(eliminaPlaylist()))
+                                                    System.out.println("Operação não realizada!");
+                                            break;
+                                            case 4:if(!cs.trataPlaylist(eliminaMusicaPlaylist()))
+                                                    System.out.println("Operação não realizada!");
+                                            break;
+                                            case 5:if(!cs.trataPlaylist(ouvirPlaylist()))
+                                                    System.out.println("Operação não realizada!");
+                                            break;
+                                            
+                                            default : break;
                                         }
                                         
                                     }while(op3!=5);
+                                    break;
+                                default:
+                                     if(logado){
+                                        if(cs.efetuaLogout(user))
+                                            System.out.println("Logout com sucesso!"); 
+                                    }
+                                    break;
                             }
                         }while(op2!=3);
-                        
-                        
-                        };break;
+               }
                 case 3:
-                    //mandar mensagem de logout
-                    if(user!=null)
-                        cs.efetuaLogout(user);
-                    break;
-
+                    cs.terminarCliente();
             }
         }while(op!=3);
        
