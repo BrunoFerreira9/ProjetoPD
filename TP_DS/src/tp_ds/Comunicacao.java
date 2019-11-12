@@ -50,16 +50,33 @@ public class Comunicacao {
                 break;
             case "Cliente":
                 System.out.print("Cliente - ");
-                
+                Servidor aux;
+                if(listservers.size()==1){
+                    aux = listservers.get(0);
+                    listservers.get(0).setnClientes(1);
+                    
+                }
                     //FAZER ROUND ROBIN PARA SABER QUAL O SERVIDOR A ATRIBUIR!!!!
-                    Servidor aux = listservers.get(listservers.size()-1);
+                    int servidor = roundRobin(listservers);
+                    aux = listservers.get(servidor);
+                    listservers.get(servidor).setnClientes(1);
                     resposta = "tipo | resposta ; sucesso | sim ; ip | "+aux.getIp()+" ; porto | "+aux.getPorto();
                     numClientes++;
                
             break;
         }
     }
+    public int roundRobin(List<Servidor> lista){
     
+        int pos = 0;
+        
+        for(int i = 1; i<lista.size();i++){
+            if(lista.get(i).getnClientes()<lista.get(pos).getnClientes())
+                pos=i;
+        }
+        
+        return pos;
+    }
     public void enviaresposta() throws IOException{
         System.out.println(resposta);
         pkt.setData(resposta.getBytes());

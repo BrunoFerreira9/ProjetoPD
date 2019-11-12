@@ -11,6 +11,7 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static tp_cliente.ConstantesCliente.BUFSIZE;
+import static tp_cliente.ConstantesCliente.ResolveMessages;
 import static tp_cliente.ConstantesCliente.portoDS;
 
 public class ComunicacaoToDS {
@@ -79,17 +80,5 @@ public class ComunicacaoToDS {
     public String getIpServer(){return ipServer;}
     public int getPortoServer(){return portoServer;}
     
-     public static HashMap<String,String> ResolveMessages(String message){
-        StringTokenizer t,tokens = new StringTokenizer(message,";");
-        String key,val;
-        HashMap<String,String> messages = new HashMap<>();
-        while (tokens.hasMoreElements()) {
-            t = new StringTokenizer(tokens.nextElement().toString()," | ");  
-            key = t.nextElement().toString();
-            val = t.nextElement().toString();
-            messages.put(key, val);
-        }
-        return messages;
-    }
      
 }
