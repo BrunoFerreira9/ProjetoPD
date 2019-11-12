@@ -212,19 +212,25 @@ public class uiTexto implements myObserver{
     
     int op,op2,op3,op4;
     boolean logado=false;
+    boolean existeSocket=true;
+
+
     public void run() throws Exception 
     {
         try{
             cds = new ComunicacaoToDS(ipDS);
-            cds.inicializaUDP();
-            cs = new ComunicacaoToServidor(cds.getIpServer(),cds.getPortoServer());
-            cs.inicializaTCP();
+            if(cds.inicializaUDP()){             
+                cs = new ComunicacaoToServidor(cds.getIpServer(),cds.getPortoServer());
+                cs.inicializaTCP();}
+            else
+                 existeSocket=false;
         }catch(IOException e){
              Logger.getLogger(TP_Cliente.class.getName()).log(Level.SEVERE, null, e);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(TP_Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }
-           
+        
+        if(existeSocket){
         HashMap<String,String> user = new HashMap<>();
         do{
             apresentaMenuInicial();
@@ -310,7 +316,7 @@ public class uiTexto implements myObserver{
                     cs.terminarCliente();
             }
         }while(op!=3);
-       
+        }
     }
 
     @Override

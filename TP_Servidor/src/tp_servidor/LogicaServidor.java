@@ -17,16 +17,19 @@ import static tp_servidor.ConstantesServer.ResolveMessages;
 
 public class LogicaServidor implements InterfaceGestao, myObservable {
 
-    LigacaoToBD ligacao ;
-    LogicaServidor este;
+    private LigacaoToBD ligacao ;
+    private LogicaServidor este;
      
-    ComunicacaoToDS cds;  
-    ComunicacaoToCliente cc;
+    private ComunicacaoToDS cds;  
+
+
+    
+    private ComunicacaoToCliente cc;
     private Thread pings;
     
-    DatagramSocket dtsocket;
-    ServerSocket serverSocket = null;
-    List<Socket> listaClientes;
+    private DatagramSocket dtsocket;
+    private ServerSocket serverSocket = null;
+    private List<Socket> listaClientes;
                 
     public LogicaServidor(String ipDS, String ipMaquinaBD) {  
         listaClientes = new ArrayList<>();
@@ -44,6 +47,10 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
         ligacao = new LigacaoToBD(ipMaquinaBD);
         ligacao.criarLigacaoBD(cds.getnumBD());
     }
+
+    public LigacaoToBD getLigacao() {
+        return ligacao;
+    }
     
     public ServerSocket criaNovoServidor(){
        
@@ -56,10 +63,20 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
          return serverSocket;
     }
 
+    public ComunicacaoToDS getCds() {
+        return cds;
+    }
+
+    public ComunicacaoToCliente getCc() {
+        return cc;
+    }
     public List<Socket> obterListaClientes(){
         return listaClientes;
     }
     
+    public void terminaServidor(){
+        cds.terminaServidor();
+    }
     public void aceitaLigacoes(Thread threadCliente) {
 
         try {

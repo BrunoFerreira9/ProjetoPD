@@ -35,7 +35,7 @@ public class ComunicacaoToDS {
         this.endereco = endereco;
      }
      
-    public void inicializaUDP() throws IOException {
+    public boolean inicializaUDP() throws IOException {
         String resposta;
         HashMap <String,String> message;
         try{
@@ -52,20 +52,19 @@ public class ComunicacaoToDS {
             socketUDP.receive(receivePacket);
             resposta = new String(receivePacket.getData(),0,receivePacket.getLength());
             
-            System.out.println(resposta);
-            
-            
             message = ResolveMessages(resposta);
             switch(message.get("tipo")){
                 case "resposta":
-                                if(message.containsValue("sim")){
-                                    ipServer = message.get("ip");
-                                    portoServer = Integer.parseInt(message.get("porto"));
-                                }
-                                else{
-                                    System.out.println(message.get("msg"));
-                                }
-                                break;
+                    if(message.get("sucesso").equals("nao")){
+                         System.out.println("Não existe servidores ativos");
+                          return false;
+                    }else if(message.get("sucesso").equals("sim")){
+                        ipServer = message.get("ip");
+                        portoServer = Integer.parseInt(message.get("porto"));
+                        return true;
+                    }
+                    
+                    break;
             }
             
            
@@ -74,6 +73,7 @@ public class ComunicacaoToDS {
         } catch (SocketException ex) {
             Logger.getLogger(ComunicacaoToDS.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return false;
     }
    
     

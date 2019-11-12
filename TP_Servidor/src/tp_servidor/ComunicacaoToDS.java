@@ -24,7 +24,7 @@ public class ComunicacaoToDS {
     
     //mensagem a enviar
     byte[] data = new byte[128];
-    private String dados = "tipo | Servidor";
+    private String dados;
     
     //recebe o ip e porto do servidor a que ligam
     private int portoServer;
@@ -38,6 +38,7 @@ public class ComunicacaoToDS {
     public DatagramSocket inicializaUDP() throws IOException {
         String resposta ;
         try{
+            dados = "tipo | Servidor ; msg | ligar";
             addr = InetAddress.getByName(endereco);
             data= dados.getBytes();
             socketUDP = new DatagramSocket();
@@ -63,6 +64,16 @@ public class ComunicacaoToDS {
         }
         
         return socketUDP;
+    }
+    public void terminaServidor(){
+       dados = "tipo | Servidor ; msg | terminar";
+        data= dados.getBytes();
+        packet = new DatagramPacket( data, data.length,addr,portoDS);
+        try {
+            socketUDP.send(packet);
+        } catch (IOException ex) {
+            Logger.getLogger(ComunicacaoToDS.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public String getIpServer(){return ipServer;}

@@ -28,6 +28,10 @@ public class Comunicacao {
     public void criacomunicacao() throws SocketException{
         sock = new DatagramSocket(ConstantesDS.portoDS);
     }
+
+    public DatagramSocket getSock() {
+        return sock;
+    }
     
    
     public void setPacket(DatagramPacket p){
@@ -44,46 +48,61 @@ public class Comunicacao {
     public void verificapedido() throws SocketException{
         switch(message.get("tipo")){
             case "Servidor":
-                System.out.print("Servidor - ");
-                listservers.add(new Servidor(pkt.getAddress().getHostAddress(),pkt.getPort(),true, (listservers.isEmpty())));
-                resposta = "tipo | resposta ; sucesso | sim ; numbd | "+numbasedados++;
+                if(message.get("msg").equals("terminar")){
+                    terminaServidor(pkt.getAddress().getHostAddress());                
+                }
+                else{                    
+                    listservers.add(new Servidor(pkt.getAddress().getHostAddress(),pkt.getPort(),true, (listservers.isEmpty())));
+                    resposta = "tipo | resposta ; sucesso | sim ; numbd | "+numbasedados++;
+                }
                 break;
             case "Cliente":
-                System.out.print("Cliente - ");
                 Servidor aux;
+                if(listservers.size()==0){
+                    resposta = "tipo | resposta ; sucesso | nao ; msg | Nao existe servidores";
+                    break;
+                }
                 if(listservers.size()==1){
                     aux = listservers.get(0);
                     listservers.get(0).setnClientes(1);
                     
-                }
-                    //FAZER ROUND ROBIN PARA SABER QUAL O SERVIDOR A ATRIBUIR!!!!
-                    int servidor = roundRobin(listservers);
+                }else{ //FAZER ROUND ROBIN PARA SABER QUAL O SERVIDOR A ATRIBUIR!!!!
+                    int servidor = roundRobin();
                     aux = listservers.get(servidor);
                     listservers.get(servidor).setnClientes(1);
-                    resposta = "tipo | resposta ; sucesso | sim ; ip | "+aux.getIp()+" ; porto | "+aux.getPorto();
-                    numClientes++;
+                }
+                    
+                resposta = "tipo | resposta ; sucesso | sim ; ip | "+aux.getIp()+" ; porto | "+aux.getPorto();
+                numClientes++;
                
             break;
         }
     }
-    public int roundRobin(List<Servidor> lista){
+    public int roundRobin(){
     
         int pos = 0;
         
-        for(int i = 1; i<lista.size();i++){
-            if(lista.get(i).getnClientes()<lista.get(pos).getnClientes())
+        for(int i = 1; i<listservers.size();i++){
+            if(listservers.get(i).getnClientes()<listservers.get(pos).getnClientes())
                 pos=i;
         }
         
         return pos;
     }
     public void enviaresposta() throws IOException{
-        System.out.println(resposta);
         pkt.setData(resposta.getBytes());
         pkt.setLength(resposta.length());
         sock.send(pkt);
     }
     
+    public void terminaServidor(String ip){
+    
+        for(int i = 0; i<listservers.size();i++){
+            if(listservers.get(i).getIp().equals(ip)){
+                listservers.get(i).setAtivo(false);
+            }
+        }
+    }
     
     
 }

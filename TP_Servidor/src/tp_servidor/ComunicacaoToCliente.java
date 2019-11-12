@@ -38,7 +38,7 @@ public class ComunicacaoToCliente implements myObserver {
         this.socketCliente = cliente;
             
         this.endereco = cliente.getInetAddress().getHostName();
-        this.porto = servidor.cds.getPortoServer();
+        this.porto = servidor.getCds().getPortoServer();
         
          try {   
             pout = new PrintWriter(socketCliente.getOutputStream());
@@ -92,7 +92,7 @@ public class ComunicacaoToCliente implements myObserver {
     
    
     
-     public void recebeInformacaoTCP() {
+    public void recebeInformacaoTCP() {
        
         while (!terminaServidor) {
             
@@ -130,7 +130,7 @@ public class ComunicacaoToCliente implements myObserver {
                     user.put("ip", socketCliente.getLocalAddress().getHostAddress());
                     if(servidor.efetuaLogin(user)){
                         String q = "Select idUtilizador from utilizador where username = \'" + user.get("username") + "\';";
-                        String id = servidor.ligacao.executarSelect(q);
+                        String id = servidor.getLigacao().executarSelect(q);
 
                         pout.println("tipo | resposta ; msg | sucesso ; id | " + id);
                         pout.flush();
@@ -208,6 +208,9 @@ public class ComunicacaoToCliente implements myObserver {
                     break;
             } 
        }
+       pout.println("tipo | servidor ; msg | terminou");
+       pout.flush();
+        
     }
      
     @Override

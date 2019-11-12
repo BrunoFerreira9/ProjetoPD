@@ -84,19 +84,14 @@ public class ComunicacaoToServidor implements InterfaceGestao,myObservable {
             out.flush();
          
             resposta = reader.readLine();
-             System.out.print(resposta);
-             HashMap <String,String> message = ResolveMessages(resposta);
+            HashMap <String,String> message = ResolveMessages(resposta);
             
-               if(message.get("tipo").equals("resposta") && message.get("msg").equals("sucesso")){
-                    System.out.println("Estou logado!!");
+                if(message.get("tipo").equals("resposta") && message.get("msg").equals("sucesso")){
                     idUser = Integer.parseInt(message.get("id").toString());
-               }
-            
-          
+                }
         } catch (IOException ex) {
             Logger.getLogger(TP_Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return true;
     }
     
@@ -104,34 +99,27 @@ public class ComunicacaoToServidor implements InterfaceGestao,myObservable {
     public boolean efetuaLogout(HashMap <String,String> user) {
        
         try {
-          
             pedido = "tipo | logout ; username | "+user.get("username");
             out.println(pedido);
             out.flush();
          
             resposta = reader.readLine();
             
-             HashMap <String,String> message = ResolveMessages(resposta);
-            
-               if(message.get("tipo").equals("resposta") && message.get("msg").equals("sucesso")){
-                    return true;
-               }
-            
-          
+            HashMap <String,String> message = ResolveMessages(resposta);
+            if(message.get("tipo").equals("resposta") && message.get("msg").equals("sucesso")){
+                return true;
+            }
         } catch (IOException ex) {
             Logger.getLogger(TP_Cliente.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
         return false;
-        
     }
     
     public boolean sucesso() throws IOException{
         
         resposta = reader.readLine();
-            
         HashMap <String,String> message = ResolveMessages(resposta);
-
         if(message.get("tipo").equals("resposta") && message.get("msg").equals("sucesso")){
              return true;
         }
@@ -145,7 +133,6 @@ public class ComunicacaoToServidor implements InterfaceGestao,myObservable {
             mensagem += "id | " + idUser;
             HashMap <String,String> pedido = ResolveMessages(mensagem);
             switch(pedido.get("tipo")){
-                
                 case "criaMusica" :
                     out.println(mensagem);
                     out.flush();
@@ -176,8 +163,7 @@ public class ComunicacaoToServidor implements InterfaceGestao,myObservable {
          return false;
     }
 
-    
-     @Override
+    @Override
     public boolean trataPlaylist(String mensagem) {
         try {
              mensagem += "id | " + idUser;
@@ -207,7 +193,6 @@ public class ComunicacaoToServidor implements InterfaceGestao,myObservable {
                 default:
                     return false;
             }
-            
         } catch (IOException ex) {
             Logger.getLogger(ComunicacaoToServidor.class.getName()).log(Level.SEVERE, null, ex);
         }

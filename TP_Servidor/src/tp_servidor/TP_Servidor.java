@@ -39,6 +39,7 @@ public class TP_Servidor {
         }while(!scann.equalsIgnoreCase("sair"));
 
         try{
+            servidores.terminaServidor();
             clientSocket.close();
 
             ligacoes.desliga();
