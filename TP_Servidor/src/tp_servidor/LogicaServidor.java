@@ -38,7 +38,8 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
         
         try {
             dtsocket = cds.inicializaUDP();
-            pings = new ThreadPings(dtsocket, ipDS);
+            pings = new ThreadPings(dtsocket,ipDS);
+            pings.start();
         } catch (IOException ex) {
             Logger.getLogger(LogicaServidor.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -92,7 +93,6 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
             
             threadCliente.start();
 
-          //  cliente.close();
         }catch (SocketException e)
         {
             System.out.println("O servidor vai terminar.\n");

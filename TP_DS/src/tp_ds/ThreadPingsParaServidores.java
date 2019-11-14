@@ -14,16 +14,20 @@ import java.util.logging.Logger;
 import static tp_ds.ConstantesDS.ResolveMessages;
 
 class ThreadPingsParaServidores extends Thread {
-    private DatagramSocket dtsocket;
+    private DatagramSocket dtsocketPing;
     private DatagramPacket dtpack;
     private List<Servidor> listservers;
     String dados;
     
      HashMap <String,String> message;
      
-    public ThreadPingsParaServidores(List<Servidor> listservers,DatagramSocket s) {
+    public ThreadPingsParaServidores(List<Servidor> listservers) {
      
-        dtsocket = s;
+        try {
+            dtsocketPing = new DatagramSocket(ConstantesDS.portoPingsDS);
+        } catch (SocketException ex) {
+            Logger.getLogger(ThreadPingsParaServidores.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         if(listservers == null)
             this.listservers = new ArrayList<>();
@@ -32,35 +36,43 @@ class ThreadPingsParaServidores extends Thread {
     
     @Override
     public void run(){
-        byte[] data = "ping".getBytes();
-        while(true){
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(ThreadPingsParaServidores.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            if(listservers.isEmpty())
+          String resposta ;
+          byte[] data = "ping".getBytes();
+          //dtsocketPing.setSoTimeout(10000);
+          
+          while(!dtsocketPing.isClosed()){
+              
+              if(listservers.isEmpty()){ 
+                  //System.out.println("0");
                 continue;
-            
-            try {
-                for(Servidor s : listservers){
-                    dtpack = new DatagramPacket(data, data.length, InetAddress.getByName(s.getIp()), s.getPorto());
-                    dtsocket.send(dtpack);
-                    
-                    dtpack = new DatagramPacket(new byte[ConstantesDS.BUFSIZE], ConstantesDS.BUFSIZE);
-                    dtsocket.receive(dtpack);
-                    dados = new String(dtpack.getData(),0,dtpack.getLength());
-                    message = ResolveMessages(dados);
-                    if(message.get("tipo").equals("ping") && message.get("resposta").equals("ativo"))
-                        System.out.print("Servidor " + s.getIp() + " ativo.\n");
-                }
-            } catch (UnknownHostException ex) {
-                Logger.getLogger(ThreadPingsParaServidores.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(ThreadPingsParaServidores.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-        }
+              }
+              
+              try {
+                  Thread.sleep(ConstantesDS.PINGTIME);
+              } catch (InterruptedException ex) {
+                  Logger.getLogger(ThreadPingsParaServidores.class.getName()).log(Level.SEVERE, null, ex);
+              }
+              try {
+                    for(Servidor s : listservers){
+                        dtpack = new DatagramPacket(data, data.length, InetAddress.getByName(s.getIp()), s.getPorto());
+                        dtsocketPing.send(dtpack);
+                        System.out.println("enviei ping para " +InetAddress.getByName(s.getIp()) + " - " + s.getPorto());
+                        
+                        dtpack = new DatagramPacket(new byte[ConstantesDS.BUFSIZE],ConstantesDS.BUFSIZE);
+                           
+                        dtsocketPing.receive(dtpack);
+                      
+                        resposta = new String(dtpack.getData(),0,dtpack.getLength());
+                        if(resposta.equalsIgnoreCase("ativo"))
+                            System.out.print("Servidor " + s.getIp() + " ativo.\n");
+                  }
+              } catch (UnknownHostException ex) {
+                  Logger.getLogger(ThreadPingsParaServidores.class.getName()).log(Level.SEVERE, null, ex);
+              } catch (IOException ex) {
+                  Logger.getLogger(ThreadPingsParaServidores.class.getName()).log(Level.SEVERE, null, ex);
+              }
+              
+          }
     }
     
 }
