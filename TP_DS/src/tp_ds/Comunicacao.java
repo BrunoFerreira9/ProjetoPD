@@ -3,10 +3,14 @@ package tp_ds;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import static tp_ds.ConstantesDS.ResolveMessages;
 
 public class Comunicacao {
@@ -49,7 +53,16 @@ public class Comunicacao {
         switch(message.get("tipo")){
             case "Servidor":
                 if(message.get("msg").equals("terminar")){
-                    terminaServidor(pkt.getAddress().getHostAddress());                
+                    if(!terminaServidor(pkt.getAddress().getHostAddress())){
+                        byte[] data = "sair".getBytes();
+                        try {
+                            DatagramPacket dtgram = new DatagramPacket(data, data.length, InetAddress.getByName(ConstantesDS.IPMULTICAST), ConstantesDS.portoMulticast);
+                            sock.send(dtgram);
+                        } catch (Exception ex) {
+                            Logger.getLogger(Comunicacao.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    else{/*Implementar se o servidor é principal como funciona com o multicast...*/}
                 }
                 else{
                     listservers.add(new Servidor(pkt.getAddress().getHostAddress(),pkt.getPort(),true, (listservers.isEmpty())));
@@ -91,6 +104,7 @@ public class Comunicacao {
                 break;*/
         }
     }
+    
     public int roundRobin(){
     
         int pos = 0;
@@ -102,19 +116,22 @@ public class Comunicacao {
         
         return pos;
     }
+    
     public void enviaresposta() throws IOException{
         pkt.setData(resposta.getBytes());
         pkt.setLength(resposta.length());
         sock.send(pkt);
     }
     
-    public void terminaServidor(String ip){
-    
-        for(int i = 0; i<listservers.size();i++){
-            if(listservers.get(i).getIp().equals(ip)){
-                listservers.get(i).setAtivo(false);
+    public boolean terminaServidor(String ip){
+        for(Servidor server : listservers){
+            if(server.getIp().equals(ip)){
+                server.setAtivo(false);
+                return server.isPrincipal();
             }
         }
+        
+        return false;
     }
     
     
