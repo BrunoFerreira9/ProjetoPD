@@ -231,91 +231,91 @@ public class uiTexto implements myObserver{
         }
         
         if(existeSocket){
-        HashMap<String,String> user = new HashMap<>();
-        do{
-            apresentaMenuInicial();
-            op = in.nextInt();
+            HashMap<String,String> user = new HashMap<>();
+            do{
+                apresentaMenuInicial();
+                op = in.nextInt();
 
-            switch(op){
+                switch(op){
 
-                case 1:                       
-                        cs.efetuaRegisto(dadosRegisto()); break;
-                case 2:
-                        user = dadosLogin();
-                        if(cs.efetuaLogin(user)){
-                        
-                        logado=true;                      
-                        do{
-                            apresentaMenuSecundario();
-                            op2 = in.nextInt();
-                            
-                            switch(op2){
-                                case 1 : 
-                                    
-                                    do{
-                                        apresentaMenuMusicas();
-                                        op3 = in.nextInt();
-                                    
-                                        switch(op3){
-                                        
-                                            case 1:if(!cs.trataMusicas(criaMusica()))
-                                                    System.out.println("Operação não realizada!");                                                
-                                                break;
-                                            case 2:if(!cs.trataMusicas(editaMusica()))
-                                                    System.out.println("Operação não realizada!");  
-                                                    ;break;
-                                            case 3:if(!cs.trataMusicas(eliminaMusica()))
-                                                    System.out.println("Operação não realizada!");  
+                    case 1:                       
+                            cs.efetuaRegisto(dadosRegisto()); break;
+                    case 2:
+                            user = dadosLogin();
+                            if(cs.efetuaLogin(user)){
+
+                            logado=true;                      
+                            do{
+                                apresentaMenuSecundario();
+                                op2 = in.nextInt();
+
+                                switch(op2){
+                                    case 1 : 
+
+                                        do{
+                                            apresentaMenuMusicas();
+                                            op3 = in.nextInt();
+
+                                            switch(op3){
+
+                                                case 1:if(!cs.trataMusicas(criaMusica()))
+                                                        System.out.println("Operação não realizada!");                                                
                                                     break;
-                                            case 4:if(!cs.trataMusicas(addMusicaPlaylist()))
-                                                    System.out.println("Operação não realizada!");  
-                                                    break;                                           
-                                            default : break;
+                                                case 2:if(!cs.trataMusicas(editaMusica()))
+                                                        System.out.println("Operação não realizada!");  
+                                                        ;break;
+                                                case 3:if(!cs.trataMusicas(eliminaMusica()))
+                                                        System.out.println("Operação não realizada!");  
+                                                        break;
+                                                case 4:if(!cs.trataMusicas(addMusicaPlaylist()))
+                                                        System.out.println("Operação não realizada!");  
+                                                        break;                                           
+                                                default : break;
+                                            }
+
+                                        }while(op3!=5);
+                                        break;
+                                    case 2 :
+                                        do{
+                                            apresentaMenuPlaylist();
+                                            op3 = in.nextInt();
+
+                                            switch(op3){
+
+                                                case 1:if(!cs.trataPlaylist(criaPlaylist()))
+                                                        System.out.println("Operação não realizada!");
+                                                break;
+                                                case 2:if(!cs.trataPlaylist(editaPlaylist()))
+                                                        System.out.println("Operação não realizada!");
+                                                break;
+                                                case 3:if(!cs.trataPlaylist(eliminaPlaylist()))
+                                                        System.out.println("Operação não realizada!");
+                                                break;
+                                                case 4:if(!cs.trataPlaylist(eliminaMusicaPlaylist()))
+                                                        System.out.println("Operação não realizada!");
+                                                break;
+                                                case 5:if(!cs.trataPlaylist(ouvirPlaylist()))
+                                                        System.out.println("Operação não realizada!");
+                                                break;
+
+                                                default : break;
+                                            }
+
+                                        }while(op3!=5);
+                                        break;
+                                    default:
+                                         if(logado){
+                                            if(cs.efetuaLogout(user))
+                                                System.out.println("Logout com sucesso!"); 
                                         }
-                                        
-                                    }while(op3!=5);
-                                    break;
-                                case 2 :
-                                    do{
-                                        apresentaMenuPlaylist();
-                                        op3 = in.nextInt();
-                                    
-                                        switch(op3){
-                                        
-                                            case 1:if(!cs.trataPlaylist(criaPlaylist()))
-                                                    System.out.println("Operação não realizada!");
-                                            break;
-                                            case 2:if(!cs.trataPlaylist(editaPlaylist()))
-                                                    System.out.println("Operação não realizada!");
-                                            break;
-                                            case 3:if(!cs.trataPlaylist(eliminaPlaylist()))
-                                                    System.out.println("Operação não realizada!");
-                                            break;
-                                            case 4:if(!cs.trataPlaylist(eliminaMusicaPlaylist()))
-                                                    System.out.println("Operação não realizada!");
-                                            break;
-                                            case 5:if(!cs.trataPlaylist(ouvirPlaylist()))
-                                                    System.out.println("Operação não realizada!");
-                                            break;
-                                            
-                                            default : break;
-                                        }
-                                        
-                                    }while(op3!=5);
-                                    break;
-                                default:
-                                     if(logado){
-                                        if(cs.efetuaLogout(user))
-                                            System.out.println("Logout com sucesso!"); 
-                                    }
-                                    break;
-                            }
-                        }while(op2!=3);
-               }
-                case 3:
-                    cs.terminarCliente();
-            }
-        }while(op!=3);
+                                        break;
+                                }
+                            }while(op2!=3);
+                   }
+                    case 3:
+                        cs.terminarCliente();
+                }
+            }while(op!=3);
         }
     }
 

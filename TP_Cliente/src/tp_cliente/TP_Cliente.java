@@ -8,7 +8,4 @@ public class TP_Cliente {
         textUI.run(); 
       
     }
-   
-   
-    
 }

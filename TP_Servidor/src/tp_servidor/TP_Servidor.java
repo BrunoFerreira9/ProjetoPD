@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 public class TP_Servidor {
 
     public static void main(String[] args){
-        
+        Boolean principal = false;
         Scanner sc = new Scanner(System.in);
         String scann;
         String ipMaquinaBD;
@@ -25,7 +25,7 @@ public class TP_Servidor {
         LogicaServidor servidores = null;
         ServerSocket clientSocket = null;
 
-        servidores = new LogicaServidor(ipDS,ipMaquinaBD);
+        servidores = new LogicaServidor(ipDS,ipMaquinaBD, principal);
         clientSocket = servidores.criaNovoServidor(); 
 
         ControloLigacoes ligacoes = new ControloLigacoes(servidores);

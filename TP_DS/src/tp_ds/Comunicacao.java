@@ -51,9 +51,14 @@ public class Comunicacao {
                 if(message.get("msg").equals("terminar")){
                     terminaServidor(pkt.getAddress().getHostAddress());                
                 }
-                else{                    
+                else{
                     listservers.add(new Servidor(pkt.getAddress().getHostAddress(),pkt.getPort(),true, (listservers.isEmpty())));
-                    resposta = "tipo | resposta ; sucesso | sim ; numbd | "+numbasedados++;
+                    if(listservers.size() == 1){
+                        listservers.get(0).setPrincipal(true);
+                        resposta = "tipo | resposta ; sucesso | sim ; numbd | " + numbasedados++ + " ; principal | sim";
+                    }
+                    else
+                        resposta = "tipo | resposta ; sucesso | sim ; numbd | " + numbasedados++ + " ; principal | nao";
                 }
                 break;
             case "Cliente":

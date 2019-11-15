@@ -31,13 +31,13 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
     private ServerSocket serverSocket = null;
     private List<Socket> listaClientes;
                 
-    public LogicaServidor(String ipDS, String ipMaquinaBD) {  
+    public LogicaServidor(String ipDS, String ipMaquinaBD, Boolean principal) {  
         listaClientes = new ArrayList<>();
         este = this;
         cds = new ComunicacaoToDS(ipDS);
         
         try {
-            dtsocket = cds.inicializaUDP();
+            dtsocket = cds.inicializaUDP(principal);
             pings = new ThreadPings(dtsocket,ipDS);
             pings.start();
         } catch (IOException ex) {

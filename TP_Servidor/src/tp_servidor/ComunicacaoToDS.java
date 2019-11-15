@@ -35,7 +35,7 @@ public class ComunicacaoToDS {
         this.endereco = endereco;
      }
      
-    public DatagramSocket inicializaUDP() throws IOException {
+    public DatagramSocket inicializaUDP(Boolean principal) throws IOException {
         String resposta ;
         try{
             dados = "tipo | Servidor ; msg | ligar";
@@ -55,7 +55,7 @@ public class ComunicacaoToDS {
             System.out.println(resposta);
             HashMap <String,String> teste = ResolveMessages(resposta);
             numBD = Integer.parseInt(teste.get("numbd"));
-            
+            principal = teste.get("principal").equalsIgnoreCase("sim");
             
         }catch (UnknownHostException e){
             System.err.println ("Unable to resolve host");
