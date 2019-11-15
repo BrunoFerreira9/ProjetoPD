@@ -15,6 +15,7 @@ public class TP_DS extends Thread{
     private static int numClientes = 0,numbasedados = 0;
     
     public static void main(String[] args){
+        /*
         DatagramSocket dtsocket = null;
         try {
             dtsocket = new DatagramSocket(ConstantesDS.portoPingsDS);
@@ -26,12 +27,12 @@ public class TP_DS extends Thread{
             System.out.println("Erro na criacao do socket para os pings!");
             return;
         }
-        
+        */
         Comunicacao com = new Comunicacao(listservers, numClientes, numbasedados);
         try {
             com.criacomunicacao();
             new ThreadRecebePedidos(com).start();
-            //new ThreadPingsParaServidores(listservers,com.getSock()).start();
+            new ThreadPingsParaServidores(listservers).start();
         } catch (SocketException ex) {
             Logger.getLogger(TP_DS.class.getName()).log(Level.SEVERE, null, ex);
         }
