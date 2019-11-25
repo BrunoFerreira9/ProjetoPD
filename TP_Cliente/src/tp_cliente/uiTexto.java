@@ -16,6 +16,7 @@ public class uiTexto implements myObserver{
     ComunicacaoToServidor cs = null;
     ComunicacaoToDS cds = null;
         
+    
     public uiTexto(String ip) 
     {
         this.ipDS = ip; 
@@ -320,7 +321,7 @@ public class uiTexto implements myObserver{
     }
 
     @Override
-    public void update(myObservable s) {
+    public void update() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

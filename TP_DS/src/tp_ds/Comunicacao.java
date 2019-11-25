@@ -93,15 +93,7 @@ public class Comunicacao {
                 resposta = "tipo | resposta ; sucesso | sim ; ip | "+aux.getIp()+" ; porto | "+aux.getPorto();
                 numClientes++;
                
-            break;/*
-            case "ping" :
-                    if(message.get("msg").equals("ativo"))
-                        System.out.print("Servidor ativo.\n");
-                    else{
-                        
-                    
-                    }
-                break;*/
+            break;
         }
     }
     

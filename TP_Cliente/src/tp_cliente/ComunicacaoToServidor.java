@@ -13,7 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import static tp_cliente.ConstantesCliente.ResolveMessages;
 
-public class ComunicacaoToServidor implements InterfaceGestao,myObservable {
+public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
     
     private int idUser;
     //ligacao TCP com o servidor
@@ -28,7 +28,8 @@ public class ComunicacaoToServidor implements InterfaceGestao,myObservable {
     String resposta;
     String pedido;
     
-    myObservable subject =null;
+    //myObservable subjet = new myObservable();
+
     
     public ComunicacaoToServidor(String endereco, int porto) {
             this.endereco = endereco;
@@ -86,9 +87,10 @@ public class ComunicacaoToServidor implements InterfaceGestao,myObservable {
             resposta = reader.readLine();
             HashMap <String,String> message = ResolveMessages(resposta);
             
-                if(message.get("tipo").equals("resposta") && message.get("msg").equals("sucesso")){
-                    idUser = Integer.parseInt(message.get("id").toString());
-                }
+            if(message.get("tipo").equals("resposta") && message.get("msg").equals("sucesso")){
+                idUser = Integer.parseInt(message.get("id").toString());
+                
+            }
         } catch (IOException ex) {
             Logger.getLogger(TP_Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }

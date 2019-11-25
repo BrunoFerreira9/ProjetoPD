@@ -19,7 +19,7 @@ class ThreadPingsParaServidores extends Thread {
     private List<Servidor> listservers;
     String dados;
     
-     HashMap <String,String> message;
+    HashMap <String,String> message;
      
     public ThreadPingsParaServidores(List<Servidor> listservers) {
      
@@ -36,8 +36,9 @@ class ThreadPingsParaServidores extends Thread {
     
     @Override
     public void run(){
-        String resposta;
-        byte[] data = "ping".getBytes();
+        String resposta = "";
+        
+        boolean existePrimario = true;
         
         try {
             dtsocketPing.setSoTimeout(ConstantesDS.PINGTIME);
@@ -47,9 +48,20 @@ class ThreadPingsParaServidores extends Thread {
 
         while(!dtsocketPing.isClosed()){
 
-            if(listservers.isEmpty()){ 
-                //System.out.println("0");
+            if(listservers.isEmpty()){              
               continue;
+            }
+            
+            for(Servidor s : listservers){
+                if(!s.isAtivo()){
+                   s.setAtivo(false);
+                   if(s.isPrincipal()){
+                       s.setPrincipal(false);
+                       existePrimario = false;
+                   }
+                   //avisar todos os servidores que aquele servidor morreu
+                   //mudar cliente de servidor
+                }
             }
 
             try {
@@ -57,27 +69,27 @@ class ThreadPingsParaServidores extends Thread {
             } catch (InterruptedException ex) {
                 Logger.getLogger(ThreadPingsParaServidores.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
+            dtpack = new DatagramPacket(new byte[ConstantesDS.BUFSIZE],ConstantesDS.BUFSIZE);
+
             try {
-                  for(Servidor s : listservers){
-                      dtpack = new DatagramPacket(data, data.length, InetAddress.getByName(s.getIp()), s.getPorto());
-                      dtsocketPing.send(dtpack);
-                      System.out.println("enviei ping para " +InetAddress.getByName(s.getIp()) + " - " + s.getPorto());
-
-                      dtpack = new DatagramPacket(new byte[ConstantesDS.BUFSIZE],ConstantesDS.BUFSIZE);
-
-                      dtsocketPing.receive(dtpack);
-
-                      resposta = new String(dtpack.getData(),0,dtpack.getLength());
-                      if(resposta.equalsIgnoreCase("ativo"))
-                          System.out.print("Servidor " + s.getIp() + " ativo.\n");
-                }
-            } catch (UnknownHostException ex) {
-                Logger.getLogger(ThreadPingsParaServidores.class.getName()).log(Level.SEVERE, null, ex);
+                dtsocketPing.receive(dtpack);
             } catch (IOException ex) {
                 Logger.getLogger(ThreadPingsParaServidores.class.getName()).log(Level.SEVERE, null, ex);
             }
-
+            
+            for(Servidor s : listservers){
+                if(dtpack.getAddress().getHostName().equals(s.getIp())){
+                    if(resposta.equalsIgnoreCase("ativo"))
+                        System.out.print("Servidor " + s.getIp() + " ativo.\n");
+                    if(!existePrimario){
+                        s.setPrincipal(true);
+                    }
+                }
+            }
         }
     }
+    
+    
     
 }
