@@ -47,45 +47,22 @@ class ThreadPingsParaServidores extends Thread {
         }
 
         while(!dtsocketPing.isClosed()){
-
-            if(listservers.isEmpty()){              
-              continue;
-            }
-            
-            for(Servidor s : listservers){
-                if(!s.isAtivo()){
-                   s.setAtivo(false);
-                   if(s.isPrincipal()){
-                       s.setPrincipal(false);
-                       existePrimario = false;
-                   }
-                   //avisar todos os servidores que aquele servidor morreu
-                   //mudar cliente de servidor
-                }
-            }
-
             try {
                 Thread.sleep(ConstantesDS.PINGTIME);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(ThreadPingsParaServidores.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            dtpack = new DatagramPacket(new byte[ConstantesDS.BUFSIZE],ConstantesDS.BUFSIZE);
-
-            try {
+                dtpack = new DatagramPacket(new byte[ConstantesDS.BUFSIZE],ConstantesDS.BUFSIZE);
                 dtsocketPing.receive(dtpack);
-            } catch (IOException ex) {
-                Logger.getLogger(ThreadPingsParaServidores.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            for(Servidor s : listservers){
-                if(dtpack.getAddress().getHostName().equals(s.getIp())){
-                    if(resposta.equalsIgnoreCase("ativo"))
-                        System.out.print("Servidor " + s.getIp() + " ativo.\n");
-                    if(!existePrimario){
-                        s.setPrincipal(true);
+                resposta = new String(dtpack.getData(),0,dtpack.getLength());
+                for(Servidor s : listservers){
+                    if(dtpack.getAddress().getHostName().equals(s.getIp())){
+                        if(resposta.equalsIgnoreCase("ativo")){ 
+                            System.out.print("Servidor " + s.getIp() + " ativo.\n");
+                            s.setAtivo(true);
+                        }
+                        else s.setAtivo(false);
                     }
                 }
+            } catch (InterruptedException | IOException ex) {
+                continue;
             }
         }
     }

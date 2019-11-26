@@ -8,7 +8,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static tp_servidor.ConstantesServer.portoDS;
+import static tp_servidor.ConstantesServer.*;
 
 class ThreadPings extends Thread {
     private DatagramSocket dtsocket;
@@ -33,7 +33,7 @@ class ThreadPings extends Thread {
                 
                 byte[] data = "ativo".getBytes();
                 
-                dtpacket = new DatagramPacket(data, data.length,InetAddress.getByName(IpDS),portoDS);
+                dtpacket = new DatagramPacket(data, data.length,InetAddress.getByName(IpDS),portoPingsDS);
                 dtsocket.send(dtpacket);
             } catch (IOException ex) {
                 Logger.getLogger(ThreadPings.class.getName()).log(Level.SEVERE, null, ex);

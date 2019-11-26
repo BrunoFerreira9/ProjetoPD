@@ -45,6 +45,7 @@ public class Comunicacao {
     public void recebepedidos() throws IOException{
         sock.receive(pkt);
         dados = new String(pkt.getData(),0,pkt.getLength());
+        System.out.println(dados);
         message = ResolveMessages(dados);
         System.out.println("Recebi "+dados+" de "+pkt.getAddress()+" porto: "+pkt.getPort());
     }
