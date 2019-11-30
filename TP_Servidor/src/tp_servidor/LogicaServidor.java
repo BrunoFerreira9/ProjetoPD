@@ -20,9 +20,7 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
     private LigacaoToBD ligacao ;
     private LogicaServidor este;
      
-    private ComunicacaoToDS cds;  
-
-
+    private ComunicacaoToDS cds;
     
     private ComunicacaoToCliente cc;
     private Thread pings;
@@ -30,6 +28,10 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
     private DatagramSocket dtsocket;
     private ServerSocket serverSocket = null;
     private List<Socket> listaClientes;
+    
+    boolean changed = false;
+    List<myObserver> observers = new ArrayList<>();
+    int msg;
                 
     public LogicaServidor(String ipDS, String ipMaquinaBD, Boolean principal) {  
         listaClientes = new ArrayList<>();
@@ -190,16 +192,6 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
     }
 
     @Override
-    public void setChanged() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void notifyObservers() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public boolean trataMusicas(String mensagem) {
         HashMap <String,String> musica = ResolveMessages(mensagem);
        
@@ -216,9 +208,12 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
                 
                 
                 String resultado1= ligacao.executarInsert(insert);
-                 if (resultado1 == "ERRO" || resultado1 == "") { 
+                if (resultado1 == "ERRO" || resultado1 == "") { 
                      return false;
-                 }
+                }
+                msg = ConstantesServer.ATUALIZAMUSICAS;
+                setChanged();
+                notifyObservers();
                 return true;
             } 
             return false;
@@ -429,5 +424,27 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
     @Override
     public boolean atualizaMusicas() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    @Override
+    public void setChanged() {
+        changed = true;
+    }
+
+    @Override
+    public void notifyObservers() {
+        observers.forEach((obs) -> {
+            obs.update(msg);
+        });
+        changed = false;
+    }
+
+    @Override
+    public void addObserver(myObserver obs) {
+        observers.add(obs);
+    }
+
+    @Override
+    public void removeObserver(myObserver obs) {
+        observers.remove(obs);
     }
 }

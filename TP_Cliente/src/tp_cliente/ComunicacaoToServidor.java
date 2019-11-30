@@ -7,7 +7,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,8 +30,10 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
     String resposta;
     String pedido;
     
-    //myObservable subjet = new myObservable();
-
+    boolean changed = false;
+    List<myObserver> observers = new ArrayList<>();
+    int msg;
+    boolean logado = false; 
     
     public ComunicacaoToServidor(String endereco, int porto) {
             this.endereco = endereco;
@@ -89,7 +93,8 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
             
             if(message.get("tipo").equals("resposta") && message.get("msg").equals("sucesso")){
                 idUser = Integer.parseInt(message.get("id").toString());
-                
+                logado = true;
+                tratainformacao();
             }
         } catch (IOException ex) {
             Logger.getLogger(TP_Cliente.class.getName()).log(Level.SEVERE, null, ex);
@@ -109,6 +114,7 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
             
             HashMap <String,String> message = ResolveMessages(resposta);
             if(message.get("tipo").equals("resposta") && message.get("msg").equals("sucesso")){
+                logado = false; 
                 return true;
             }
         } catch (IOException ex) {
@@ -208,14 +214,47 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
 
     @Override
     public void setChanged() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       changed = true;
     }
 
     @Override
     public void notifyObservers() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        observers.forEach((obs) -> {
+            obs.update(msg);
+        });
+        changed = false;
     }
 
-    
+    @Override
+    public void addObserver(myObserver obs) {
+        observers.add(obs);
+    }
+
+    @Override
+    public void removeObserver(myObserver obs) {
+        observers.remove(obs);
+    }
+
+    public void tratainformacao(){
+        Thread recebepedidos;
+        recebepedidos = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String pedido;
+                while(logado){
+                    System.out.println("Estou à escuta");
+                    try {
+                        pedido = reader.readLine();
+                        System.out.println("Recebi do Servidor: "+ pedido);
+                        HashMap <String,String> info = ResolveMessages(pedido);
+                    } catch (IOException ex) {
+                        Logger.getLogger(ComunicacaoToServidor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                }
+            }
+        });
+        recebepedidos.start();
+    }
     
 }

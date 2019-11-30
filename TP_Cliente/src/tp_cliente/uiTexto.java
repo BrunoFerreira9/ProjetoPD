@@ -321,8 +321,11 @@ public class uiTexto implements myObserver{
     }
 
     @Override
-    public void update() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void update(int msg) {
+        switch(msg){
+            case ConstantesCliente.ATUALIZAMUSICAS: break;
+            case ConstantesCliente.ATUALIZAPLAYLISTS: break;
+        }
     }
 
 }

@@ -21,4 +21,6 @@ public class ConstantesCliente {
         }
         return messages;
     }
+    static final int ATUALIZAMUSICAS = 0;
+    static final int ATUALIZAPLAYLISTS = 1;
 }

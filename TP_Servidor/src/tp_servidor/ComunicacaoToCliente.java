@@ -12,6 +12,8 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static tp_servidor.ConstantesServer.ATUALIZAMUSICAS;
+import static tp_servidor.ConstantesServer.ATUALIZAPLAYLISTS;
 import static tp_servidor.ConstantesServer.ResolveMessages;
 
 public class ComunicacaoToCliente implements myObserver {
@@ -138,12 +140,7 @@ public class ComunicacaoToCliente implements myObserver {
        pout.flush();
         
     }
-     
-    @Override
-    public void update(myObservable s) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+    
     //Adicionei para testar
     public void trataPedido(HashMap<String, String> user) {
         
@@ -161,11 +158,12 @@ public class ComunicacaoToCliente implements myObserver {
                 if(servidor.efetuaLogin(user)){
                     String q = "Select idUtilizador from utilizador where username = \'" + user.get("username") + "\';";
                     String id = servidor.getLigacao().executarSelect(q);
-
+                    
                     pout.println("tipo | resposta ; msg | sucesso ; id | " + id);
                     pout.flush();
 
                     servidor.adicionaCliente(socketCliente);
+                    servidor.addObserver(this);
                 }  
                 break;
             case "logout":
@@ -173,6 +171,7 @@ public class ComunicacaoToCliente implements myObserver {
                     pout.println("tipo | resposta ; msg | sucesso");
                     pout.flush();
                     servidor.removeCliente(socketCliente);
+                    servidor.removeObserver(observer);
                 } 
                 else{
                     pout.println("tipo | resposta ; msg | insucesso");
@@ -237,5 +236,20 @@ public class ComunicacaoToCliente implements myObserver {
             default:
                 break;
         }
+    }
+
+    @Override
+    public void update(int msg) {
+        String mensagem = "";
+        switch(msg){
+            case ATUALIZAMUSICAS:
+                mensagem = "tipo | atualizamusicas";
+                break;
+            case ATUALIZAPLAYLISTS:
+                mensagem = "tipo | atualizamusicas";
+                break;
+        }
+        pout.println(mensagem);
+        pout.flush();
     }
 }

@@ -17,12 +17,12 @@ class ThreadPings extends Thread {
 
     public ThreadPings( DatagramSocket s, String IpDS) throws SocketException {
         this.dtsocket = s;
-        this.IpDS=IpDS;
-       
+        this.IpDS=IpDS;       
     }
     
     @Override
     public void run(){
+        System.out.println("Inicio da Thread Ping");
         while(true){
             try {
                 try {
