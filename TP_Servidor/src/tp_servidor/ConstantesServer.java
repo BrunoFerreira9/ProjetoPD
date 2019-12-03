@@ -12,7 +12,8 @@ public class ConstantesServer {
     public static final String IPMULTICAST = "230.0.0.0";
     public static final int BUFSIZE = 256;
     public static final int PINGTIME = 5000;
-    
+        static final String PATHLOCATION = "C:\\ServidorPD";
+
     
     public static HashMap<String,String> ResolveMessages(String message){
         StringTokenizer t,tokens = new StringTokenizer(message,";");

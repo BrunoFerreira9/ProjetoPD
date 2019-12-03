@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 
 public class ConstantesCliente {
-    
     static final int MAX_SIZE = 4000;
     static final int TIMEOUT = 5000;
     static final int portoDS = 5001;
@@ -23,4 +22,5 @@ public class ConstantesCliente {
     }
     static final int ATUALIZAMUSICAS = 0;
     static final int ATUALIZAPLAYLISTS = 1;
+    static final String PATHLOCATION = "C:\\ClientePD";
 }
