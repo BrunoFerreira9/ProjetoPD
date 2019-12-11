@@ -21,9 +21,11 @@ public class ConstantesServer {
         HashMap<String,String> messages = new HashMap<>();
         while (tokens.hasMoreElements()) {
             t = new StringTokenizer(tokens.nextElement().toString()," | ");  
-            key = t.nextElement().toString();
-            val = t.nextElement().toString();
-            messages.put(key, val);
+            if(t.countTokens() == 2){
+                key = t.nextElement().toString();
+                val = t.nextElement().toString();
+                messages.put(key, val);
+            }
         }
         return messages;
     }

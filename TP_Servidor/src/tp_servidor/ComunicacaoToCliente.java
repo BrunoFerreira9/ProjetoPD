@@ -120,20 +120,21 @@ public class ComunicacaoToCliente implements myObserver {
             } catch (IOException ex) {
                 Logger.getLogger(ComunicacaoToCliente.class.getName()).log(Level.SEVERE, null, ex);
             }
-            System.out.println("Recebi do Cliente: "+ pedido);
             HashMap <String,String> user = ResolveMessages(pedido);
+            if(user.size() > 1){
+                System.out.println("Recebi do Cliente: "+ pedido);
+                trataPedido(user);
 
-            trataPedido(user);
-            
-            //Envia pedido de mudança para o multicast
-            byte[] data = pedido.getBytes();
-            try {
-                packetMulticast = new DatagramPacket(data, data.length, InetAddress.getByName(ConstantesServer.IPMULTICAST), ConstantesServer.portoMulticast);
-                socketEnviaMulticast.send(packetMulticast);
-            } catch (UnknownHostException ex) {
-                Logger.getLogger(ComunicacaoToCliente.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(ComunicacaoToCliente.class.getName()).log(Level.SEVERE, null, ex);
+                //Envia pedido de mudança para o multicast
+                byte[] data = pedido.getBytes();
+                try {
+                    packetMulticast = new DatagramPacket(data, data.length, InetAddress.getByName(ConstantesServer.IPMULTICAST), ConstantesServer.portoMulticast);
+                    socketEnviaMulticast.send(packetMulticast);
+                } catch (UnknownHostException ex) {
+                    Logger.getLogger(ComunicacaoToCliente.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(ComunicacaoToCliente.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
        }
        pout.println("tipo | servidor ; msg | terminou");
@@ -181,6 +182,8 @@ public class ComunicacaoToCliente implements myObserver {
             case "criaMusica":if(servidor.trataMusicas(pedido)){
                     pout.println("tipo | resposta ; msg | sucesso");
                     pout.flush();
+                    Thread downMusica = new ThreadDownload(user.get("ficheiro"),socketCliente);
+                    downMusica.start();
                 }else{
                     pout.println("tipo | resposta ; msg | insucesso");
                     pout.flush();
@@ -208,7 +211,9 @@ public class ComunicacaoToCliente implements myObserver {
             case "ouvirMusica":
                 if(servidor.trataMusicas(pedido)){
                     pout.println("tipo | resposta ; msg | sucesso");
-                    pout.flush();
+                    pout.flush(); 
+                    Thread upMusica = new ThreadDownload(user.get("nome"),socketCliente);
+                    upMusica.start();
                 }else{
                     pout.println("tipo | resposta ; msg | insucesso");
                     pout.flush();
@@ -246,7 +251,7 @@ public class ComunicacaoToCliente implements myObserver {
                 mensagem = "tipo | atualizamusicas";
                 break;
             case ATUALIZAPLAYLISTS:
-                mensagem = "tipo | atualizamusicas";
+                mensagem = "tipo | atualizaplaylists";
                 break;
         }
         pout.println(mensagem);

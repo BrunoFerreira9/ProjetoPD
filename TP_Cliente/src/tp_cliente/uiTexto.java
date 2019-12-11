@@ -43,8 +43,9 @@ public class uiTexto implements myObserver{
         System.out.println("1 - Criar Musica");
         System.out.println("2 - Editar Musica");
         System.out.println("3 - Eliminar Musica");
-        System.out.println("4 - Adicionar musica a playlist");
-        System.out.println("5 - Sair");
+        System.out.println("4 - Ouvir Musica");
+        System.out.println("5 - Adicionar musica a playlist");
+        System.out.println("6 - Sair");
     }
     
     public String criaMusica(){
@@ -181,6 +182,14 @@ public class uiTexto implements myObserver{
         
         return sb.toString();
     }
+      
+    private String ouvirMusica() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("tipo | ouvirMusica ; "); 
+        System.out.println("Nome da Musica:");
+        sb.append("nome | "+in.next()+" ; ");
+        return sb.toString();
+    }
      
     
      public HashMap<String,String> dadosRegisto(){
@@ -268,13 +277,16 @@ public class uiTexto implements myObserver{
                                                 case 3:if(!cs.trataMusicas(eliminaMusica()))
                                                         System.out.println("Operação não realizada!");  
                                                         break;
-                                                case 4:if(!cs.trataMusicas(addMusicaPlaylist()))
+                                                case 4:if(!cs.trataMusicas(ouvirMusica()))
+                                                        System.out.println("Operação não realizada!");  
+                                                        break;                                           
+                                                case 5:if(!cs.trataMusicas(addMusicaPlaylist()))
                                                         System.out.println("Operação não realizada!");  
                                                         break;                                           
                                                 default : break;
                                             }
 
-                                        }while(op3!=5);
+                                        }while(op3!=6);
                                         break;
                                     case 2 :
                                         do{
@@ -327,5 +339,7 @@ public class uiTexto implements myObserver{
             case ConstantesCliente.ATUALIZAPLAYLISTS: break;
         }
     }
+
+    
 
 }

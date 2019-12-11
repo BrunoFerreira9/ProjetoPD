@@ -145,7 +145,6 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
                     out.println(mensagem);
                     out.flush();
                     return sucesso();
-                     
                 case "editaMusica": 
                     out.println(mensagem);
                     out.flush(); 
@@ -242,11 +241,21 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
             public void run() {
                 String pedido;
                 while(logado){
-                    System.out.println("Estou à escuta");
                     try {
                         pedido = reader.readLine();
                         System.out.println("Recebi do Servidor: "+ pedido);
                         HashMap <String,String> info = ResolveMessages(pedido);
+                        switch(info.get("tipo"))
+                        {
+                            case "upload": 
+                                Thread upmusica = new ThreadUpload(info.get("ficheiro"),socketTCP);
+                                upmusica.start();
+                                break;
+                            case "download": 
+                                Thread downmusica = new ThreadDownload(info.get("ficheiro"),socketTCP);
+                                downmusica.start();
+                                break;
+                        }
                     } catch (IOException ex) {
                         Logger.getLogger(ComunicacaoToServidor.class.getName()).log(Level.SEVERE, null, ex);
                     }

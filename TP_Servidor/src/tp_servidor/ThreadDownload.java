@@ -54,51 +54,38 @@ public class ThreadDownload extends Thread{
     public void run(){
         if(verificaDiretoria()){
             try{
-                try{
-                    localFilePath = localDirectory.getCanonicalPath()+File.separator+fileName;
-                    localFileOutputStream = new FileOutputStream(localFilePath);
-                    System.out.println("Ficheiro " + localFilePath + " criado.");
-                }catch(IOException e){
-                    if(localFilePath == null){
-                        System.out.println("Ocorreu a excepcao {" + e +"} ao obter o caminho canonico para o ficheiro local!");   
-                    }else{
-                        System.out.println("Ocorreu a excepcao {" + e +"} ao tentar criar o ficheiro " + localFilePath + "!");
-                    }
-                    return;
+                localFilePath = localDirectory.getCanonicalPath()+File.separator+fileName;
+                localFileOutputStream = new FileOutputStream(localFilePath);
+                System.out.println("Ficheiro " + localFilePath + " criado.");
+            }catch(IOException e){
+                if(localFilePath == null){
+                    System.out.println("Ocorreu a excepcao {" + e +"} ao obter o caminho canonico para o ficheiro local!");   
+                }else{
+                    System.out.println("Ocorreu a excepcao {" + e +"} ao tentar criar o ficheiro " + localFilePath + "!");
                 }
-                try{
-                    bfr = socket.getInputStream();
-                    prts = new PrintWriter(socket.getOutputStream());
-                    prts.println(fileName); // Alterar para a string adequada ao pedido
-                    prts.flush();
-                    do{
-                        nbytes = bfr.read(bufer);
-                        if(nbytes < 0) break;
-                        localFileOutputStream.write(bufer, 0, nbytes);
-                    }while(nbytes > 0);
-
-                    System.out.println("Transferencia concluida do ficheiro "+fileName+".");
-
-                }catch(UnknownHostException e){
-                     System.out.println("Destino desconhecido:\n\t"+e);
-                }catch(NumberFormatException e){
-                    System.out.println("O porto do servidor deve ser um inteiro positivo:\n\t"+e);
-                }catch(SocketTimeoutException e){
-                    System.out.println("Nao foi recebida qualquer bloco adicional, podendo a transferencia estar incompleta:\n\t"+e);
-                }catch(SocketException e){
-                    System.out.println("Ocorreu um erro ao nivel do socket UDP:\n\t"+e);
-                }catch(IOException e){
-                    System.out.println("Ocorreu um erro no acesso ao socket ou ao ficheiro local " + localFilePath +":\n\t"+e);
-                }
-
-            }finally{  
-                if(localFileOutputStream != null){
-                    try{
-                        localFileOutputStream.close();
-                    }catch(IOException e){}
-                }  
+                return;
             }
-        }
+            try{
+                bfr = socket.getInputStream();
+                prts = new PrintWriter(socket.getOutputStream());
+                prts.println("tipo | upload ; ficheiro | "+ fileName); 
+                prts.flush();
+                do{
+                    nbytes = bfr.read(bufer);
+                    //|| new String(bufer,0,bufer.length).equals("fim")
+                    if(nbytes < 0) break;
+                    localFileOutputStream.write(bufer, 0, nbytes);
+                    System.out.println("ler ficheiro");
+                }while(nbytes > 0);
+                System.out.println("Transferencia concluida do ficheiro "+fileName+".");
+                localFileOutputStream.close();
+
+            }catch(UnknownHostException e){
+                 System.out.println("Destino desconhecido:\n\t"+e);
+            }catch(IOException e){
+                System.out.println("Ocorreu um erro no acesso ao socket ou ao ficheiro local " + localFilePath +":\n\t"+e);
+            }
+        }   
     }
 }
 
