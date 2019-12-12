@@ -125,7 +125,6 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
     }
     
     public boolean sucesso() throws IOException{
-        
         resposta = reader.readLine();
         HashMap <String,String> message = ResolveMessages(resposta);
         if(message.get("tipo").equals("resposta") && message.get("msg").equals("sucesso")){
@@ -248,10 +247,10 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
                         switch(info.get("tipo"))
                         {
                             case "upload": 
-                                Thread upmusica = new ThreadUpload(info.get("ficheiro"),socketTCP);
+                                Thread upmusica = new ThreadUpload(info.get("ficheiro"),endereco,Integer.parseInt(info.get("porto")));
                                 upmusica.start();
                                 break;
-                            case "download": 
+                            case "download":
                                 Thread downmusica = new ThreadDownload(info.get("ficheiro"),socketTCP);
                                 downmusica.start();
                                 break;

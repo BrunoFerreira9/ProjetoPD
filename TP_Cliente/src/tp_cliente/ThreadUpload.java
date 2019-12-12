@@ -23,10 +23,10 @@ public class ThreadUpload extends Thread{
     Socket socket = null;
     public static boolean correr = true;
 
-    ThreadUpload(String filename,Socket s){
+    ThreadUpload(String filename,String ip,int porto) throws IOException{
         localDirectory = new File(ConstantesCliente.PATHLOCATION);
         this.fileName = filename;
-        socket = s;
+        socket = new Socket(ip,porto);
     }
     @Override
     public void run(){
@@ -45,7 +45,8 @@ public class ThreadUpload extends Thread{
                 if(bytes < 0) break;
                 out.write(data,0,bytes);
             }while(bytes >0);
-            localFileInputStream.close();         
+            localFileInputStream.close(); 
+            socket.close();
              System.out.println("Acabei de enviar o ficheiro: "+fileName);
         } catch (IOException ex) {
             Logger.getLogger(ThreadUpload.class.getName()).log(Level.SEVERE, null, ex);

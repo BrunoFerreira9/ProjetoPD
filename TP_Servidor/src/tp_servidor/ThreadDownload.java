@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
@@ -20,17 +21,19 @@ import java.util.logging.Logger;
 public class ThreadDownload extends Thread{
     File localDirectory;
     String fileName, localFilePath = null;
-    Socket socket = null;
+    Socket socketcliente = null;
+    ServerSocket server = null;
     FileOutputStream localFileOutputStream = null;
     InputStream bfr;
     PrintWriter prts;
     int nbytes;
     byte []bufer = new byte[4000];
     
-    ThreadDownload(String filename,Socket s){
+    ThreadDownload(String filename,Socket s) throws IOException{
         localDirectory = new File(ConstantesServer.PATHLOCATION);
         this.fileName = filename;
-        socket = s;
+        socketcliente = s;
+        server = new ServerSocket(0);
     }
     
     boolean verificaDiretoria(){
@@ -66,20 +69,21 @@ public class ThreadDownload extends Thread{
                 return;
             }
             try{
-                bfr = socket.getInputStream();
-                prts = new PrintWriter(socket.getOutputStream());
-                prts.println("tipo | upload ; ficheiro | "+ fileName); 
+                prts = new PrintWriter(socketcliente.getOutputStream());
+                prts.println("tipo | upload ; ficheiro | "+ fileName +" ; porto | "+server.getLocalPort()); 
                 prts.flush();
+                
+                socketcliente = server.accept();
+                bfr = socketcliente.getInputStream();
                 do{
                     nbytes = bfr.read(bufer);
-                    //|| new String(bufer,0,bufer.length).equals("fim")
                     if(nbytes < 0) break;
                     localFileOutputStream.write(bufer, 0, nbytes);
-                    System.out.println("ler ficheiro");
                 }while(nbytes > 0);
                 System.out.println("Transferencia concluida do ficheiro "+fileName+".");
                 localFileOutputStream.close();
-
+                socketcliente.close();
+                server.close();
             }catch(UnknownHostException e){
                  System.out.println("Destino desconhecido:\n\t"+e);
             }catch(IOException e){

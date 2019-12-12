@@ -28,7 +28,7 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
     private DatagramSocket dtsocket;
     private ServerSocket serverSocket = null;
     private List<Socket> listaClientes;
-    
+    String resposta;
     boolean changed = false;
     List<myObserver> observers = new ArrayList<>();
     int msg;
@@ -275,7 +275,8 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
             if (resultado == "ERRO" || resultado == "") { //se nao existir
                 return false;
             }      
-            
+            resposta = resultado;
+            return true;
             //TRANSFERIR O FICHEIRO PARA O CLIENTE
         }
         else if(musica.get("tipo").equals("addMusPlaylist")){
