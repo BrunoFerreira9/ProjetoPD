@@ -335,7 +335,7 @@ public class uiTexto implements myObserver{
     @Override
     public void update(int msg) {
         switch(msg){
-            case ConstantesCliente.ATUALIZAMUSICAS: break;
+            case ConstantesCliente.ATUALIZAMUSICAS:break;
             case ConstantesCliente.ATUALIZAPLAYLISTS: break;
         }
     }

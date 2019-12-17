@@ -211,7 +211,7 @@ public class ComunicacaoToCliente implements myObserver {
                 }   break;
             case "ouvirMusica":
                 if(servidor.trataMusicas(pedido)){
-                    pout.println("tipo | download ; msg | sucesso ; ficheiro | "+servidor.resposta);
+                    pout.println("tipo | download ; msg | sucesso ; ficheiro | "+servidor.resposta+" ; ouvirMusica | sim");
                     pout.flush();
                     break;
                 }else{

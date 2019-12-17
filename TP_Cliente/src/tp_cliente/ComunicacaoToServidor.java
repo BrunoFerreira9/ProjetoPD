@@ -2,6 +2,9 @@ package tp_cliente;
 
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -13,6 +16,8 @@ import java.util.List;
 import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 import static tp_cliente.ConstantesCliente.ResolveMessages;
 
 public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
@@ -253,6 +258,10 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
                             case "download":
                                 Thread downmusica = new ThreadDownload(info.get("ficheiro"),socketTCP);
                                 downmusica.start();
+                                
+                             //   if(info.containsKey("ouvirMusica") && info.containsValue("sim")){
+                              //      ouvirmusica(info.get("ficheiro"));
+                               // }
                                 break;
                         }
                     } catch (IOException ex) {
@@ -261,8 +270,18 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
                     
                 }
             }
+
+            
         });
         recebepedidos.start();
     }
-    
+    /*private void ouvirmusica(String ficheiro) throws IOException {
+        try {
+            InputStream musica = new FileInputStream(new File(ConstantesCliente.PATHLOCATION+"\\"+ficheiro));
+            AudioStream audios = new AudioStream(musica);
+            AudioPlayer.player.start(audios);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ComunicacaoToServidor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }*/
 }
