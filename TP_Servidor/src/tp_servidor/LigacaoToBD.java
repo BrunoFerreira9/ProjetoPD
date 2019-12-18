@@ -155,11 +155,11 @@ public class LigacaoToBD {
         return null;
     }
     
-    public ArrayList<String> getListaMusicasPlaylist(int playlist) 
+    public ArrayList<String> getListaMusicasPlaylist(String playlist) 
     {
         try {
             ArrayList<String> lista = new ArrayList<>();
-            String query = "Select m.nome from playlist p, musica m, musica_has_playlist mp where mp.idPlaylist = " +playlist ;
+            String query = "Select m.nome from playlist p, musica m, musica_has_playlist mp where mp.nome = " +playlist ;
             stmt = conn_ligacao.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             
