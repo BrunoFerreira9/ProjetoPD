@@ -231,6 +231,9 @@ public class ComunicacaoToCliente implements myObserver {
                     pout.println("tipo | resposta ; msg | insucesso");
                     pout.flush();
                 }   break;
+            case "listaMusicas":
+                break;
+            case "listaPlaylists": break;
             case "criaPlaylist":
             case "editaPlaylist":
             case "eliminaPlaylist":

@@ -141,73 +141,67 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
     @Override
     public boolean trataMusicas(String mensagem){
      
-        try {
-            mensagem += "id | " + idUser;
-            HashMap <String,String> pedido = ResolveMessages(mensagem);
-            switch(pedido.get("tipo")){
-                case "criaMusica" :
-                    out.println(mensagem);
-                    out.flush();
-                    return sucesso();
-                case "editaMusica": 
-                    out.println(mensagem);
-                    out.flush(); 
-                    return sucesso();
-                case "eliminaMusica": 
-                    out.println(mensagem);
-                    out.flush();  
-                    return sucesso();
-                case "ouvirMusica": 
-                    out.println(mensagem);
-                    out.flush();
-                    return sucesso();
-                case "addMusPlaylist":
-                    out.println(mensagem);
-                    out.flush(); 
-                    return sucesso();
-                default:return false;
+        mensagem += "id | " + idUser;
+        HashMap <String,String> pedido = ResolveMessages(mensagem);
+        switch(pedido.get("tipo")){
+            case "criaMusica" :
+                out.println(mensagem);
+                out.flush();
+                return true;
+            case "editaMusica":
+                out.println(mensagem);
+                out.flush();
+                return true;
+            case "eliminaMusica":
+                out.println(mensagem);
+                out.flush();
+                return true;
+            case "ouvirMusica":
+                out.println(mensagem);
+                out.flush();
+                return true;
+            case "addMusPlaylist":
+                out.println(mensagem);
+                out.flush();
+                return true;
+            case "listaMusicas":
+                out.println(mensagem);
+                out.flush();
+                return true;
+            default:
+                return false;
                 
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(ComunicacaoToServidor.class.getName()).log(Level.SEVERE, null, ex);
         }
-         return false;
     }
 
     @Override
     public boolean trataPlaylist(String mensagem) {
-        try {
-             mensagem += "id | " + idUser;
-            HashMap <String,String> pedido = ResolveMessages(mensagem);
-            
-            switch(pedido.get("tipo")){
-                case "criaPlaylist":
-                    out.println(mensagem);
-                    out.flush(); 
-                    return sucesso();
-                case "editaPlaylist": 
-                    out.println(mensagem);
-                    out.flush(); 
-                    return sucesso();
-                case "eliminaPlaylist":
-                    out.println(mensagem);
-                    out.flush();
-                    return sucesso();
-                case "ouvirPlaylist":
-                    out.println(mensagem);
-                    out.flush(); 
-                    return sucesso();
-                case "eliminaMusicaPlaylist":
-                    out.println(mensagem);
-                    out.flush(); 
-                    return sucesso();
-                default:
-                    return false;
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(ComunicacaoToServidor.class.getName()).log(Level.SEVERE, null, ex);
+        mensagem += "id | " + idUser;
+        HashMap <String,String> pedido = ResolveMessages(mensagem);
+        switch(pedido.get("tipo")){
+            case "criaPlaylist":
+                out.println(mensagem);
+                out.flush();
+                return true;
+            case "editaPlaylist":
+                out.println(mensagem);
+                out.flush();
+                return true;
+            case "eliminaPlaylist":
+                out.println(mensagem);
+                out.flush();
+                return true;
+            case "ouvirPlaylist":
+                out.println(mensagem);
+                out.flush();
+                return true;
+            case "eliminaMusicaPlaylist":
+                out.println(mensagem);
+                out.flush();
+                return true;
+            default:
+                return false;
         }
-        return false;
     }
 
     @Override
@@ -258,12 +252,17 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
                             case "download":
                                 Thread downmusica = new ThreadDownload(info.get("ficheiro"),socketTCP);
                                 downmusica.start();
-                                
-                             //   if(info.containsKey("ouvirMusica") && info.containsValue("sim")){
-                              //      ouvirmusica(info.get("ficheiro"));
-                               // }
                                 break;
+                            case "atualizamusicas":
+                                msg = ConstantesCliente.ATUALIZAMUSICAS;
+                                break;
+                            case "atualizaplaylists":
+                                msg = ConstantesCliente.ATUALIZAPLAYLISTS;
+                                break;
+                            
                         }
+                        setChanged();
+                        notifyObservers();
                     } catch (IOException ex) {
                         Logger.getLogger(ComunicacaoToServidor.class.getName()).log(Level.SEVERE, null, ex);
                     }

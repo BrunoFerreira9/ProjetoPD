@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 public class uiTexto implements myObserver{
     
-    myObservable subject;
+  
     String ipDS ;
     Scanner in = new Scanner(System.in);
     
@@ -20,6 +20,7 @@ public class uiTexto implements myObserver{
     public uiTexto(String ip) 
     {
         this.ipDS = ip; 
+        cs.addObserver(this);
     }
     
   public void apresentaMenuInicial(){
@@ -46,6 +47,13 @@ public class uiTexto implements myObserver{
         System.out.println("4 - Ouvir Musica");
         System.out.println("5 - Adicionar musica a playlist");
         System.out.println("6 - Sair");
+    }
+    public void apresentaListaMusicas(){
+        cs.trataMusicas("tipo | listaMusicas");
+       
+    }
+    public void apresentaListaPlaylists(){
+        cs.trataPlaylist("tipo | listaPlaylists");
     }
     
     public String criaMusica(){
@@ -263,6 +271,7 @@ public class uiTexto implements myObserver{
                                     case 1 : 
 
                                         do{
+                                            apresentaListaMusicas();
                                             apresentaMenuMusicas();
                                             op3 = in.nextInt();
 
@@ -290,6 +299,7 @@ public class uiTexto implements myObserver{
                                         break;
                                     case 2 :
                                         do{
+                                            apresentaListaPlaylists();
                                             apresentaMenuPlaylist();
                                             op3 = in.nextInt();
 
@@ -335,8 +345,8 @@ public class uiTexto implements myObserver{
     @Override
     public void update(int msg) {
         switch(msg){
-            case ConstantesCliente.ATUALIZAMUSICAS:break;
-            case ConstantesCliente.ATUALIZAPLAYLISTS: break;
+            case ConstantesCliente.ATUALIZAMUSICAS: apresentaListaMusicas(); break;
+            case ConstantesCliente.ATUALIZAPLAYLISTS: apresentaListaPlaylists(); break;
         }
     }
 

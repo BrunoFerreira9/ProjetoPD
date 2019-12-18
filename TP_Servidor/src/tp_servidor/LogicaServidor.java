@@ -243,8 +243,10 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
                 System.out.println("Erro na atualizacao da musica na BD");
                 return false;
             }
+            msg = ConstantesServer.ATUALIZAMUSICAS;
+            setChanged();
+            notifyObservers();
             return true;
-            
         }
         else if(musica.get("tipo").equals("eliminaMusica")){
           
@@ -262,7 +264,9 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
             
             String delete = "Delete from musica where idMusica = " +resultado ;
             ligacao.executarDelete(delete);
-           
+            msg = ConstantesServer.ATUALIZAMUSICAS;
+            setChanged();
+            notifyObservers();
             return true;
             
         }
@@ -276,6 +280,9 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
                 return false;
             }      
             resposta = resultado;
+            msg = ConstantesServer.ATUALIZAMUSICAS;
+            setChanged();
+            notifyObservers();
             return true;
             //TRANSFERIR O FICHEIRO PARA O CLIENTE
         }
@@ -300,7 +307,9 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
             
             if (resultadoadd == "ERRO" || resultadoadd == "")  //se nao existir
                      return false;
-            
+            msg = ConstantesServer.ATUALIZAMUSICAS;
+            setChanged();
+            notifyObservers();
             return true;
                         
         }else if(musica.get("tipo").equals("filtro")){
@@ -321,7 +330,9 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
 
             if (resultado == "ERRO" || resultado == "")  //se nao existir
                      return false;
-                      
+            msg = ConstantesServer.ATUALIZAMUSICAS;
+            setChanged();
+            notifyObservers();          
             return true;
         }
         return false;
@@ -344,6 +355,9 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
                  if (resultado1 == "ERRO" || resultado1 == "") { 
                      return false;
                  }
+                msg = ConstantesServer.ATUALIZAPLAYLISTS;
+                setChanged();
+                notifyObservers();
                 return true;
             } 
             return false;
@@ -366,6 +380,9 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
                 System.out.println("Erro na atualizacao da playlist na BD\n");
                 return false;
             }
+            msg = ConstantesServer.ATUALIZAPLAYLISTS;
+            setChanged();
+            notifyObservers();
             return true;
             
         }
@@ -387,6 +404,9 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
             if (resultadodelete == "ERRO" || resultadodelete == "") { //se nao existir
                 return false;            
             }  
+            msg = ConstantesServer.ATUALIZAPLAYLISTS;
+            setChanged();
+            notifyObservers();
             return true;
             
         }
@@ -401,7 +421,9 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
             }      
             
             //TRANSFERIR OS FICHEIROS PARA O CLIENTE
-            
+            msg = ConstantesServer.ATUALIZAPLAYLISTS;
+            setChanged();
+            notifyObservers();
             return true;
         }
         else if(playlist.get("tipo").equals("eliminaMusicaPlaylist")){
@@ -421,9 +443,11 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
              String queryPlaylist = "Select * from playlist  where nome='"+playlist.get("nomePlaylist")+"'";
 
             String resultadoPlaylist = ligacao.executarSelect(queryPlaylist);
-             String deletePlaylist = "Delete from musica_has_playlist where idMusica = " + resultadoMusica + " AND idPlaylist = "+resultadoPlaylist;
-             ligacao.executarDelete(deletePlaylist);
-            
+            String deletePlaylist = "Delete from musica_has_playlist where idMusica = " + resultadoMusica + " AND idPlaylist = "+resultadoPlaylist;
+            ligacao.executarDelete(deletePlaylist);
+            msg = ConstantesServer.ATUALIZAPLAYLISTS;
+            setChanged();
+            notifyObservers();
             return true;
         }
         return false;
