@@ -8,20 +8,19 @@ public class Playlist {
     private String nome;
     private List<Integer> listaMusicas;
     private final int idUserPlaylist;
-    private static int contaPlaylist = 1;
     private final int idPlaylist;
 
-    public Playlist(String nome, List<Integer> lista,int idUserPlaylist){
+    public Playlist(int id, String nome, List<Integer> lista,int idUserPlaylist){
         this.nome=nome;
         listaMusicas=lista;
         this.idUserPlaylist=idUserPlaylist;
-        idPlaylist=contaPlaylist++;
+        idPlaylist=id;
     }
-    public Playlist(String nome,int idUserPlaylist){
+    public Playlist(int id, String nome,int idUserPlaylist){
         this.nome=nome;
         listaMusicas=new ArrayList<>();        
         this.idUserPlaylist=idUserPlaylist;
-        idPlaylist=contaPlaylist++;
+        idPlaylist=id;
     }
    
     public String getNome(){return nome;}

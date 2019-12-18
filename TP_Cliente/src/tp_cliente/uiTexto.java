@@ -98,8 +98,8 @@ public class uiTexto implements myObserver{
                
         StringBuilder sb = new StringBuilder();
         sb.append("tipo | eliminaMusica ; ");
-        System.out.println("ID musica a eliminar:");
-        sb.append("idMusica | "+in.nextInt()+" ; ");
+        System.out.println("Musica a eliminar:");
+        sb.append("nome | "+in.next()+" ; ");
         
         return sb.toString();
     }
@@ -107,10 +107,10 @@ public class uiTexto implements myObserver{
                
         StringBuilder sb = new StringBuilder();
         sb.append("tipo | addMusPlaylist ; ");
-        System.out.println("ID musica a adicionar:");
-        sb.append("idMusica | "+in.nextInt()+" ; ");
-        System.out.println("ID Playlist :");
-        sb.append("idPlaylist | "+in.nextInt()+" ; ");
+        System.out.println("musica a adicionar:");
+        sb.append("nome | "+in.next()+" ; ");
+        System.out.println("Playlist :");
+        sb.append("nomePlaylist | "+in.next()+" ; ");
         
         return sb.toString();
     }
@@ -143,8 +143,8 @@ public class uiTexto implements myObserver{
                
         StringBuilder sb = new StringBuilder();
         sb.append("tipo | editaPlaylist ; ");
-        System.out.println("ID Playlist a editar:");
-        sb.append("idPlaylist | "+in.nextInt()+" ; ");
+        System.out.println("Playlist a editar:");
+        sb.append("nomePlaylist | "+in.next()+" ; ");
         System.out.println("Nome:");
         sb.append("nome | "+in.next()+" ; ");
         
@@ -155,8 +155,8 @@ public class uiTexto implements myObserver{
                
         StringBuilder sb = new StringBuilder();
         sb.append("tipo | eliminaPlaylist ; ");
-        System.out.println("ID Playlist a eliminar:");
-        sb.append("idPlaylist | "+in.nextInt()+" ; ");
+        System.out.println("Playlist a eliminar:");
+        sb.append("nome | "+in.next()+" ; ");
         
         return sb.toString();
     }
@@ -165,10 +165,10 @@ public class uiTexto implements myObserver{
                
         StringBuilder sb = new StringBuilder();
         sb.append("tipo | eliminaMusicaPlaylist ; "); 
-        System.out.println("ID Playlist:");
-        sb.append("idPlaylist | "+in.nextInt()+" ; ");
-        System.out.println("ID Musica a retirar:");
-        sb.append("idMusica | "+in.nextInt()+" ; ");
+        System.out.println("Playlist:");
+        sb.append("nomePlaylist | "+in.next()+" ; ");
+        System.out.println("Musica a retirar:");
+        sb.append("nomeMusica | "+in.next()+" ; ");
         
         return sb.toString();
     }
@@ -177,8 +177,8 @@ public class uiTexto implements myObserver{
                
         StringBuilder sb = new StringBuilder();
         sb.append("tipo | ouvirPlaylist ; "); 
-        System.out.println("ID Playlist:");
-        sb.append("idPlaylist | "+in.nextInt()+" ; ");
+        System.out.println("Playlist:");
+        sb.append("nome | "+in.next()+" ; ");
         
         return sb.toString();
     }

@@ -1,7 +1,6 @@
 package tp_servidor;
 
 public class Musica {
-    static int contaMusicas=1;
     private String nome;
     private String autor;
     private String album;
@@ -12,17 +11,15 @@ public class Musica {
     private int idUserMusica;
     private int idMusica;
     
-    public Musica(String nome,String autor,String album,int ano,double duracao,String genero,String ficheiro,int idUser){
+    public Musica(int idMusica, String nome,String autor,String album,int ano,double duracao,String genero,String ficheiro,int idUser){
         this.nome = nome;
         this.autor = autor;
         this.album = album;
         this.ano = ano;
         this.duracao = duracao;
         this.genero = genero;
-        this.ficheiro = ficheiro;
-       
-        this.idUserMusica = idUser;
-        idMusica = contaMusicas++;
+        this.ficheiro = ficheiro;       
+        this.idMusica = idMusica;
     }
     
     //------GETS------
