@@ -191,6 +191,12 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
        return true;
     }
 
+    public ArrayList<Musica> getListaMusicas(){
+        return ligacao.getListaMusicas();
+    }
+    public ArrayList<Playlist> getListaPlaylist(){
+        return ligacao.getListaPlaylist();
+    }
     @Override
     public boolean trataMusicas(String mensagem) {
         HashMap <String,String> musica = ResolveMessages(mensagem);
@@ -280,9 +286,6 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
                 return false;
             }      
             resposta = resultado;
-            msg = ConstantesServer.ATUALIZAMUSICAS;
-            setChanged();
-            notifyObservers();
             return true;
             //TRANSFERIR O FICHEIRO PARA O CLIENTE
         }

@@ -9,6 +9,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -232,8 +233,27 @@ public class ComunicacaoToCliente implements myObserver {
                     pout.flush();
                 }   break;
             case "listaMusicas":
+                ArrayList<Musica> listamusicas = servidor.getListaMusicas();
+                StringBuilder sb = new StringBuilder();
+                sb.append("tipo | listamusicas ; msg | sucesso ; tamanho | ").append(listamusicas.size()).append(" ; ");
+                for (int i = 0; i < listamusicas.size(); i++) {
+                    sb.append("musica").append(i).append(" | ").append(listamusicas.get(i).toString());
+                    if(i != listamusicas.size()-1) sb.append(" ; ");
+                }
+                pout.println(sb.toString());
+                pout.flush();
                 break;
-            case "listaPlaylists": break;
+            case "listaPlaylists":
+                ArrayList<Playlist> listaplaylists = servidor.getListaPlaylist();
+                StringBuilder ped = new StringBuilder();
+                ped.append("tipo | listaplaylists ; msg | sucesso ; tamanho | ").append(listaplaylists.size()).append(" ; ");
+                for (int i = 0; i < listaplaylists.size(); i++) {
+                    ped.append("playlist").append(i).append(" | ").append(listaplaylists.get(i));
+                    if(i != listaplaylists.size()-1) ped.append(" ; ");
+                }
+                pout.println(ped.toString());
+                pout.flush();
+                break;
             case "criaPlaylist":
             case "editaPlaylist":
             case "eliminaPlaylist":

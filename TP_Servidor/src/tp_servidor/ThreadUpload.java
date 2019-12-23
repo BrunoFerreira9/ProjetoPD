@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -18,7 +19,7 @@ public class ThreadUpload extends Thread{
     FileInputStream localFileInputStream = null;
     BufferedReader in;
     OutputStream out;
-    PrintStream prts;
+    PrintWriter prts;
     String fileName,localFilePath;
     Socket socket = null;
     public static boolean correr = true;
@@ -45,9 +46,9 @@ public class ThreadUpload extends Thread{
                 if(bytes < 0) break;
                 out.write(data,0,bytes);
             }while(bytes >0);
-            localFileInputStream.close(); 
+            localFileInputStream.close();
+            System.out.println("Acabei de enviar o ficheiro: "+fileName);
             socket.close();
-             System.out.println("Acabei de enviar o ficheiro: "+fileName);
         } catch (IOException ex) {
             Logger.getLogger(ThreadUpload.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -68,4 +68,8 @@ public class Playlist {
         
         return sb;
     }
+    @Override
+    public String toString(){
+        return idPlaylist+","+nome;
+    }
 }

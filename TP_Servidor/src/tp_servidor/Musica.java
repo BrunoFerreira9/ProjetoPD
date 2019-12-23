@@ -44,12 +44,7 @@ public class Musica {
     
     @Override
     public String toString(){
-         return "\nMusica:" + this.nome + "\n "
-                + "Autor:" + this.autor + "\n"
-                 + "Album:" + this.album + "\n"
-                 + "Género:" + this.genero + "\n"
-                 + "Ano:" + this.ano + "\n"
-                  + "Duracao:" + this.duracao + "\n";
+        return this.nome + "," + this.autor + "," + this.album + "," + this.genero + "," + this.ano + "," + this.duracao;
     }
     
 }

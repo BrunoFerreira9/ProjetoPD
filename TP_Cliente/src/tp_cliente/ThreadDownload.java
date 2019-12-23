@@ -22,6 +22,7 @@ public class ThreadDownload extends Thread{
     File localDirectory;
     String fileName, localFilePath = null;
     Socket socketcliente = null;
+    String ouvir;
     ServerSocket server = null;
     FileOutputStream localFileOutputStream = null;
     InputStream bfr;
@@ -29,10 +30,11 @@ public class ThreadDownload extends Thread{
     int nbytes;
     byte []bufer = new byte[4000];
     
-    ThreadDownload(String filename,Socket s) throws IOException{
+    ThreadDownload(String filename,Socket s,String ouvir) throws IOException{
         localDirectory = new File(ConstantesCliente.PATHLOCATION);
         this.fileName = filename;
         socketcliente = s;
+        this.ouvir = ouvir;
         server = new ServerSocket(0);
     }
     
@@ -84,10 +86,16 @@ public class ThreadDownload extends Thread{
                 localFileOutputStream.close();
                 socketcliente.close();
                 server.close();
+                if(ouvir.equals("sim")){
+                    Process pro = Runtime.getRuntime().exec("cmd.exe /c "+ConstantesCliente.PATHLOCATION+"\\"+fileName);
+                    pro.waitFor();
+                }
             }catch(UnknownHostException e){
                  System.out.println("Destino desconhecido:\n\t"+e);
             }catch(IOException e){
                 System.out.println("Ocorreu um erro no acesso ao socket ou ao ficheiro local " + localFilePath +":\n\t"+e);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ThreadDownload.class.getName()).log(Level.SEVERE, null, ex);
             }
         }   
     }

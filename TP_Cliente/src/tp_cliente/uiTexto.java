@@ -19,10 +19,8 @@ public class uiTexto implements myObserver{
     
     public uiTexto(String ip) 
     {
-        this.ipDS = ip; 
-        cs.addObserver(this);
+        this.ipDS = ip;
     }
-    
   public void apresentaMenuInicial(){
     
         System.out.println("----MENU----");
@@ -49,11 +47,22 @@ public class uiTexto implements myObserver{
         System.out.println("6 - Sair");
     }
     public void apresentaListaMusicas(){
-        cs.trataMusicas("tipo | listaMusicas");
-       
+        cs.trataMusicas("tipo | listaMusicas;");
+        if(cs.listamusicas.size() > 0){
+            System.out.println("-------- Lista Musicas --------");
+            System.out.println("Musica,Autor,Album,Genero,Ano,Duracao");
+            for(int i=0;i<cs.listamusicas.size();i++)
+                System.out.println(cs.listamusicas.get(i));
+        }
     }
     public void apresentaListaPlaylists(){
-        cs.trataPlaylist("tipo | listaPlaylists");
+        cs.trataPlaylist("tipo | listaPlaylists;");
+        if(cs.listaplaylist.size() > 0){
+            System.out.println("-------- Lista PlayLists --------");
+            System.out.println("Nome");
+            for(int i=0;i<cs.listaplaylist.size();i++)
+                System.out.println(cs.listaplaylist.get(i));
+        }
     }
     
     public String criaMusica(){
@@ -239,7 +248,9 @@ public class uiTexto implements myObserver{
             cds = new ComunicacaoToDS(ipDS);
             if(cds.inicializaUDP()){             
                 cs = new ComunicacaoToServidor(cds.getIpServer(),cds.getPortoServer());
-                cs.inicializaTCP();}
+                cs.inicializaTCP();
+                cs.addObserver(this);
+            }
             else
                  existeSocket=false;
         }catch(IOException e){
@@ -261,12 +272,13 @@ public class uiTexto implements myObserver{
                     case 2:
                             user = dadosLogin();
                             if(cs.efetuaLogin(user)){
-
+                            apresentaListaMusicas();
+                            apresentaListaPlaylists();
                             logado=true;                      
                             do{
                                 apresentaMenuSecundario();
                                 op2 = in.nextInt();
-
+                                    
                                 switch(op2){
                                     case 1 : 
 

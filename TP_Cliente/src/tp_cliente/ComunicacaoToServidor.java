@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
 import static tp_cliente.ConstantesCliente.ResolveMessages;
 
 public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
@@ -39,12 +37,12 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
     List<myObserver> observers = new ArrayList<>();
     int msg;
     boolean logado = false; 
+    List<String> listamusicas = new ArrayList<String>();
+    List<String> listaplaylist = new ArrayList<String>();
     
     public ComunicacaoToServidor(String endereco, int porto) {
             this.endereco = endereco;
             this.porto = porto;
-        
-    
     }
     
     public void inicializaTCP() throws IOException, ClassNotFoundException {
@@ -140,7 +138,6 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
 
     @Override
     public boolean trataMusicas(String mensagem){
-     
         mensagem += "id | " + idUser;
         HashMap <String,String> pedido = ResolveMessages(mensagem);
         switch(pedido.get("tipo")){
@@ -199,6 +196,10 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
                 out.println(mensagem);
                 out.flush();
                 return true;
+            case "listaPlaylists":
+                out.println(mensagem);
+                out.flush();
+                return true;
             default:
                 return false;
         }
@@ -241,7 +242,7 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
                 while(logado){
                     try {
                         pedido = reader.readLine();
-                        System.out.println("Recebi do Servidor: "+ pedido);
+                       // System.out.println("Recebi do Servidor: "+ pedido);
                         HashMap <String,String> info = ResolveMessages(pedido);
                         switch(info.get("tipo"))
                         {
@@ -250,19 +251,34 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
                                 upmusica.start();
                                 break;
                             case "download":
-                                Thread downmusica = new ThreadDownload(info.get("ficheiro"),socketTCP);
+                                Thread downmusica = new ThreadDownload(info.get("ficheiro"),socketTCP,info.get("ouvirMusica"));
                                 downmusica.start();
                                 break;
                             case "atualizamusicas":
                                 msg = ConstantesCliente.ATUALIZAMUSICAS;
+                                setChanged();
+                                notifyObservers();
                                 break;
                             case "atualizaplaylists":
                                 msg = ConstantesCliente.ATUALIZAPLAYLISTS;
+                                setChanged();
+                                notifyObservers();
                                 break;
-                            
+                            case "listamusicas":
+                                listamusicas.clear();
+                                for(int i = 0; i< Integer.parseInt(info.get("tamanho")); i++)
+                                {
+                                    listamusicas.add(info.get("musica"+i));
+                                }
+                                break;
+                            case "listaplaylists":
+                                listaplaylist.clear();
+                                for(int i = 0; i< Integer.parseInt(info.get("tamanho")); i++)
+                                {
+                                   listaplaylist.add(info.get("playlist"+i));
+                                }
+                                break;
                         }
-                        setChanged();
-                        notifyObservers();
                     } catch (IOException ex) {
                         Logger.getLogger(ComunicacaoToServidor.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -274,13 +290,8 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
         });
         recebepedidos.start();
     }
-    /*private void ouvirmusica(String ficheiro) throws IOException {
-        try {
-            InputStream musica = new FileInputStream(new File(ConstantesCliente.PATHLOCATION+"\\"+ficheiro));
-            AudioStream audios = new AudioStream(musica);
-            AudioPlayer.player.start(audios);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(ComunicacaoToServidor.class.getName()).log(Level.SEVERE, null, ex);
-        }
+  /*  private void ouvirmusica(String ficheiro) throws IOException, InterruptedException {
+        Process pro = Runtime.getRuntime().exec("cmd.exe /c "+ConstantesCliente.PATHLOCATION+"\\"+ficheiro);
+        pro.waitFor();
     }*/
 }
