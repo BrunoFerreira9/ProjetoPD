@@ -219,6 +219,18 @@ public class ComunicacaoToCliente implements myObserver {
                     pout.println("tipo | resposta ; msg | insucesso");
                     pout.flush();
                 }   break;
+            case "filtro" :    
+                ArrayList<Musica> listamusicasFiltro = servidor.getListaMusicasFiltro(pedido);
+                StringBuilder sb = new StringBuilder();
+                sb.append("tipo | listamusicas ; msg | sucesso ; tamanho | ").append(listamusicasFiltro.size()).append(" ; ");
+                for (int i = 0; i < listamusicasFiltro.size(); i++) {
+                    sb.append("musica").append(i).append(" | ").append(listamusicasFiltro.get(i).toString());
+                    if(i != listamusicasFiltro.size()-1) sb.append(" ; ");
+                }
+                pout.println(sb.toString());
+                pout.flush();
+                break;
+                
             case "upload": 
                 Thread upmusica = new ThreadUpload(user.get("ficheiro"),endereco,Integer.parseInt(user.get("porto")));
                 upmusica.start();
@@ -234,13 +246,13 @@ public class ComunicacaoToCliente implements myObserver {
                 }   break;
             case "listaMusicas":
                 ArrayList<Musica> listamusicas = servidor.getListaMusicas();
-                StringBuilder sb = new StringBuilder();
-                sb.append("tipo | listamusicas ; msg | sucesso ; tamanho | ").append(listamusicas.size()).append(" ; ");
+                StringBuilder sb1 = new StringBuilder();
+                sb1.append("tipo | listamusicas ; msg | sucesso ; tamanho | ").append(listamusicas.size()).append(" ; ");
                 for (int i = 0; i < listamusicas.size(); i++) {
-                    sb.append("musica").append(i).append(" | ").append(listamusicas.get(i).toString());
-                    if(i != listamusicas.size()-1) sb.append(" ; ");
+                    sb1.append("musica").append(i).append(" | ").append(listamusicas.get(i).toString());
+                    if(i != listamusicas.size()-1) sb1.append(" ; ");
                 }
-                pout.println(sb.toString());
+                pout.println(sb1.toString());
                 pout.flush();
                 break;
             case "listaPlaylists":
@@ -266,6 +278,7 @@ public class ComunicacaoToCliente implements myObserver {
                     pout.println("tipo | resposta ; msg | insucesso");
                     pout.flush();
                 }   break;
+            
             default:
                 break;
         }

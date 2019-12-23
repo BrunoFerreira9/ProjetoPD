@@ -197,6 +197,11 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
     public ArrayList<Playlist> getListaPlaylist(){
         return ligacao.getListaPlaylist();
     }
+    
+    public ArrayList<Musica> getListaMusicasFiltro(String msg){
+        return ligacao.getListaMusicasFiltro(msg);
+    }
+    
     @Override
     public boolean trataMusicas(String mensagem) {
         HashMap <String,String> musica = ResolveMessages(mensagem);
@@ -315,31 +320,10 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
             notifyObservers();
             return true;
                         
-        }else if(musica.get("tipo").equals("filtro")){
-          
-            String query = "Select * from musicas where ";
-            switch(musica.get("filtro")){
-            
-                case "nome": query += "nome = \'" +musica.get("pesquisa") +"\'";break;
-                case "autor": query += "autor = \'" +musica.get("pesquisa") +"\'";break;
-                case "album": query += "album = \'" +musica.get("pesquisa") +"\'";break;
-                case "ano": query += "ano = " +musica.get("pesquisa");break;
-                case "duracao": query += "duracao = " +musica.get("pesquisa");break;
-                case "genero": query += "genero = \'" +musica.get("pesquisa") +"\'";break;
-            
-            }
-            
-            String resultado = ligacao.executarSelect(query);
-
-            if (resultado == "ERRO" || resultado == "")  //se nao existir
-                     return false;
-            msg = ConstantesServer.ATUALIZAMUSICAS;
-            setChanged();
-            notifyObservers();          
-            return true;
         }
         return false;
     }
+    
     @Override
     public boolean trataPlaylist(String mensagem) {
        HashMap <String,String> playlist = ResolveMessages(mensagem);

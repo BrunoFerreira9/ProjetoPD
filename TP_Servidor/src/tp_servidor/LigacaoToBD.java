@@ -7,8 +7,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static tp_servidor.ConstantesServer.ResolveMessages;
 
 public class LigacaoToBD {
         
@@ -110,6 +113,49 @@ public class LigacaoToBD {
         try {
             ArrayList<Musica> lista = new ArrayList<>();
             String query = "Select * from musica";
+            stmt = conn_ligacao.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            
+            while (rs.next()) {
+                int i = rs.getInt("idMusica");
+                String nome = rs.getString("nome");
+                String autor = rs.getString("autor");
+                String album = rs.getString("album");
+                int ano = rs.getInt("ano");
+                double duracao = rs.getDouble("duracao");
+                String genero = rs.getString("genero");
+                String ficheiro = rs.getString("ficheiro");
+                int idUtilizador = rs.getInt("idUtilizador");
+                
+                lista.add(new Musica(i,nome,autor,album,ano,duracao,genero,ficheiro,idUtilizador));
+            }
+            return lista;
+        } catch (SQLException ex) {
+            Logger.getLogger(LigacaoToBD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public ArrayList<Musica> getListaMusicasFiltro(String mensagem) 
+    {
+        HashMap <String,String> musica = ResolveMessages(mensagem);
+        
+          
+        String query = "Select * from musicas where ";
+        switch(musica.get("filtragem")){
+
+            case "nome": query += "nome = \'" +musica.get("pesquisa") +"\'";break;
+            case "autor": query += "autor = \'" +musica.get("pesquisa") +"\'";break;
+            case "album": query += "album = \'" +musica.get("pesquisa") +"\'";break;
+            case "ano": query += "ano = " +musica.get("pesquisa");break;
+            case "duracao": query += "duracao = " +musica.get("pesquisa");break;
+            case "genero": query += "genero = \'" +musica.get("pesquisa") +"\'";break;
+            case "ficheiro": query += "ficheiro = \'" +musica.get("pesquisa") +"\'";break;
+
+        }
+        
+        try {
+            ArrayList<Musica> lista = new ArrayList<>();            
             stmt = conn_ligacao.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             

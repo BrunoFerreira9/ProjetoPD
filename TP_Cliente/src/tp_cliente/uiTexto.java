@@ -44,8 +44,57 @@ public class uiTexto implements myObserver{
         System.out.println("3 - Eliminar Musica");
         System.out.println("4 - Ouvir Musica");
         System.out.println("5 - Adicionar musica a playlist");
-        System.out.println("6 - Sair");
+        System.out.println("6 - Filtrar");
+        System.out.println("7 - Sair");
     }
+    
+    public void filtroMusicas(){
+    
+        System.out.println("----Musicas----");
+        System.out.println("1 - Nome");
+        System.out.println("2 - Autor");
+        System.out.println("3 - Album");
+        System.out.println("4 - Ano");
+        System.out.println("5 - Duracao");
+        System.out.println("6 - Genero");
+        System.out.println("7 - Ficheiro");
+        System.out.println("8 - Sair");
+    }
+    
+     public String filtroMusicasTexto(int op){
+     
+        StringBuilder sb = new StringBuilder();
+     
+         sb.append("tipo | filtro ; ");
+        switch(op){
+        
+            case 1:  sb.append("filtragem | nome ; ");
+                    System.out.println("Nome:");
+                    sb.append("pesquisa | "+in.next()+" ; ");break;
+            case 2: sb.append("filtragem | autor ; ");
+                    System.out.println("Autor");
+                    sb.append("pesquisa | "+in.next()+" ; ");break;
+            case 3:sb.append("filtragem | album ; ");
+                    System.out.println("Album");
+                    sb.append("pesquisa | "+in.next()+" ; ");break;
+            case 4:sb.append("filtragem | ano ; ");
+                    System.out.println("Ano");
+                    sb.append("pesquisa | "+in.nextInt()+" ; ");break;
+            case 5:sb.append("filtragem | duracao ; ");
+                    System.out.println("Duracao");
+                    sb.append("pesquisa | "+in.nextDouble()+" ; ");break;
+            case 6:sb.append("filtragem | genero ; ");
+                    System.out.println("Genero");
+                    sb.append("pesquisa | "+in.next()+" ; ");break;
+           case 7:     sb.append("filtragem | ficheiro ; ");                   
+                    System.out.println("Ficheiro");
+                    sb.append("pesquisa | "+in.next()+" ; ");break;
+        
+        }
+     
+        return sb.toString();
+     }
+    
     public void apresentaListaMusicas(){
         cs.trataMusicas("tipo | listaMusicas;");
         if(cs.listamusicas.size() > 0){
@@ -143,7 +192,14 @@ public class uiTexto implements myObserver{
         System.out.println("3 - Eliminar Playlist");
         System.out.println("4 - Remover Musica");
         System.out.println("5 - Ouvir Playlist");
-        System.out.println("6 - Sair");
+        System.out.println("6 - Ouvir Playlist");
+        System.out.println("7 - Sair");
+    }
+    
+    public void filtroPlaylist(){
+    
+        System.out.println("----Playlists----");
+        System.out.println("Nome");
     }
     
     public String criaPlaylist(){
@@ -224,6 +280,7 @@ public class uiTexto implements myObserver{
          return registo;
     }
      
+    
      
     public HashMap<String,String> dadosLogin(){
         
@@ -237,7 +294,7 @@ public class uiTexto implements myObserver{
         return login;
     }
     
-    int op,op2,op3,op4;
+    int op,op2,op3,op4, op5;
     boolean logado=false;
     boolean existeSocket=true;
 
@@ -303,11 +360,23 @@ public class uiTexto implements myObserver{
                                                         break;                                           
                                                 case 5:if(!cs.trataMusicas(addMusicaPlaylist()))
                                                         System.out.println("Operação não realizada!");  
-                                                        break;                                           
+                                                        break;   
+                                                case 6:
+                                                     
+                                                    do { 
+                                                        apresentaListaMusicas();
+                                                        filtroMusicas();
+                                                        op5 = in.nextInt();
+                                                        if(op5!=8){
+                                                            if(!cs.trataMusicas(filtroMusicasTexto(op5))){
+                                                                System.out.println("Operação não realizada!");  
+                                                            }
+                                                        }
+                                                    } while (op5!=8);break;
                                                 default : break;
                                             }
 
-                                        }while(op3!=6);
+                                        }while(op3!=7);
                                         break;
                                     case 2 :
                                         do{
