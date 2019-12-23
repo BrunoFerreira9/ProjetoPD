@@ -88,8 +88,7 @@ public class uiTexto implements myObserver{
                     sb.append("pesquisa | "+in.next()+" ; ");break;
            case 7:     sb.append("filtragem | ficheiro ; ");                   
                     System.out.println("Ficheiro");
-                    sb.append("pesquisa | "+in.next()+" ; ");break;
-        
+                    sb.append("pesquisa | "+in.next()+" ; ");break;        
         }
      
         return sb.toString();
