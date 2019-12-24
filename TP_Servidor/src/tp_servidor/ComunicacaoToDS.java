@@ -30,6 +30,7 @@ public class ComunicacaoToDS {
     private int portoServer;
     private String ipServer;
     private int numBD;       
+    private boolean princ;
      
     public ComunicacaoToDS(String endereco) {
         this.endereco = endereco;
@@ -55,7 +56,7 @@ public class ComunicacaoToDS {
             System.out.println(resposta);
             HashMap <String,String> teste = ResolveMessages(resposta);
             numBD = Integer.parseInt(teste.get("numbd"));
-            principal = teste.get("principal").equalsIgnoreCase("sim");
+            princ = principal = teste.get("principal").equalsIgnoreCase("sim");
             
         }catch (UnknownHostException e){
             System.err.println ("Unable to resolve host");
@@ -78,10 +79,6 @@ public class ComunicacaoToDS {
     
     public String getIpServer(){return ipServer;}
     public int getPortoServer(){return portoServer;}
-     public int getnumBD(){return numBD;}
-
-    
-    
-     
-     
+    public int getnumBD(){return numBD;}
+    public boolean getprinc(){ return princ; }
 }

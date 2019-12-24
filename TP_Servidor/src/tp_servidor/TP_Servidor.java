@@ -30,11 +30,11 @@ public class TP_Servidor {
 
         ControloLigacoes ligacoes = new ControloLigacoes(servidores);
         ligacoes.start();
-
+        
+        
         do
         {
             System.out.print("\n-> ");
-
             scann = sc.next();
         }while(!scann.equalsIgnoreCase("sair"));
 
