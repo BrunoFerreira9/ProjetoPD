@@ -191,8 +191,7 @@ public class uiTexto implements myObserver{
         System.out.println("3 - Eliminar Playlist");
         System.out.println("4 - Remover Musica");
         System.out.println("5 - Ouvir Playlist");
-        System.out.println("6 - Ouvir Playlist");
-        System.out.println("7 - Sair");
+        System.out.println("6 - Sair");
     }
     
     public void filtroPlaylist(){
@@ -294,7 +293,6 @@ public class uiTexto implements myObserver{
     }
     
     int op,op2,op3,op4, op5;
-    boolean logado=false;
     boolean existeSocket=true;
 
 
@@ -330,7 +328,7 @@ public class uiTexto implements myObserver{
                             if(cs.efetuaLogin(user)){
                             apresentaListaMusicas();
                             apresentaListaPlaylists();
-                            logado=true;                      
+                                               
                             do{
                                 apresentaMenuSecundario();
                                 op2 = in.nextInt();
@@ -407,9 +405,9 @@ public class uiTexto implements myObserver{
                                         }while(op3!=5);
                                         break;
                                     default:
-                                         if(logado){
-                                            if(cs.efetuaLogout(user))
-                                                System.out.println("Logout com sucesso!"); 
+                                        if(cs.logado){
+                                            cs.efetuaLogout(user);
+                                            System.out.println("Logout com sucesso!"); 
                                         }
                                         break;
                                 }

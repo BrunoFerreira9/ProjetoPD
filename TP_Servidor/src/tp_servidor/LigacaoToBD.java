@@ -141,7 +141,7 @@ public class LigacaoToBD {
         HashMap <String,String> musica = ResolveMessages(mensagem);
         
           
-        String query = "Select * from musicas where ";
+        String query = "Select * from musica where ";
         switch(musica.get("filtragem")){
 
             case "nome": query += "nome = \'" +musica.get("pesquisa") +"\'";break;
@@ -211,6 +211,24 @@ public class LigacaoToBD {
             
             while (rs.next()) {                
                 String nome = rs.getString("nome");                
+                lista.add(nome);
+            }
+            return lista;
+        } catch (SQLException ex) {
+            Logger.getLogger(LigacaoToBD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    public ArrayList<String> getListaFicheirosPlaylist(String playlist) 
+    {
+        try {
+            ArrayList<String> lista = new ArrayList<>();
+            String query = "Select ficheiro from musica m , musica_has_playlist mp, playlist p where m.idMusica = mp.idMusica AND mp.idPlaylist = p.idPlaylist AND p.nome='"+playlist+"'";
+            stmt = conn_ligacao.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            
+            while (rs.next()) {                
+                String nome = rs.getString("ficheiro");                
                 lista.add(nome);
             }
             return lista;
