@@ -190,6 +190,10 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
                 out.println(mensagem);
                 out.flush();
                 return true;
+            case "filtroPlaylist":
+                out.println(mensagem);
+                out.flush();
+                return true;
             default:
                 return false;
         }

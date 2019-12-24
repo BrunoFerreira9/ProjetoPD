@@ -70,13 +70,13 @@ public class uiTexto implements myObserver{
         
             case 1:  sb.append("filtragem | nome ; ");
                     System.out.println("Nome:");
-                    sb.append("pesquisa | "+in.next()+" ; ");break;
+                    sb.append("pesquisa | "+in.nextLine()+" ; ");break;
             case 2: sb.append("filtragem | autor ; ");
                     System.out.println("Autor");
-                    sb.append("pesquisa | "+in.next()+" ; ");break;
+                    sb.append("pesquisa | "+in.nextLine()+" ; ");break;
             case 3:sb.append("filtragem | album ; ");
                     System.out.println("Album");
-                    sb.append("pesquisa | "+in.next()+" ; ");break;
+                    sb.append("pesquisa | "+in.nextLine()+" ; ");break;
             case 4:sb.append("filtragem | ano ; ");
                     System.out.println("Ano");
                     sb.append("pesquisa | "+in.nextInt()+" ; ");break;
@@ -85,10 +85,10 @@ public class uiTexto implements myObserver{
                     sb.append("pesquisa | "+in.nextDouble()+" ; ");break;
             case 6:sb.append("filtragem | genero ; ");
                     System.out.println("Genero");
-                    sb.append("pesquisa | "+in.next()+" ; ");break;
+                    sb.append("pesquisa | "+in.nextLine()+" ; ");break;
            case 7:     sb.append("filtragem | ficheiro ; ");                   
                     System.out.println("Ficheiro");
-                    sb.append("pesquisa | "+in.next()+" ; ");break;        
+                    sb.append("pesquisa | "+in.nextLine()+" ; ");break;        
         }
      
         return sb.toString();
@@ -118,19 +118,26 @@ public class uiTexto implements myObserver{
         StringBuilder sb = new StringBuilder();
         sb.append("tipo | criaMusica ; ");
         System.out.println("Nome:");
-        sb.append("nome | "+in.next()+" ; ");
+        sb.append("nome | "+in.nextLine()+" ; ");      
+        in.nextLine(); 
         System.out.println("Autor");
-        sb.append("autor | "+in.next()+" ; ");
+        sb.append("autor | "+in.nextLine()+" ; ");
+        in.nextLine(); 
         System.out.println("Album");
-        sb.append("album | "+in.next()+" ; ");
+        sb.append("album | "+in.nextLine()+" ; ");
+        in.nextLine(); 
         System.out.println("Ano");
         sb.append("ano | "+in.nextInt()+" ; ");
+        in.nextLine(); 
         System.out.println("Duracao");
         sb.append("duracao | "+in.nextDouble()+" ; ");
+        in.nextLine(); 
         System.out.println("Genero");
-        sb.append("genero | "+in.next()+" ; ");
+        sb.append("genero | "+in.nextLine()+" ; ");
+        in.nextLine(); 
         System.out.println("Ficheiro");
-        sb.append("ficheiro | "+in.next()+" ; ");
+        sb.append("ficheiro | "+in.nextLine()+" ; ");
+        in.nextLine(); 
         
         return sb.toString();
     }
@@ -191,13 +198,19 @@ public class uiTexto implements myObserver{
         System.out.println("3 - Eliminar Playlist");
         System.out.println("4 - Remover Musica");
         System.out.println("5 - Ouvir Playlist");
-        System.out.println("6 - Sair");
+        System.out.println("6 - Pesquisar Playlist");
+        System.out.println("7 - Sair");
     }
     
-    public void filtroPlaylist(){
-    
-        System.out.println("----Playlists----");
-        System.out.println("Nome");
+    public String filtroPlaylist(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("tipo | filtroPlaylist ; ");
+        sb.append("filtragem | nome ; ");
+        System.out.println("Nome:");
+        sb.append("pesquisa | "+in.next()+" ; ");
+        
+        return sb.toString();
+   
     }
     
     public String criaPlaylist(){
@@ -293,6 +306,7 @@ public class uiTexto implements myObserver{
     }
     
     int op,op2,op3,op4, op5;
+    boolean logado=false;
     boolean existeSocket=true;
 
 
@@ -328,7 +342,7 @@ public class uiTexto implements myObserver{
                             if(cs.efetuaLogin(user)){
                             apresentaListaMusicas();
                             apresentaListaPlaylists();
-                                               
+                            logado=true;                      
                             do{
                                 apresentaMenuSecundario();
                                 op2 = in.nextInt();
@@ -398,16 +412,19 @@ public class uiTexto implements myObserver{
                                                 case 5:if(!cs.trataPlaylist(ouvirPlaylist()))
                                                         System.out.println("Operação não realizada!");
                                                 break;
+                                                case 6:if(!cs.trataPlaylist(filtroPlaylist()))
+                                                        System.out.println("Operação não realizada!");
+                                                break;
 
                                                 default : break;
                                             }
 
-                                        }while(op3!=5);
+                                        }while(op3!=7);
                                         break;
                                     default:
-                                        if(cs.logado){
-                                            cs.efetuaLogout(user);
-                                            System.out.println("Logout com sucesso!"); 
+                                         if(logado){
+                                            if(cs.efetuaLogout(user))
+                                                System.out.println("Logout com sucesso!"); 
                                         }
                                         break;
                                 }
