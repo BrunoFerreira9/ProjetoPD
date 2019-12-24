@@ -25,9 +25,6 @@ public class ComunicacaoToCliente implements myObserver {
     private DatagramPacket packetMulticast;
     private String endereco;
     private int porto;
-    
-    //ObjectInputStream in = null;
-    //ObjectOutputStream out = null;
     private PrintWriter pout = null;
     private BufferedReader in = null;
     
@@ -173,7 +170,7 @@ public class ComunicacaoToCliente implements myObserver {
                 break;
             case "logout":
                 if(servidor.efetuaLogout(user)){
-                    pout.println("tipo | resposta ; msg | sucesso");
+                    pout.println("tipo | logout ; msg | sucesso");
                     pout.flush();
                     servidor.removeCliente(socketCliente);
                     servidor.removeObserver(observer);
@@ -222,7 +219,8 @@ public class ComunicacaoToCliente implements myObserver {
             case "filtro" :    
                 ArrayList<Musica> listamusicasFiltro = servidor.getListaMusicasFiltro(pedido);
                 StringBuilder sb = new StringBuilder();
-                sb.append("tipo | listamusicas ; msg | sucesso ; tamanho | ").append(listamusicasFiltro.size()).append(" ; ");
+                sb.append("tipo | listamusicasfiltro ; msg | sucesso ; tamanho | ").append(listamusicasFiltro.size());
+                if(!listamusicasFiltro.isEmpty()) sb.append(" ; ");
                 for (int i = 0; i < listamusicasFiltro.size(); i++) {
                     sb.append("musica").append(i).append(" | ").append(listamusicasFiltro.get(i).toString());
                     if(i != listamusicasFiltro.size()-1) sb.append(" ; ");
@@ -247,7 +245,8 @@ public class ComunicacaoToCliente implements myObserver {
             case "listaMusicas":
                 ArrayList<Musica> listamusicas = servidor.getListaMusicas();
                 StringBuilder sb1 = new StringBuilder();
-                sb1.append("tipo | listamusicas ; msg | sucesso ; tamanho | ").append(listamusicas.size()).append(" ; ");
+                sb1.append("tipo | listamusicas ; msg | sucesso ; tamanho | ").append(listamusicas.size());
+                if(!listamusicas.isEmpty()) sb1.append(" ; ");
                 for (int i = 0; i < listamusicas.size(); i++) {
                     sb1.append("musica").append(i).append(" | ").append(listamusicas.get(i).toString());
                     if(i != listamusicas.size()-1) sb1.append(" ; ");
@@ -258,7 +257,8 @@ public class ComunicacaoToCliente implements myObserver {
             case "listaPlaylists":
                 ArrayList<Playlist> listaplaylists = servidor.getListaPlaylist();
                 StringBuilder ped = new StringBuilder();
-                ped.append("tipo | listaplaylists ; msg | sucesso ; tamanho | ").append(listaplaylists.size()).append(" ; ");
+                ped.append("tipo | listaplaylists ; msg | sucesso ; tamanho | ").append(listaplaylists.size());
+                if(!listaplaylists.isEmpty()) ped.append(" ; ");
                 for (int i = 0; i < listaplaylists.size(); i++) {
                     ped.append("playlist").append(i).append(" | ").append(listaplaylists.get(i));
                     if(i != listaplaylists.size()-1) ped.append(" ; ");
@@ -269,7 +269,6 @@ public class ComunicacaoToCliente implements myObserver {
             case "criaPlaylist":
             case "editaPlaylist":
             case "eliminaPlaylist":
-            case "ouvirPlaylist":
             case "eliminaMusicaPlaylist":
                 if(servidor.trataPlaylist(pedido)){
                     pout.println("tipo | resposta ; msg | sucesso");
@@ -278,7 +277,16 @@ public class ComunicacaoToCliente implements myObserver {
                     pout.println("tipo | resposta ; msg | insucesso");
                     pout.flush();
                 }   break;
-            
+            case "ouvirPlaylist":
+                if(servidor.trataPlaylist(pedido)){
+                    String [] ficheiros = servidor.resposta.split(", ");
+                    for (String ficheiro : ficheiros) {
+                        pout.println("tipo | download ; msg | sucesso ; ficheiro | "+ficheiro+" ; ouvirMusica | sim");
+                        pout.flush();
+                    }
+                }
+                break;
+
             default:
                 break;
         }

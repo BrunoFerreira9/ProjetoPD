@@ -302,11 +302,10 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
             if (resultado == "ERRO" || resultado == "")  //se nao existir
                      return false;
             
-            String queryPlay = "Select idPlaylist from playlist where idUtilizador = " + musica.get("id")+" and nome = "+musica.get("nomePlaylist");
+            String queryPlay = "Select idPlaylist from playlist where idUtilizador = " + musica.get("id")+" and nome = '"+musica.get("nomePlaylist")+"'";
 
             String resultadoqueryPlay = "" ;
             resultadoqueryPlay = ligacao.executarSelect(queryPlay);
-
             if (resultadoqueryPlay == "ERRO" || resultadoqueryPlay == "")  //se nao existir
                      return false;
                 
@@ -398,15 +397,8 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
             
         }
         else if(playlist.get("tipo").equals("ouvirPlaylist")){
-          
-            String query = "Select ficheiro from musica m , musica_has_playlist mp, playlist p where m.idMusica = mp.idMusica AND mp.idPlaylist = p.idPlaylist AND p.nome="+playlist.get("nome");
-
-            String resultado = ligacao.executarSelect(query);
-
-            if (resultado == "ERRO" || resultado == "") { //se nao existir
-                return false;
-            }      
-            
+            ArrayList<String> listaficheiros = ligacao.getListaFicheirosPlaylist(playlist.get("nome"));
+            resposta = listaficheiros.toString().substring(1, listaficheiros.toString().length()-1);
             //TRANSFERIR OS FICHEIROS PARA O CLIENTE
             msg = ConstantesServer.ATUALIZAPLAYLISTS;
             setChanged();

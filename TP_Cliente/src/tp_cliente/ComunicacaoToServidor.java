@@ -107,24 +107,10 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
     
     @Override
     public boolean efetuaLogout(HashMap <String,String> user) {
-       
-        try {
-            pedido = "tipo | logout ; username | "+user.get("username");
-            out.println(pedido);
-            out.flush();
-         
-            resposta = reader.readLine();
-            
-            HashMap <String,String> message = ResolveMessages(resposta);
-            if(message.get("tipo").equals("resposta") && message.get("msg").equals("sucesso")){
-                logado = false; 
-                return true;
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(TP_Cliente.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
-        return false;
+        pedido = "tipo | logout ; username | "+user.get("username");
+        out.println(pedido);
+        out.flush();
+        return true;
     }
     
     public boolean sucesso() throws IOException{
@@ -165,6 +151,10 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
                 out.println(mensagem);
                 out.flush();
                 return true;
+            case "filtro":
+                out.println(mensagem);
+                out.flush();
+                return true;
             default:
                 return false;
                 
@@ -197,6 +187,10 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
                 out.flush();
                 return true;
             case "listaPlaylists":
+                out.println(mensagem);
+                out.flush();
+                return true;
+            case "filtroPlaylist":
                 out.println(mensagem);
                 out.flush();
                 return true;
@@ -242,7 +236,7 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
                 while(logado){
                     try {
                         pedido = reader.readLine();
-                       // System.out.println("Recebi do Servidor: "+ pedido);
+                        //System.out.println("Recebi do Servidor: "+ pedido);
                         HashMap <String,String> info = ResolveMessages(pedido);
                         switch(info.get("tipo"))
                         {
@@ -271,6 +265,13 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
                                     listamusicas.add(info.get("musica"+i));
                                 }
                                 break;
+                            case "listamusicasfiltro":
+                                System.out.println("-------- Pesquisa ---------");
+                                for(int i = 0; i< Integer.parseInt(info.get("tamanho")); i++)
+                                {
+                                    System.out.println(info.get("musica"+i));
+                                }
+                                break;
                             case "listaplaylists":
                                 listaplaylist.clear();
                                 for(int i = 0; i< Integer.parseInt(info.get("tamanho")); i++)
@@ -278,6 +279,10 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
                                    listaplaylist.add(info.get("playlist"+i));
                                 }
                                 break;
+                            case "logout":
+                                if(info.get("msg").equals("sucesso"))
+                                    logado = false;
+                            break;
                         }
                     } catch (IOException ex) {
                         Logger.getLogger(ComunicacaoToServidor.class.getName()).log(Level.SEVERE, null, ex);
