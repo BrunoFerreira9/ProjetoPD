@@ -1,17 +1,14 @@
-package tp_ds;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static tp_ds.ConstantesDS.ResolveMessages;
 
 public class Comunicacao implements myObserver,myObservable{
     DatagramSocket sock;
@@ -50,7 +47,7 @@ public class Comunicacao implements myObserver,myObservable{
         sock.receive(pkt);
         dados = new String(pkt.getData(),0,pkt.getLength());
         System.out.println(dados);
-        message = ResolveMessages(dados);
+        message = ConstantesDS.ResolveMessages(dados);
         System.out.println("Recebi "+dados+" de "+pkt.getAddress()+" porto: "+pkt.getPort());
     }
     

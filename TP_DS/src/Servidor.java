@@ -1,4 +1,4 @@
-package tp_ds;
+
 
 public class Servidor {
     private String ip;

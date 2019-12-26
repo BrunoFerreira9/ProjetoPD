@@ -327,7 +327,7 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
             if (resultadoqueryPlay == "ERRO" || resultadoqueryPlay == "")  //se nao existir
                      return false;
                 
-            String add = "INSERT INTO musica_has_playlist(nomeMusica, nomePlaylist) VALUES (" +  resultado +"," +  resultadoqueryPlay +")";
+            String add = "INSERT INTO musica_has_playlist(nomeMusica, nomePlaylist) VALUES ('" +  resultado +"','" +  resultadoqueryPlay +"')";
             String resultadoadd = ligacao.executarInsert(add);
             
             if (resultadoadd == "ERRO" || resultadoadd == "")  //se nao existir
