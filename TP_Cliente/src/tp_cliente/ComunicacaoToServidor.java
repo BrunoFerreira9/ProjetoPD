@@ -2,25 +2,20 @@ package tp_cliente;
 
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static tp_cliente.ConstantesCliente.ResolveMessages;
 
 public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
     
-    private int idUser;
+    private String userLogado;
     //ligacao TCP com o servidor
     
     Socket socketTCP ;
@@ -95,7 +90,7 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
             HashMap <String,String> message = ResolveMessages(resposta);
             
             if(message.get("tipo").equals("resposta") && message.get("msg").equals("sucesso")){
-                idUser = Integer.parseInt(message.get("id").toString());
+                userLogado = user.get("username");
                 logado = true;
                 tratainformacao();
             }
@@ -124,7 +119,7 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
 
     @Override
     public boolean trataMusicas(String mensagem){
-        mensagem += "id | " + idUser;
+        mensagem += "utilizador | " + userLogado;
         System.out.println(mensagem);
         HashMap <String,String> pedido = ResolveMessages(mensagem);
         switch(pedido.get("tipo")){
@@ -164,7 +159,7 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
 
     @Override
     public boolean trataPlaylist(String mensagem) {
-        mensagem += "id | " + idUser;
+        mensagem += "utilizador | " + userLogado;
         HashMap <String,String> pedido = ResolveMessages(mensagem);
         switch(pedido.get("tipo")){
             case "criaPlaylist":
@@ -199,11 +194,7 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
                 return false;
         }
     }
-
-    @Override
-    public boolean atualizaMusicas() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 
     @Override
     public void setChanged() {

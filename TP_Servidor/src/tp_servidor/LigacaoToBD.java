@@ -117,7 +117,6 @@ public class LigacaoToBD {
             ResultSet rs = stmt.executeQuery(query);
             
             while (rs.next()) {
-                int i = rs.getInt("idMusica");
                 String nome = rs.getString("nome");
                 String autor = rs.getString("autor");
                 String album = rs.getString("album");
@@ -125,9 +124,9 @@ public class LigacaoToBD {
                 double duracao = rs.getDouble("duracao");
                 String genero = rs.getString("genero");
                 String ficheiro = rs.getString("ficheiro");
-                int idUtilizador = rs.getInt("idUtilizador");
+                String criadorMusica = rs.getString("criadorMusica");
                 
-                lista.add(new Musica(i,nome,autor,album,ano,duracao,genero,ficheiro,idUtilizador));
+                lista.add(new Musica(nome,autor,album,ano,duracao,genero,ficheiro,criadorMusica));
             }
             return lista;
         } catch (SQLException ex) {
@@ -159,8 +158,7 @@ public class LigacaoToBD {
             stmt = conn_ligacao.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             
-            while (rs.next()) {
-                int i = rs.getInt("idMusica");
+            while (rs.next()) {                
                 String nome = rs.getString("nome");
                 String autor = rs.getString("autor");
                 String album = rs.getString("album");
@@ -168,9 +166,9 @@ public class LigacaoToBD {
                 double duracao = rs.getDouble("duracao");
                 String genero = rs.getString("genero");
                 String ficheiro = rs.getString("ficheiro");
-                int idUtilizador = rs.getInt("idUtilizador");
+                String Utilizador = rs.getString("criadorMusica");
                 
-                lista.add(new Musica(i,nome,autor,album,ano,duracao,genero,ficheiro,idUtilizador));
+                lista.add(new Musica(nome,autor,album,ano,duracao,genero,ficheiro,Utilizador));
             }
             return lista;
         } catch (SQLException ex) {
@@ -188,12 +186,11 @@ public class LigacaoToBD {
             stmt = conn_ligacao.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             
-            while (rs.next()) {
-                int i = rs.getInt("idPlaylist");
+            while (rs.next()) {                
                 String nome = rs.getString("nome");
-                int idUtilizador = rs.getInt("idUtilizador");
+                String user = rs.getString("criadorPlaylist");
                 
-                lista.add(new Playlist(i,nome,idUtilizador));
+                lista.add(new Playlist(nome,user));
             }
             return lista;
         } catch (SQLException ex) {
@@ -214,12 +211,11 @@ public class LigacaoToBD {
             stmt = conn_ligacao.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             
-            while (rs.next()) {
-                int i = rs.getInt("idPlaylist");
+            while (rs.next()) {                
                 String nome = rs.getString("nome");
-                int idUtilizador = rs.getInt("idUtilizador");
+                String user = rs.getString("criadorPlaylist");
                 
-                lista.add(new Playlist(i,nome,idUtilizador));
+                lista.add(new Playlist(nome,user));
             }
             return lista;
         } catch (SQLException ex) {
@@ -250,7 +246,7 @@ public class LigacaoToBD {
     {
         try {
             ArrayList<String> lista = new ArrayList<>();
-            String query = "Select ficheiro from musica m , musica_has_playlist mp, playlist p where m.idMusica = mp.idMusica AND mp.idPlaylist = p.idPlaylist AND p.nome='"+playlist+"'";
+            String query = "Select ficheiro from musica m , musica_has_playlist mp, playlist p where m.nome = mp.nomeMusica AND mp.nomePlaylist = p.nome AND p.nome='"+playlist+"'";
             stmt = conn_ligacao.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             

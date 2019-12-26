@@ -108,9 +108,7 @@ public class ThreadParaMulticast extends Thread {
                     data = atualizado.getBytes();
                     dtpack = new DatagramPacket(data, data.length, InetAddress.getByName(ConstantesServer.IPMULTICAST), ConstantesServer.portoMulticast);
                     mtsock.send(dtpack);
-                }
-               
-                
+                }                               
             } catch(SocketTimeoutException ex){
                 continue; // O Netbeans é chato mas fica aqui isto pq não é ele o programador.
             } catch (IOException ex) {

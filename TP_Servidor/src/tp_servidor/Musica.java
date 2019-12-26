@@ -1,17 +1,17 @@
 package tp_servidor;
 
 public class Musica {
+    
     private String nome;
     private String autor;
     private String album;
     private int ano;
-    private double duracao;
+    private double duracao ;
     private String genero;
     private String ficheiro;  
-    private int idUserMusica;
-    private int idMusica;
+    private String criadorMusica;
     
-    public Musica(int idMusica, String nome,String autor,String album,int ano,double duracao,String genero,String ficheiro,int idUser){
+    public Musica(String nome,String autor,String album,int ano,double duracao,String genero,String ficheiro,String criadorMusica){
         this.nome = nome;
         this.autor = autor;
         this.album = album;
@@ -19,7 +19,7 @@ public class Musica {
         this.duracao = duracao;
         this.genero = genero;
         this.ficheiro = ficheiro;       
-        this.idMusica = idMusica;
+        this.criadorMusica = criadorMusica;
     }
     
     //------GETS------
@@ -29,8 +29,8 @@ public class Musica {
     public String getGenero(){return genero;}
     public String getFicheiro(){return ficheiro;}
     public int getAno(){return ano;}
-    public double getDuracao(){return duracao;}   
-    public int getIdUserMusica(){return idUserMusica;} 
+    public double getDuracao(){return duracao;}  
+    public String getCriadorMusica() { return criadorMusica;  }
 
     //---------SETS---------
     public void setNome(String value){nome=value;}
@@ -40,11 +40,10 @@ public class Musica {
     public void setFicheiro(String value){ ficheiro=value;}
     public void setAno(int value){ano=value;}
     public void setDuracao(double value){ duracao=value;}
-    
-    
+
     @Override
     public String toString(){
-        return this.nome + "," + this.autor + "," + this.album + "," + this.genero + "," + this.ano + "," + this.duracao;
+         return this.nome + "," + this.autor + "," + this.album + "," + this.genero + "," + this.ano + "," + this.duracao;
     }
     
 }

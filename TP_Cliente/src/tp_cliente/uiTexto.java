@@ -98,9 +98,9 @@ public class uiTexto implements myObserver{
         cs.trataMusicas("tipo | listaMusicas;");
         if(cs.listamusicas.size() > 0){
             System.out.println("-------- Lista Musicas --------");
-            System.out.println("Musica,Autor,Album,Genero,Ano,Duracao");
+            System.out.println("Musica | Autor | Album | Genero| Ano | Duracao");
             for(int i=0;i<cs.listamusicas.size();i++)
-                System.out.println(cs.listamusicas.get(i));
+                System.out.println("-> " + cs.listamusicas.get(i));
         }
     }
     public void apresentaListaPlaylists(){
@@ -109,7 +109,7 @@ public class uiTexto implements myObserver{
             System.out.println("-------- Lista PlayLists --------");
             System.out.println("Nome");
             for(int i=0;i<cs.listaplaylist.size();i++)
-                System.out.println(cs.listaplaylist.get(i));
+                System.out.println("-> " +cs.listaplaylist.get(i));
         }
     }
     
@@ -137,8 +137,8 @@ public class uiTexto implements myObserver{
                
         StringBuilder sb = new StringBuilder();
         sb.append("tipo | editaMusica ; ");
-        System.out.println("ID musica a editar:");
-        sb.append("idMusica | "+in.nextInt()+" ; ");
+        System.out.println("musica a editar:");
+        sb.append("musicaEditar | "+in.next()+" ; ");
         System.out.println("Nome:");
         sb.append("nome | "+in.next()+" ; ");
         System.out.println("Autor");
@@ -420,9 +420,9 @@ public class uiTexto implements myObserver{
                                         break;
                                 }
                             }while(op2!=3);
-                   }
+                   };break;
                     case 3:
-                        cs.terminarCliente();
+                        cs.terminarCliente();break;
                 }
             }while(op!=3);
         }

@@ -13,9 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static tp_servidor.ConstantesServer.ATUALIZAMUSICAS;
-import static tp_servidor.ConstantesServer.ATUALIZAPLAYLISTS;
-import static tp_servidor.ConstantesServer.ResolveMessages;
+import static tp_servidor.ConstantesServer.*;
 
 public class ComunicacaoToCliente implements myObserver {
     
@@ -158,11 +156,8 @@ public class ComunicacaoToCliente implements myObserver {
                 break;
             case "login":
                 user.put("ip", socketCliente.getLocalAddress().getHostAddress());
-                if(servidor.efetuaLogin(user)){
-                    String q = "Select idUtilizador from utilizador where username = \'" + user.get("username") + "\';";
-                    String id = servidor.getLigacao().executarSelect(q);
-                    
-                    pout.println("tipo | resposta ; msg | sucesso ; id | " + id);
+                if(servidor.efetuaLogin(user)){                                       
+                    pout.println("tipo | resposta ; msg | sucesso ");
                     pout.flush();
 
                     servidor.adicionaCliente(socketCliente);

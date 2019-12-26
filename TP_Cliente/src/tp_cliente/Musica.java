@@ -2,7 +2,6 @@ package tp_cliente;
 
 public class Musica {
     
-    private static int contaMusicas=1;
     private String nome;
     private String autor;
     private String album;
@@ -10,20 +9,17 @@ public class Musica {
     private double duracao ;
     private String genero;
     private String ficheiro;  
-    private final int idUserMusica;
-    private final int idMusica;
+    private String criadorMusica;
     
-    public Musica(String nome,String autor,String album,int ano,double duracao,String genero,String ficheiro,int idUser){
+    public Musica(String nome,String autor,String album,int ano,double duracao,String genero,String ficheiro,String criadorMusica){
         this.nome = nome;
         this.autor = autor;
         this.album = album;
         this.ano = ano;
         this.duracao = duracao;
         this.genero = genero;
-        this.ficheiro = ficheiro;
-       
-        this.idUserMusica = idUser;
-        idMusica = contaMusicas++;
+        this.ficheiro = ficheiro;       
+        this.criadorMusica = criadorMusica;
     }
     
     //------GETS------
@@ -33,9 +29,8 @@ public class Musica {
     public String getGenero(){return genero;}
     public String getFicheiro(){return ficheiro;}
     public int getAno(){return ano;}
-    public double getDuracao(){return duracao;}   
-    public int getIdUserMusica(){return idUserMusica;} 
-    public int getIdMusica() {return idMusica;}
+    public double getDuracao(){return duracao;}  
+    public String getCriadorMusica() { return criadorMusica;  }
 
     //---------SETS---------
     public void setNome(String value){nome=value;}
@@ -45,6 +40,10 @@ public class Musica {
     public void setFicheiro(String value){ ficheiro=value;}
     public void setAno(int value){ano=value;}
     public void setDuracao(double value){ duracao=value;}
+
+    
+
+  
     
     
     @Override
