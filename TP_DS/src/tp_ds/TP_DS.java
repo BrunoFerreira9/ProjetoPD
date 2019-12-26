@@ -22,7 +22,4 @@ public class TP_DS extends Thread{
             Logger.getLogger(TP_DS.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
-    
 }

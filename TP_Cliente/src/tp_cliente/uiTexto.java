@@ -70,13 +70,13 @@ public class uiTexto implements myObserver{
         
             case 1:  sb.append("filtragem | nome ; ");
                     System.out.println("Nome:");
-                    sb.append("pesquisa | "+in.nextLine()+" ; ");break;
+                    sb.append("pesquisa | "+in.next()+" ; ");break;
             case 2: sb.append("filtragem | autor ; ");
                     System.out.println("Autor");
-                    sb.append("pesquisa | "+in.nextLine()+" ; ");break;
+                    sb.append("pesquisa | "+in.next()+" ; ");break;
             case 3:sb.append("filtragem | album ; ");
                     System.out.println("Album");
-                    sb.append("pesquisa | "+in.nextLine()+" ; ");break;
+                    sb.append("pesquisa | "+in.next()+" ; ");break;
             case 4:sb.append("filtragem | ano ; ");
                     System.out.println("Ano");
                     sb.append("pesquisa | "+in.nextInt()+" ; ");break;
@@ -85,10 +85,10 @@ public class uiTexto implements myObserver{
                     sb.append("pesquisa | "+in.nextDouble()+" ; ");break;
             case 6:sb.append("filtragem | genero ; ");
                     System.out.println("Genero");
-                    sb.append("pesquisa | "+in.nextLine()+" ; ");break;
+                    sb.append("pesquisa | "+in.next()+" ; ");break;
            case 7:     sb.append("filtragem | ficheiro ; ");                   
                     System.out.println("Ficheiro");
-                    sb.append("pesquisa | "+in.nextLine()+" ; ");break;        
+                    sb.append("pesquisa | "+in.next()+" ; ");break;        
         }
      
         return sb.toString();
@@ -114,31 +114,22 @@ public class uiTexto implements myObserver{
     }
     
     public String criaMusica(){
-               
         StringBuilder sb = new StringBuilder();
         sb.append("tipo | criaMusica ; ");
         System.out.println("Nome:");
-        sb.append("nome | "+in.nextLine()+" ; ");      
-        in.nextLine(); 
+        sb.append("nome | "+in.next()+" ; ");
         System.out.println("Autor");
-        sb.append("autor | "+in.nextLine()+" ; ");
-        in.nextLine(); 
+        sb.append("autor | "+in.next()+" ; ");
         System.out.println("Album");
-        sb.append("album | "+in.nextLine()+" ; ");
-        in.nextLine(); 
+        sb.append("album | "+in.next()+" ; ");
         System.out.println("Ano");
         sb.append("ano | "+in.nextInt()+" ; ");
-        in.nextLine(); 
         System.out.println("Duracao");
         sb.append("duracao | "+in.nextDouble()+" ; ");
-        in.nextLine(); 
         System.out.println("Genero");
-        sb.append("genero | "+in.nextLine()+" ; ");
-        in.nextLine(); 
+        sb.append("genero | "+in.next()+" ; ");
         System.out.println("Ficheiro");
-        sb.append("ficheiro | "+in.nextLine()+" ; ");
-        in.nextLine(); 
-        
+        sb.append("ficheiro | "+in.next()+" ; ");
         return sb.toString();
     }
     

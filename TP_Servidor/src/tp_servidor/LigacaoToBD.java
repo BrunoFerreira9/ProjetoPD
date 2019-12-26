@@ -182,8 +182,35 @@ public class LigacaoToBD {
     public ArrayList<Playlist> getListaPlaylist() 
     {
         try {
+
             ArrayList<Playlist> lista = new ArrayList<>();
             String query = "Select * from playlist";
+            stmt = conn_ligacao.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            
+            while (rs.next()) {
+                int i = rs.getInt("idPlaylist");
+                String nome = rs.getString("nome");
+                int idUtilizador = rs.getInt("idUtilizador");
+                
+                lista.add(new Playlist(i,nome,idUtilizador));
+            }
+            return lista;
+        } catch (SQLException ex) {
+            Logger.getLogger(LigacaoToBD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public ArrayList<Playlist> getListaPlaylistFiltro(String mensagem) 
+    {
+        HashMap <String,String> play = ResolveMessages(mensagem);
+        try {
+            ArrayList<Playlist> lista = new ArrayList<>();
+            String query = "Select * from playlist where ";
+            switch(play.get("filtragem")){
+                case "nome": query += "nome = \'" +play.get("pesquisa") +"\'";break;
+            }
             stmt = conn_ligacao.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             

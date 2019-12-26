@@ -125,6 +125,7 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
     @Override
     public boolean trataMusicas(String mensagem){
         mensagem += "id | " + idUser;
+        System.out.println(mensagem);
         HashMap <String,String> pedido = ResolveMessages(mensagem);
         switch(pedido.get("tipo")){
             case "criaMusica" :
@@ -277,6 +278,13 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
                                 for(int i = 0; i< Integer.parseInt(info.get("tamanho")); i++)
                                 {
                                    listaplaylist.add(info.get("playlist"+i));
+                                }
+                                break;
+                            case "listaplaylistsfiltro":
+                                System.out.println("-------- Pesquisa ---------");
+                                for(int i = 0; i< Integer.parseInt(info.get("tamanho")); i++)
+                                {
+                                    System.out.println(info.get("playlist"+i));
                                 }
                                 break;
                             case "logout":

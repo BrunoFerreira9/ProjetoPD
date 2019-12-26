@@ -201,6 +201,9 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
     public ArrayList<Musica> getListaMusicasFiltro(String msg){
         return ligacao.getListaMusicasFiltro(msg);
     }
+    public ArrayList<Playlist> getListaPlaylistFiltro(String msg){
+        return ligacao.getListaPlaylistFiltro(msg);
+    }
     
     @Override
     public boolean trataMusicas(String mensagem) {

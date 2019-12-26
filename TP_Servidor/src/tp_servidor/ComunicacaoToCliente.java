@@ -229,6 +229,18 @@ public class ComunicacaoToCliente implements myObserver {
                 pout.println(sb.toString());
                 pout.flush();
                 break;
+            case "filtroPlaylist" :    
+                ArrayList<Playlist> listaplaylistFiltro = servidor.getListaPlaylistFiltro(pedido);
+                StringBuilder lpf = new StringBuilder();
+                lpf.append("tipo | listaplaylistsfiltro ; msg | sucesso ; tamanho | ").append(listaplaylistFiltro.size());
+                if(!listaplaylistFiltro.isEmpty()) lpf.append(" ; ");
+                for (int i = 0; i < listaplaylistFiltro.size(); i++) {
+                    lpf.append("playlist").append(i).append(" | ").append(listaplaylistFiltro.get(i).toString());
+                    if(i != listaplaylistFiltro.size()-1) lpf.append(" ; ");
+                }
+                pout.println(lpf.toString());
+                pout.flush();
+                break;
                 
             case "upload": 
                 Thread upmusica = new ThreadUpload(user.get("ficheiro"),endereco,Integer.parseInt(user.get("porto")));

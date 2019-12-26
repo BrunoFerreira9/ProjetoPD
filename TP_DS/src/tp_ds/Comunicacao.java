@@ -13,7 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import static tp_ds.ConstantesDS.ResolveMessages;
 
-public class Comunicacao {
+public class Comunicacao implements myObserver,myObservable{
     DatagramSocket sock;
     DatagramPacket pkt;
     String dados,resposta = null;
@@ -21,6 +21,10 @@ public class Comunicacao {
     byte []info = new byte[128];
     List<Servidor> listservers;
     private  int numClientes,numbasedados;
+    
+    boolean changed = false;
+    List<myObserver> observers = new ArrayList<>();
+    int msg;
     
     Comunicacao(List<Servidor> listservers, int numClientes, int numbasedados) {
         this.numClientes = numClientes;
@@ -126,6 +130,42 @@ public class Comunicacao {
         
         return false;
     }
-    
-    
+
+    @Override
+    public void update(int msg) {
+      /*  String mensagem = "";
+        switch(msg){
+            case ATUALIZAMUSICAS:
+                mensagem = "tipo | atualizamusicas";
+                break;
+            case ATUALIZAPLAYLISTS:
+                mensagem = "tipo | atualizaplaylists";
+                break;
+        }
+        pout.println(mensagem);
+        pout.flush();*/
+    }
+
+    @Override
+    public void setChanged() {
+        changed = true;
+    }
+
+    @Override
+    public void notifyObservers() {
+        observers.forEach((obs) -> {
+            obs.update(msg);
+        });
+        changed = false;
+    }
+
+    @Override
+    public void addObserver(myObserver obs) {
+        observers.add(obs);
+    }
+
+    @Override
+    public void removeObserver(myObserver obs) {
+        observers.remove(obs);
+    }
 }

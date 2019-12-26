@@ -24,8 +24,8 @@ public class ThreadParaMulticast extends Thread {
     
     public ThreadParaMulticast(ComunicacaoToCliente comunicacao, Boolean principal){
         comunicacaoCliente = comunicacao;
-        numeroServidores = 0;
         this.principal = principal;
+        
         try {
             mtsock = new MulticastSocket(ConstantesServer.portoMulticast);
             InetAddress group = InetAddress.getByName(ConstantesServer.IPMULTICAST);
@@ -62,22 +62,23 @@ public class ThreadParaMulticast extends Thread {
                 mtsock.receive(dtpack);
                 
                 String pedido = new String(dtpack.getData(), 0, dtpack.getLength());
+              //  System.out.println(pedido+" "+dtpack.getPort()+" "+comunicacaoCliente.getServidor().getCds().getPortoServer());
                 
-                if(principal){
-                    if(pedido.equalsIgnoreCase(novo)){
-                        numeroServidores++;
-                        continue;
-                    }
-
-                    if(pedido.equalsIgnoreCase(sair)){
-                        numeroServidores--;
-                        continue;
-                    }
-                    
-                    //Verificação do servidor principal se todos os servidores receberam a atualização
-                    int aux;
+                if(pedido.equalsIgnoreCase(novo)){
+                    numeroServidores++;
+                    continue;
+                }
+                
+                if(pedido.equalsIgnoreCase(sair)){
+                    numeroServidores--;
+                    continue;
+                }
+                
+                
+                if(dtpack.getAddress().getHostAddress().equalsIgnoreCase(InetAddress.getLocalHost().getHostAddress()) && dtpack.getPort() == comunicacaoCliente.getServidor().getCds().getPortoServer()+2)
+                {
+                    int aux  = numeroServidores; //Menos o servidor que enviou;
                     do {
-                        aux = numeroServidores - 1; //Menos o servidor que enviou
                         for(int i = 0; i < aux; i++){
                             try{
                                 dtpack = new DatagramPacket(new byte[ConstantesServer.BUFSIZE], ConstantesServer.BUFSIZE);
@@ -96,26 +97,27 @@ public class ThreadParaMulticast extends Thread {
                             }
                         }
                     }while(aux != 0);
-                }else{
-                    if(dtpack.getAddress().getHostAddress().equalsIgnoreCase(InetAddress.getLocalHost().getHostAddress()))
-                        continue; //Para não responder a ele próprio
+                }
+                else{
                     if(pedido.equalsIgnoreCase(atualizado))
-                        continue; //Para ignorar os atualizares dos outros
+                        continue;
                     
                     HashMap <String,String> user = ResolveMessages(pedido);
                     comunicacaoCliente.trataPedido(user);
-
+                    
                     data = atualizado.getBytes();
                     dtpack = new DatagramPacket(data, data.length, InetAddress.getByName(ConstantesServer.IPMULTICAST), ConstantesServer.portoMulticast);
                     mtsock.send(dtpack);
                 }
+               
+                
             } catch(SocketTimeoutException ex){
                 continue; // O Netbeans é chato mas fica aqui isto pq não é ele o programador.
             } catch (IOException ex) {
                 Logger.getLogger(ThreadParaMulticast.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+     
         data = sair.getBytes();
         
         try {
