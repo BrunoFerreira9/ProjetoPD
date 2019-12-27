@@ -111,8 +111,9 @@ public class ComunicacaoToCliente implements myObserver {
             }
             
             try {
-
-                pedido = in.readLine();
+                synchronized(in){
+                    pedido = in.readLine();
+                }
 
             } catch (IOException ex) {
                 Logger.getLogger(ComunicacaoToCliente.class.getName()).log(Level.SEVERE, null, ex);
@@ -136,10 +137,7 @@ public class ComunicacaoToCliente implements myObserver {
                 Logger.getLogger(ComunicacaoToCliente.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-       }
-        
-       pout.println("tipo | servidor ; msg | terminou");
-       pout.flush();
+       }       
         
     }
     
@@ -166,6 +164,10 @@ public class ComunicacaoToCliente implements myObserver {
                     servidor.adicionaCliente(socketCliente);
                     servidor.addObserver(this);
                 }  
+                else{
+                    pout.println("tipo | resposta ; msg | insucesso");
+                    pout.flush();
+                } 
                 break;
             case "logout":
                 if(servidor.efetuaLogout(user)){
@@ -277,9 +279,27 @@ public class ComunicacaoToCliente implements myObserver {
                 pout.println(ped.toString());
                 pout.flush();
                 break;
-            case "criaPlaylist":
-            case "editaPlaylist":
-            case "eliminaPlaylist":
+            case "criaPlaylist":if(servidor.trataPlaylist(pedido)){
+                    pout.println("tipo | resposta ; msg | sucesso");
+                    pout.flush();
+                }else{
+                    pout.println("tipo | resposta ; msg | insucesso");
+                    pout.flush();
+                }   break;
+            case "editaPlaylist":if(servidor.trataPlaylist(pedido)){
+                    pout.println("tipo | resposta ; msg | sucesso");
+                    pout.flush();
+                }else{
+                    pout.println("tipo | resposta ; msg | insucesso");
+                    pout.flush();
+                }   break;
+            case "eliminaPlaylist":if(servidor.trataPlaylist(pedido)){
+                    pout.println("tipo | resposta ; msg | sucesso");
+                    pout.flush();
+                }else{
+                    pout.println("tipo | resposta ; msg | insucesso");
+                    pout.flush();
+                }   break;
             case "eliminaMusicaPlaylist":
                 if(servidor.trataPlaylist(pedido)){
                     pout.println("tipo | resposta ; msg | sucesso");
@@ -318,19 +338,16 @@ public class ComunicacaoToCliente implements myObserver {
                 pout.flush();
                 break;
             case TERMINASERVIDOR:
-               
                 mensagem = "tipo | terminaservidor";
                 pout.println(mensagem);
-                pout.flush();
-                
-                 terminaServidor = true;
-                {
-                    try {
-                        socketCliente.close();
-                    } catch (IOException ex) {
-                        Logger.getLogger(ComunicacaoToCliente.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                pout.flush();                
+                                
+                try {                    
+                    socketCliente.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(ComunicacaoToCliente.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                terminaServidor = true;
                 break;
         }
         

@@ -433,7 +433,7 @@ public class uiTexto implements myObserver{
         switch(msg){
             case ConstantesCliente.ATUALIZAMUSICAS: apresentaListaMusicas(); break;
             case ConstantesCliente.ATUALIZAPLAYLISTS: apresentaListaPlaylists(); break;
-            case ConstantesCliente.TERMINASERVIDOR: existeSocket= false; break;
+            case ConstantesCliente.TERMINASERVIDOR: System.exit(0); break;
             
         }
     }

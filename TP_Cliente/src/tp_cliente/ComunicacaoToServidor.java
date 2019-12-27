@@ -75,6 +75,14 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
         pedido = "tipo | termina ";
         out.println(pedido);
         out.flush();
+        
+        try {
+            socketTCP.close();
+            out.close();
+            reader.close();
+        } catch (IOException ex) {
+            Logger.getLogger(ComunicacaoToServidor.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -283,7 +291,7 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
                                     logado = false;
                             break;
                             case "terminaservidor": 
-                                System.out.println("O servidor terminou vou desligar!!");
+                                System.out.println("O servidor terminou, vou desligar!!");
                                 socketTCP.close();
                                 logado = false;
                                 msg = ConstantesCliente.TERMINASERVIDOR;

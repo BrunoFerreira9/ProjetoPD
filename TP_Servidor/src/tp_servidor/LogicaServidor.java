@@ -117,12 +117,12 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
             return;
         
         msg = ConstantesServer.TERMINASERVIDOR;
-            setChanged();
-            notifyObservers();
+        setChanged();
+        notifyObservers();
             
         for(Socket s : listaClientes)
         {
-            String queryUpdate = "UPDATE utilizador SET ativo= 0 WHERE ipUser="+s.getLocalAddress().getHostAddress();
+            String queryUpdate = "UPDATE utilizador SET ativo = 0 WHERE ipUser = '"+s.getLocalAddress().getHostAddress()+"'";
             
             ligacao.executarUpdate(queryUpdate);
                                      
@@ -133,7 +133,7 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
             }
             
         }
-         //cc.setTerminaServidor();
+        
     }
     
     @Override
