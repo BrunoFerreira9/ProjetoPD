@@ -137,6 +137,7 @@ public class ComunicacaoToCliente implements myObserver {
             }
             
        }
+        
        pout.println("tipo | servidor ; msg | terminou");
        pout.flush();
         
@@ -308,12 +309,30 @@ public class ComunicacaoToCliente implements myObserver {
         switch(msg){
             case ATUALIZAMUSICAS:
                 mensagem = "tipo | atualizamusicas";
+                pout.println(mensagem);
+                pout.flush();
                 break;
             case ATUALIZAPLAYLISTS:
                 mensagem = "tipo | atualizaplaylists";
+                pout.println(mensagem);
+                pout.flush();
+                break;
+            case TERMINASERVIDOR:
+               
+                mensagem = "tipo | terminaservidor";
+                pout.println(mensagem);
+                pout.flush();
+                
+                 terminaServidor = true;
+                {
+                    try {
+                        socketCliente.close();
+                    } catch (IOException ex) {
+                        Logger.getLogger(ComunicacaoToCliente.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
                 break;
         }
-        pout.println(mensagem);
-        pout.flush();
+        
     }
 }

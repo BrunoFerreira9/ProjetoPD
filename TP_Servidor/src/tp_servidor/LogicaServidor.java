@@ -116,12 +116,11 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
         if(listaClientes.isEmpty())
             return;
         
-        cc.setTerminaServidor();
-        //String msg = "tipo | servidor ; msg | terminar";
-        // setChanged();
-        // notifyObservers(msg);
-        
-         for(Socket s : listaClientes)
+        msg = ConstantesServer.TERMINASERVIDOR;
+            setChanged();
+            notifyObservers();
+            
+        for(Socket s : listaClientes)
         {
             String queryUpdate = "UPDATE utilizador SET ativo= 0 WHERE ipUser="+s.getLocalAddress().getHostAddress();
             
@@ -132,7 +131,9 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
             } catch (IOException ex) {
                 Logger.getLogger(LogicaServidor.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
         }
+         //cc.setTerminaServidor();
     }
     
     @Override
