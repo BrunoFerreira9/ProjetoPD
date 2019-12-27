@@ -67,8 +67,18 @@ public class Comunicacao implements myObserver,myObservable{
                     else{/*Implementar se o servidor é principal como funciona com o multicast...*/}
                 }
                 else{
+                    boolean existe = false;
+                
                     Servidor aux = new Servidor(pkt.getAddress().getHostAddress(),pkt.getPort(),true, (listservers.isEmpty()));
-                    if(!listservers.contains(aux)){
+                    Servidor atual = null;
+                    for(Servidor s: listservers){
+                        if(s.getIp().equals(aux.getIp())){
+                            existe = true;
+                            atual = s;
+                        }
+                    }
+                            
+                    if(!existe){
                         int bd  = numbasedados++;
                         aux.setBD(bd);
                         listservers.add(aux);
@@ -79,13 +89,9 @@ public class Comunicacao implements myObserver,myObservable{
                         else
                             resposta = "tipo | resposta ; sucesso | sim ; numbd | " + bd + " ; principal | nao";
                     }
-                    else{
-                        for(Servidor s: listservers){
-                            if(s.getIp().equals(aux.getIp())){
-                                s.setAtivo(true);
-                                resposta = "tipo | resposta ; sucesso | sim ; numbd | " + s.getBD() + " ; principal | nao";
-                            }
-                        }
+                    else{                        
+                        atual.setAtivo(true);
+                        resposta = "tipo | resposta ; sucesso | sim ; numbd | " + atual.getBD() + " ; principal | nao";
                     }
                 }
                 break;

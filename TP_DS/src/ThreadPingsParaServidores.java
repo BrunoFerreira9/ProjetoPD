@@ -55,6 +55,7 @@ class ThreadPingsParaServidores extends Thread {
                             if(!existe){
                                 s.setPrincipal(true);
                                 System.out.println(s.getIp()+" passei a ser o principal!");
+                                existe = true;
                             }
                             System.out.println("O servidor de IP " + s.getIp() + " enviou ao ping do DS: " + dtpack.getData().toString());
                         } catch (SocketTimeoutException e) {
