@@ -148,7 +148,7 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
         
              System.out.println(queryRegisto);
             String resultadoRegisto = ligacao.executarInsert(queryRegisto);
-            if (resultadoRegisto == "ERRO" || resultado == "") {
+            if (resultadoRegisto == "ERRO" || resultadoRegisto == "") {
                 System.out.println("Erro ao inserir o utilizador na BD\n");
                 return false;
             }
@@ -160,10 +160,12 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
    
     @Override
     public boolean efetuaLogin(HashMap <String,String> user) {
-        String query = "Select * from Utilizador where username = \'" + user.get("username") + "\' and password = \'" + user.get("password") + "\' AND ativo=0;";
+        String query = "Select username from Utilizador where username = \'" + user.get("username") + "\' and password = \'" + user.get("password") + "\' AND ativo=0;";
 
+        
         String resultado = ligacao.executarSelect(query);
 
+        System.out.println(resultado);
         if (resultado == "ERRO" || resultado == "") {
             System.out.println("Nao existe o utilizador na BD\n");
             return false;
@@ -182,7 +184,7 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
     
     @Override
     public boolean efetuaLogout(HashMap <String,String> user) {
-        String query = "Select * from Utilizador where username = \'" + user.get("username") + "\' AND ativo= 1 ;";
+        String query = "Select username from Utilizador where username = \'" + user.get("username") + "\' AND ativo = 1 ;";
 
         String resultado = ligacao.executarSelect(query);
 
