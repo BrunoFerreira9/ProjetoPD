@@ -73,7 +73,6 @@ public class Comunicacao implements myObserver,myObservable{
                     Servidor atual = null;
                     for(Servidor s: listservers){
                         if(s.getIp().equals(aux.getIp())){
-                            index = listservers.indexOf(s);
                             existe = true;
                             atual = s;
                         }
