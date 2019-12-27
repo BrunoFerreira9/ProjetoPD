@@ -55,7 +55,16 @@ public class Comunicacao implements myObserver,myObservable{
         switch(message.get("tipo")){
             case "Servidor":
                 if(message.get("msg").equals("terminar")){
-                    if(!terminaServidor(pkt.getAddress().getHostAddress())){
+                    for(Servidor server : listservers){
+                        if(server.getIp().equals(pkt.getAddress().getHostAddress())){
+                            server.setAtivo(false);
+                            if(server.isPrincipal()){
+                                server.setPrincipal(false);
+                                TP_DS.existeprincipal = false;
+                            }
+                        }
+                    }
+                    /*if(!terminaServidor(pkt.getAddress().getHostAddress())){
                         byte[] data = "sair".getBytes();
                         try {
                             DatagramPacket dtgram = new DatagramPacket(data, data.length, InetAddress.getByName(ConstantesDS.IPMULTICAST), ConstantesDS.portoMulticast);
@@ -64,7 +73,7 @@ public class Comunicacao implements myObserver,myObservable{
                             Logger.getLogger(Comunicacao.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-                    else{/*Implementar se o servidor é principal como funciona com o multicast...*/}
+                    else{/*Implementar se o servidor é principal como funciona com o multicast...}*/
                 }
                 else{
                     boolean existe = false;
@@ -84,6 +93,7 @@ public class Comunicacao implements myObserver,myObservable{
                         listservers.add(aux);
                         if(listservers.size() == 1){
                             listservers.get(0).setPrincipal(true);
+                            TP_DS.existeprincipal = true;
                             resposta = "tipo | resposta ; sucesso | sim ; numbd | " + bd+ " ; principal | sim";
                         }
                         else

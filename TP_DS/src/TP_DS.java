@@ -17,6 +17,8 @@ public class TP_DS/* extends java.rmi.server.UnicastRemoteObject implements Inte
     Comunicacao com;
     private static List<Servidor> listservers = new ArrayList<>();
     private static int numClientes ,numbasedados ;
+    public static boolean existeprincipal = false;
+
    /* 
     public TP_DS() throws RemoteException{
         listservers = new ArrayList<>();

@@ -10,7 +10,6 @@ public class ConstantesDS {
     public static final int PINGTIME = 10000;
     public static final int portoMulticast = 6000;
     public static final String IPMULTICAST = "230.0.0.0";
-
     
     public static HashMap<String,String> ResolveMessages(String message){
         StringTokenizer t,tokens = new StringTokenizer(message,";");

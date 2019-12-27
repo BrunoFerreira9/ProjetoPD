@@ -282,6 +282,11 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
                                 if(info.get("msg").equals("sucesso"))
                                     logado = false;
                             break;
+                            case "terminaservidor": 
+                                 System.out.println("O servidor terminou vou desligar!!");
+                                 socketTCP.close();
+                                 logado = false;
+                                break;
                         }
                     } catch (IOException ex) {
                         Logger.getLogger(ComunicacaoToServidor.class.getName()).log(Level.SEVERE, null, ex);

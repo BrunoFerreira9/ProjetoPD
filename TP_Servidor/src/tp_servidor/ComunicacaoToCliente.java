@@ -147,6 +147,8 @@ public class ComunicacaoToCliente implements myObserver {
         
         switch (user.get("tipo")) {
             case "termina":
+                pout.println("tipo | terminaservidor");
+                pout.flush();
                 terminar = true; break;
             case "registo":
                 if(servidor.efetuaRegisto(user)){

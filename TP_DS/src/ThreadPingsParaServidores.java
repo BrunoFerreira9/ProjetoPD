@@ -34,7 +34,7 @@ class ThreadPingsParaServidores extends Thread {
     public void run(){
         byte[] data = "ping".getBytes();
 
-        boolean existe = true;
+        
         while(true){
             try {
                 Thread.sleep(2000);
@@ -52,10 +52,10 @@ class ThreadPingsParaServidores extends Thread {
                         try {
                             dtpack = new DatagramPacket(new byte[ConstantesDS.BUFSIZE], ConstantesDS.BUFSIZE);
                             dtsocket.receive(dtpack);
-                            if(!existe){
+                            if(!TP_DS.existeprincipal){
                                 s.setPrincipal(true);
                                 System.out.println(s.getIp()+" passei a ser o principal!");
-                                existe = true;
+                                TP_DS.existeprincipal = true;
                             }
                             System.out.println("O servidor de IP " + s.getIp() + " enviou ao ping do DS: " + dtpack.getData().toString());
                         } catch (SocketTimeoutException e) {
@@ -63,7 +63,7 @@ class ThreadPingsParaServidores extends Thread {
                            if(s.isPrincipal()){
                                s.setPrincipal(false);
                                System.out.println(s.getIp()+" deixou de ser principal");
-                               existe = false;
+                               TP_DS.existeprincipal = false;
                            }
                            s.setAtivo(false);
                            continue;
