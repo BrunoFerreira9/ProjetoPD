@@ -108,7 +108,7 @@ public class Comunicacao implements myObserver,myObservable{
                 }
                 break;
             case "Cliente":
-                Servidor aux;
+                Servidor aux= null;
                 if(listservers.size()==0){
                     resposta = "tipo | resposta ; sucesso | nao ; msg | Nao existe servidores";
                     break;
@@ -118,29 +118,46 @@ public class Comunicacao implements myObserver,myObservable{
                     listservers.get(0).setnClientes(1);
                     
                 }else{ //FAZER ROUND ROBIN PARA SABER QUAL O SERVIDOR A ATRIBUIR!!!!
-                    int servidor = roundRobin();
-                    aux = listservers.get(servidor);
-                    listservers.get(servidor).setnClientes(1);
+                    Servidor servidor = roundRobin();
+                    for(Servidor s : listservers){
+                        if(s.getIp().equals(servidor.getIp())){
+                            s.setnClientes(1);
+                            aux = s;
+                        }
+                    }
+                    
                 }
                     
                 resposta = "tipo | resposta ; sucesso | sim ; ip | "+aux.getIp()+" ; porto | "+aux.getPorto();
+                System.out.println(resposta);
                 numClientes++;
                
             break;
         }
     }
     
-    public int roundRobin(){
+    public Servidor roundRobin(){
     
         int pos = 0;
-        
-        for(int i = 1; i<listservers.size();i++){
-            if(listservers.get(i).getnClientes()<listservers.get(pos).getnClientes() && listservers.get(i).isAtivo())
-                pos=i;
+        List <Servidor> aux = getlistativos();
+        for(int i = 1; i<aux.size();i++){
+            if(aux.get(i).getnClientes()<aux.get(pos).getnClientes()){
+                pos = i;
+            }
         }
         
-        return pos;
+        return aux.get(pos);
     }
+    
+    public List<Servidor> getlistativos() {
+        List<Servidor> aux = new ArrayList<>();
+        for(Servidor s : listservers)
+        {
+            if(s.isAtivo())aux.add(s);
+        }
+        return aux;
+    }
+    
     
     public void enviaresposta() throws IOException{
         pkt.setData(resposta.getBytes());
