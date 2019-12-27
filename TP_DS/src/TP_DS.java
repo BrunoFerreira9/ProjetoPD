@@ -8,21 +8,21 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class TP_DS extends java.rmi.server.UnicastRemoteObject implements InterfaceServico{
-    
+public class TP_DS/* extends java.rmi.server.UnicastRemoteObject implements InterfaceServico*/{
+/*    
     public static final String SERVICE_NAME = "RegistryDS";
     public static final int MAX_CHUNCK_SIZE = 10000; //bytes
-    public static final int MAX_CHUNK_LENGTH = 512 ;
+    public static final int MAX_CHUNK_LENGTH = 512 ;*/
     
     Comunicacao com;
-    private static List<Servidor> listservers ;
+    private static List<Servidor> listservers = new ArrayList<>();
     private static int numClientes ,numbasedados ;
-    
-    public TP_DS(){
+   /* 
+    public TP_DS() throws RemoteException{
         listservers = new ArrayList<>();
         numClientes = 0;
         numbasedados = 0;
-    }
+    }*/
     
     public static void main(String[] args){
         
@@ -38,7 +38,7 @@ public class TP_DS extends java.rmi.server.UnicastRemoteObject implements Interf
         /*
         * Lanca o rmiregistry localmente no porto TCP por omissao (1099).
         */
-        try{
+      /*  try{
             try{
                 LocateRegistry.getRegistry("localhost");
                                 
@@ -49,7 +49,7 @@ public class TP_DS extends java.rmi.server.UnicastRemoteObject implements Interf
             /*
              * Cria o servico
              */            
-            TP_DS servico = new TP_DS();
+        /*    TP_DS servico = new TP_DS();
             
             System.out.println("Servico ServicoDS criado e em execucao ("+servico.getRef().remoteToString()+"...");
             
@@ -64,11 +64,9 @@ public class TP_DS extends java.rmi.server.UnicastRemoteObject implements Interf
             System.exit(1);
         }catch(Exception e){
             System.out.println("Erro - " + e);
-            System.exit(1);
-        }   
-    }
+            System.exit(1);   }*/
 
-    @Override
+  /*  @Override
     public synchronized String obterServidoresAtivos() throws RemoteException {
        
         StringBuilder sb = new StringBuilder();
@@ -96,5 +94,6 @@ public class TP_DS extends java.rmi.server.UnicastRemoteObject implements Interf
     @Override
     public synchronized void removerListener() throws RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    }*/
+}
 }

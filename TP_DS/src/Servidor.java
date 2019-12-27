@@ -6,15 +6,19 @@ public class Servidor {
     private boolean ativo;
     private boolean principal;
     private int nClientes;
-    
+    int bd;
     Servidor(String end,int p,boolean a,boolean princ){
         ip = end;
         porto = p;
         ativo =a;
         principal = princ;
         nClientes=0;
+        
     }
 
+    public int getBD(){return bd;}
+    public void setBD(int BD){bd = BD;}
+    
     public int getnClientes() {
         return nClientes;
     }

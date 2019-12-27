@@ -33,6 +33,8 @@ class ThreadPingsParaServidores extends Thread {
     @Override
     public void run(){
         byte[] data = "ping".getBytes();
+
+        boolean existe = true;
         while(true){
             try {
                 Thread.sleep(2000);
@@ -44,18 +46,27 @@ class ThreadPingsParaServidores extends Thread {
             
             try {
                 for(Servidor s : listservers){
-                    dtpack = new DatagramPacket(data, data.length, InetAddress.getByName(s.getIp()), s.getPorto());
-                    dtsocket.send(dtpack);
-                    try {
-                        dtpack = new DatagramPacket(new byte[ConstantesDS.BUFSIZE], ConstantesDS.BUFSIZE);
-                        dtsocket.receive(dtpack);
-                    
-                        System.out.println("O servidor de IP " + s.getIp() + " enviou ao ping do DS: " + dtpack.getData().toString());
-                    } catch (SocketTimeoutException e) {
-                       // resends
-                        System.out.println("Deixou de receber ping do servidor "+s.getIp());
-                       s.setAtivo(false);
-                       continue;
+                    if(s.isAtivo()){
+                        dtpack = new DatagramPacket(data, data.length, InetAddress.getByName(s.getIp()), s.getPorto());
+                        dtsocket.send(dtpack);
+                        try {
+                            dtpack = new DatagramPacket(new byte[ConstantesDS.BUFSIZE], ConstantesDS.BUFSIZE);
+                            dtsocket.receive(dtpack);
+                            if(!existe){
+                                s.setPrincipal(true);
+                                System.out.println(s.getIp()+" passei a ser o principal!");
+                            }
+                            System.out.println("O servidor de IP " + s.getIp() + " enviou ao ping do DS: " + dtpack.getData().toString());
+                        } catch (SocketTimeoutException e) {
+                           System.out.println("Deixou de receber ping do servidor "+s.getIp());
+                           if(s.isPrincipal()){
+                               s.setPrincipal(false);
+                               System.out.println(s.getIp()+" deixou de ser principal");
+                               existe = false;
+                           }
+                           s.setAtivo(false);
+                           continue;
+                        }
                     }
                 }
             } catch (UnknownHostException ex) {
