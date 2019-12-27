@@ -70,9 +70,10 @@ public class Comunicacao implements myObserver,myObservable{
                     boolean existe = false;
                 
                     Servidor aux = new Servidor(pkt.getAddress().getHostAddress(),pkt.getPort(),true, (listservers.isEmpty()));
-                    Servidor atual = null;
+                    Servidor atual = null;int index = -1;
                     for(Servidor s: listservers){
                         if(s.getIp().equals(aux.getIp())){
+                            index = listservers.indexOf(s);
                             existe = true;
                             atual = s;
                         }
@@ -90,7 +91,7 @@ public class Comunicacao implements myObserver,myObservable{
                             resposta = "tipo | resposta ; sucesso | sim ; numbd | " + bd + " ; principal | nao";
                     }
                     else{                        
-                        atual.setAtivo(true);
+                        listservers.get(index).setAtivo(true);
                         resposta = "tipo | resposta ; sucesso | sim ; numbd | " + atual.getBD() + " ; principal | nao";
                     }
                 }
