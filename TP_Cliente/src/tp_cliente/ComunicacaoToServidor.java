@@ -283,9 +283,12 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
                                     logado = false;
                             break;
                             case "terminaservidor": 
-                                 System.out.println("O servidor terminou vou desligar!!");
-                                 socketTCP.close();
-                                 logado = false;
+                                System.out.println("O servidor terminou vou desligar!!");
+                                socketTCP.close();
+                                logado = false;
+                                msg = ConstantesCliente.TERMINASERVIDOR;
+                                setChanged();
+                                notifyObservers();
                                 break;
                         }
                     } catch (IOException ex) {

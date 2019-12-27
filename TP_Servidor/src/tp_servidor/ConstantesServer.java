@@ -31,5 +31,5 @@ public class ConstantesServer {
     }
     static final int ATUALIZAMUSICAS = 0;
     static final int ATUALIZAPLAYLISTS = 1;
-        static final int TERMINASERVIDOR = 2;
+    static final int TERMINASERVIDOR = 2;
 }
