@@ -113,7 +113,7 @@ public class Comunicacao implements myObserver,myObservable{
                     resposta = "tipo | resposta ; sucesso | nao ; msg | Nao existe servidores";
                     break;
                 }
-                if(listservers.size()==1){
+                if(listservers.size()==1 && listservers.get(0).isAtivo()){
                     aux = listservers.get(0);
                     listservers.get(0).setnClientes(1);
                     
@@ -135,7 +135,7 @@ public class Comunicacao implements myObserver,myObservable{
         int pos = 0;
         
         for(int i = 1; i<listservers.size();i++){
-            if(listservers.get(i).getnClientes()<listservers.get(pos).getnClientes())
+            if(listservers.get(i).getnClientes()<listservers.get(pos).getnClientes() && listservers.get(i).isAtivo())
                 pos=i;
         }
         
