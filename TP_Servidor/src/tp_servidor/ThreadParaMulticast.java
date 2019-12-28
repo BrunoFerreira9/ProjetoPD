@@ -62,7 +62,7 @@ public class ThreadParaMulticast extends Thread {
                 mtsock.receive(dtpack);
                 
                 String pedido = new String(dtpack.getData(), 0, dtpack.getLength());
-              //  System.out.println(pedido+" "+dtpack.getPort()+" "+comunicacaoCliente.getServidor().getCds().getPortoServer());
+                System.out.println(pedido);
                 
                 if(pedido.equalsIgnoreCase(novo)){
                     numeroServidores++;
