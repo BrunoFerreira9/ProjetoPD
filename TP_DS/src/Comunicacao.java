@@ -23,10 +23,20 @@ public class Comunicacao implements myObserver,myObservable{
     List<myObserver> observers = new ArrayList<>();
     int msg;
     
+    TP_DS rmi;
+    
     Comunicacao(List<Servidor> listservers, int numClientes, int numbasedados) {
         this.numClientes = numClientes;
         this.numbasedados = numbasedados;
         this.listservers = listservers;
+    }
+
+    public TP_DS getRmi() {
+        return rmi;
+    }
+
+    public void setRmi(TP_DS rmi) {
+        this.rmi = rmi;
     }
     
     
@@ -61,6 +71,7 @@ public class Comunicacao implements myObserver,myObservable{
                             if(server.isPrincipal()){
                                 server.setPrincipal(false);
                                 TP_DS.existeprincipal = false;
+                                rmi.notifyListeners("Servidores ativos mudaram!");
                             }
                         }
                     }
@@ -105,6 +116,7 @@ public class Comunicacao implements myObserver,myObservable{
                         listservers.remove(atual);
                         resposta = "tipo | resposta ; sucesso | sim ; numbd | " + atual.getBD() + " ; principal | nao";
                     }
+                    rmi.notifyListeners("Servidores ativos mudaram!");
                 }
                 break;
             case "Cliente":
@@ -127,7 +139,7 @@ public class Comunicacao implements myObserver,myObservable{
                     }
                     
                 }
-                    
+                rmi.notifyListeners("Novo Cliente!");     
                 resposta = "tipo | resposta ; sucesso | sim ; ip | "+aux.getIp()+" ; porto | "+aux.getPorto();
                 System.out.println(resposta);
                 numClientes++;
