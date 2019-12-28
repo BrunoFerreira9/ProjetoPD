@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class TP_DS extends java.rmi.server.UnicastRemoteObject implements InterfaceServico{
+public class TP_DS extends UnicastRemoteObject implements InterfaceServico{
     
     public static final String SERVICE_NAME = "RegistryDS";
     public static final int MAX_CHUNCK_SIZE = 10000; //bytes
@@ -24,10 +24,9 @@ public class TP_DS extends java.rmi.server.UnicastRemoteObject implements Interf
     public List<IServicoListener> listaObservers;
     
     public TP_DS() throws RemoteException{
-        listservers = new ArrayList<>();
         numClientes = 0;
         numbasedados = 0;
-        listaObservers = new ArrayList<IServicoListener>();
+        listaObservers = new ArrayList<>();
     }
     
     public static void main(String[] args){
@@ -40,11 +39,6 @@ public class TP_DS extends java.rmi.server.UnicastRemoteObject implements Interf
         } catch (SocketException ex) {
             Logger.getLogger(TP_DS.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        System.out.println("Loading RMI service");
-        /*
-        * Lanca o rmiregistry localmente no porto TCP por omissao (1099).
-        */
         try{
             try{
                 LocateRegistry.createRegistry(Registry.REGISTRY_PORT);                                                
@@ -76,12 +70,11 @@ public class TP_DS extends java.rmi.server.UnicastRemoteObject implements Interf
     }
         @Override
         public synchronized String obterServidoresAtivos() throws RemoteException {
-
             StringBuilder sb = new StringBuilder();
             sb.append("Servidores Ativos\n");
-            for(int i = 0; i < listservers.size(); i++ ){        
+            for(int i = 0; i < listservers.size(); i++ ){
                 if(listservers.get(i).isAtivo())
-                    sb.append("Servidor : "+ listservers.get(i).getIp()+ "\n");
+                    sb.append("Servidor : ").append(listservers.get(i).getIp()).append("\n");
             }
             return sb.toString();
         }
@@ -92,7 +85,8 @@ public class TP_DS extends java.rmi.server.UnicastRemoteObject implements Interf
                 if(listservers.get(i).isAtivo() && listservers.get(i).getIp().equals(ipServidor))                
                     listservers.get(i).setAtivo(false);
                     //Como terminar servidor?? enviar mensagem de terminar??
-                    
+                        //Sim penso que seja o melhor envia por UDP para esse determinado Servidor, só que é complicado saber qual é se tiveres muitos na mesma maquina
+                        // só se diferenciares pelo porto, vê isso bruno
             }
         }
 

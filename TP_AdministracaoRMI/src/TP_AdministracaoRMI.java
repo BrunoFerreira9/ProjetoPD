@@ -1,8 +1,8 @@
-package tp_administracaormi;
 
+
+import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
@@ -10,10 +10,10 @@ import java.util.Scanner;
 public class TP_AdministracaoRMI extends UnicastRemoteObject implements IServicoListener{
     public static void apresentamenu(){
         
-        System.out.print("---RMI--- ");        
-        System.out.print("1 - Obter lista servidores ativos ");
-        System.out.print("2 - Terminar Servidor ");
-        System.out.print("3 - Sair ");
+        System.out.println("---RMI--- ");        
+        System.out.println("1 - Obter lista servidores ativos ");
+        System.out.println("2 - Terminar Servidor ");
+        System.out.println("3 - Sair ");
         
     }
     public TP_AdministracaoRMI() throws  RemoteException{}
@@ -33,16 +33,14 @@ public class TP_AdministracaoRMI extends UnicastRemoteObject implements IServico
               //Cria e lanca o servico
             TP_AdministracaoRMI objeto =  new TP_AdministracaoRMI();
                         
-            InterfaceServico servico = (InterfaceServico)Naming.lookup (objectUrl);;
+            InterfaceServico servico = (InterfaceServico)Naming.lookup (objectUrl);
             
             servico.adicionarListener(objeto);
             
             do{
-            
                 apresentamenu();
                 op = in.nextInt();
                 switch(op){
-                
                     case 1 : System.out.println(servico.obterServidoresAtivos()); break;
                     case 2 : 
                         System.out.print("Introduza o IP do servidor:");
@@ -50,16 +48,15 @@ public class TP_AdministracaoRMI extends UnicastRemoteObject implements IServico
                         servico.terminarServidor(ipTreminar);break;
                         default:break;
                 }
-            }while(op!=3);      
-           
-            
+            }while(op!=3);
+            System.exit(0);
         }catch(RemoteException e){
             System.out.println("Erro remoto - " + e);
         }catch(NotBoundException e){
             System.out.println("Servico remoto desconhecido - " + e);
-        }catch(Exception e){
+        }catch(MalformedURLException e){
             System.out.println("Erro - " + e);
-        } 
+        }
     }
     
     @Override

@@ -92,7 +92,7 @@ public class Comunicacao implements myObserver,myObservable{
                     Servidor aux = new Servidor(pkt.getAddress().getHostAddress(),pkt.getPort(),true, (listservers.isEmpty()));
                     Servidor atual = null;
                     for(Servidor s: listservers){
-                        if(s.getIp().equals(aux.getIp())){
+                        if(s.getIp().equals(aux.getIp()) && !s.isAtivo()){
                             existe = true;
                             atual = s;
                         }
