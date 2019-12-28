@@ -42,7 +42,7 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
     
     public void inicializaTCP() throws IOException, ClassNotFoundException {
         try {
-            socketTCP = new Socket(endereco,porto);    
+            socketTCP = new Socket(endereco,porto);
             reader  = new BufferedReader(new InputStreamReader(socketTCP.getInputStream()));
             out = new PrintWriter(socketTCP.getOutputStream());
           
@@ -310,8 +310,16 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
         });
         recebepedidos.start();
     }
-  /*  private void ouvirmusica(String ficheiro) throws IOException, InterruptedException {
-        Process pro = Runtime.getRuntime().exec("cmd.exe /c "+ConstantesCliente.PATHLOCATION+"\\"+ficheiro);
-        pro.waitFor();
-    }*/
+
+    @Override
+    public boolean trataMusicas(HashMap<String, String> musica) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean trataPlaylist(HashMap<String, String> playlist) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+ 
 }

@@ -101,7 +101,7 @@ public class ThreadParaMulticast extends Thread {
                 else{
                     if(pedido.equalsIgnoreCase(atualizado))
                         continue;
-                    
+                    pedido += " ; multicast | sim ; ip | "+dtpack.getAddress().getHostAddress()+" ; porto | "+dtpack.getPort();
                     HashMap <String,String> user = ResolveMessages(pedido);
                     comunicacaoCliente.trataPedido(user);
                     

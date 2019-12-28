@@ -13,7 +13,7 @@ public class TP_Servidor {
         Scanner sc = new Scanner(System.in);
         String scann;
         String ipMaquinaBD;
-        String ipDS ;
+        String ipDS; 
 
         if(args.length != 2){
             System.out.println("Sintaxe: java TP_Servidor ipDS ipMaquinaBD ");

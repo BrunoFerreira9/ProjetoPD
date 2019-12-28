@@ -118,23 +118,24 @@ public class ComunicacaoToCliente implements myObserver {
             } catch (IOException ex) {
                 Logger.getLogger(ComunicacaoToCliente.class.getName()).log(Level.SEVERE, null, ex);
             }
+                System.out.println("Recebi do Cliente: "+ pedido);
             HashMap <String,String> user = ResolveMessages(pedido);
-            System.out.println("Recebi do Cliente: "+ pedido);
             try {
                 trataPedido(user);
             } catch (IOException ex) {
                 Logger.getLogger(ComunicacaoToCliente.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-            //Envia pedido de mudança para o multicast
-            byte[] data = pedido.getBytes();
-            try {
-                packetMulticast = new DatagramPacket(data, data.length, InetAddress.getByName(ConstantesServer.IPMULTICAST), ConstantesServer.portoMulticast);
-                socketEnviaMulticast.send(packetMulticast);
-            } catch (UnknownHostException ex) {
-                Logger.getLogger(ComunicacaoToCliente.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(ComunicacaoToCliente.class.getName()).log(Level.SEVERE, null, ex);
+            if(!user.get("tipo").equalsIgnoreCase("upload") && !user.get("tipo").equalsIgnoreCase("ouvirMusica") && !user.get("tipo").equalsIgnoreCase("termina") && !user.get("tipo").equalsIgnoreCase("ouvirPlaylist")){
+                //Envia pedido de mudança para o multicast
+                byte[] data = pedido.getBytes();
+                try {
+                    packetMulticast = new DatagramPacket(data, data.length, InetAddress.getByName(ConstantesServer.IPMULTICAST), ConstantesServer.portoMulticast);
+                    socketEnviaMulticast.send(packetMulticast);
+                } catch (UnknownHostException ex) {
+                    Logger.getLogger(ComunicacaoToCliente.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(ComunicacaoToCliente.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             
        }       
@@ -143,7 +144,6 @@ public class ComunicacaoToCliente implements myObserver {
     
     //Adicionei para testar
     public void trataPedido(HashMap<String, String> user) throws IOException {
-        
         switch (user.get("tipo")) {
             case "termina":
                 pout.println("tipo | terminaservidor");
@@ -181,10 +181,17 @@ public class ComunicacaoToCliente implements myObserver {
                     pout.flush();
                 } 
                 break;
-            case "criaMusica":if(servidor.trataMusicas(pedido)){
+            case "criaMusica":if(servidor.trataMusicas(user)){
+                    System.out.println(user);
                     pout.println("tipo | resposta ; msg | sucesso");
                     pout.flush();
-                    Thread downMusica = new ThreadDownload(user.get("ficheiro"),socketCliente);
+                    Thread downMusica;
+                    if(!user.containsKey("multicast")){
+                        downMusica = new ThreadDownload(user.get("ficheiro"),socketCliente);
+                    }
+                    else{
+                        downMusica = new ThreadDownload(user.get("ficheiro"),user.get("ip"),Integer.parseInt(user.get("porto")));
+                    }
                     downMusica.start();
                 }else{
                     pout.println("tipo | resposta ; msg | insucesso");
@@ -192,7 +199,7 @@ public class ComunicacaoToCliente implements myObserver {
                 }  
             break;
             case "editaMusica":
-                if(servidor.trataMusicas(pedido)){
+                if(servidor.trataMusicas(user)){
                     pout.println("tipo | resposta ; msg | sucesso");
                     pout.flush();
                 }else{
@@ -201,7 +208,7 @@ public class ComunicacaoToCliente implements myObserver {
                 }  
                 break;
             case "eliminaMusica":
-                if(servidor.trataMusicas(pedido)){
+                if(servidor.trataMusicas(user)){
                     pout.println("tipo | resposta ; msg | sucesso");
                     pout.flush();
                 }else{
@@ -209,7 +216,7 @@ public class ComunicacaoToCliente implements myObserver {
                     pout.flush();
                 }   break;
             case "ouvirMusica":
-                if(servidor.trataMusicas(pedido)){
+                if(servidor.trataMusicas(user)){
                     pout.println("tipo | download ; msg | sucesso ; ficheiro | "+servidor.resposta+" ; ouvirMusica | sim");
                     pout.flush();
                     break;
@@ -248,7 +255,7 @@ public class ComunicacaoToCliente implements myObserver {
                 break;
                 
             case "addMusPlaylist":
-                if(servidor.trataMusicas(pedido)){
+                if(servidor.trataMusicas(user)){
                     pout.println("tipo | resposta ; msg | sucesso");
                     pout.flush();
                 }else{
@@ -279,21 +286,21 @@ public class ComunicacaoToCliente implements myObserver {
                 pout.println(ped.toString());
                 pout.flush();
                 break;
-            case "criaPlaylist":if(servidor.trataPlaylist(pedido)){
+            case "criaPlaylist":if(servidor.trataPlaylist(user)){
                     pout.println("tipo | resposta ; msg | sucesso");
                     pout.flush();
                 }else{
                     pout.println("tipo | resposta ; msg | insucesso");
                     pout.flush();
                 }   break;
-            case "editaPlaylist":if(servidor.trataPlaylist(pedido)){
+            case "editaPlaylist":if(servidor.trataPlaylist(user)){
                     pout.println("tipo | resposta ; msg | sucesso");
                     pout.flush();
                 }else{
                     pout.println("tipo | resposta ; msg | insucesso");
                     pout.flush();
                 }   break;
-            case "eliminaPlaylist":if(servidor.trataPlaylist(pedido)){
+            case "eliminaPlaylist":if(servidor.trataPlaylist(user)){
                     pout.println("tipo | resposta ; msg | sucesso");
                     pout.flush();
                 }else{
@@ -301,7 +308,7 @@ public class ComunicacaoToCliente implements myObserver {
                     pout.flush();
                 }   break;
             case "eliminaMusicaPlaylist":
-                if(servidor.trataPlaylist(pedido)){
+                if(servidor.trataPlaylist(user)){
                     pout.println("tipo | resposta ; msg | sucesso");
                     pout.flush();
                 }else{
@@ -309,7 +316,7 @@ public class ComunicacaoToCliente implements myObserver {
                     pout.flush();
                 }   break;
             case "ouvirPlaylist":
-                if(servidor.trataPlaylist(pedido)){
+                if(servidor.trataPlaylist(user)){
                     String [] ficheiros = servidor.resposta.split(", ");
                     for (String ficheiro : ficheiros) {
                         pout.println("tipo | download ; msg | sucesso ; ficheiro | "+ficheiro+" ; ouvirMusica | sim");

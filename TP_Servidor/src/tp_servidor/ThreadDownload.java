@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -33,6 +34,12 @@ public class ThreadDownload extends Thread{
         localDirectory = new File(ConstantesServer.PATHLOCATION);
         this.fileName = filename;
         socketcliente = s;
+        server = new ServerSocket(0);
+    }
+    ThreadDownload(String filename,String ip,int porto) throws IOException{
+        localDirectory = new File(ConstantesServer.PATHLOCATION);
+        this.fileName = filename;
+        socketcliente = new Socket(ip,porto-2);
         server = new ServerSocket(0);
     }
     
