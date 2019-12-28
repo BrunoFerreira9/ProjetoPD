@@ -3,6 +3,7 @@ import java.rmi.Naming;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,8 +47,8 @@ public class TP_DS extends java.rmi.server.UnicastRemoteObject implements Interf
         */
         try{
             try{
-                LocateRegistry.getRegistry("localhost");
-                                
+                LocateRegistry.createRegistry(Registry.REGISTRY_PORT);                                                
+                System.out.println("Registry lancado!");           
             }catch(RemoteException e){
                 System.out.println("Registry provavelmente ja' em execucao na maquina local!");   
             }            
