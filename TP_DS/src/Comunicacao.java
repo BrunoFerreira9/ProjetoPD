@@ -53,15 +53,23 @@ public class Comunicacao implements myObserver,myObservable{
         pkt = p;
     }
     
-    public void recebepedidos() throws IOException{
-        sock.receive(pkt);
-        dados = new String(pkt.getData(),0,pkt.getLength());
-        System.out.println(dados);
-        message = ConstantesDS.ResolveMessages(dados);
-        System.out.println("Recebi "+dados+" de "+pkt.getAddress()+" porto: "+pkt.getPort());
+    public synchronized void recebepedidos() {
+        try {
+            sock.receive(pkt);
+            dados = new String(pkt.getData(),0,pkt.getLength());
+            message = ConstantesDS.ResolveMessages(dados);
+        } catch (IOException ex) {
+            sock.close();
+           // Logger.getLogger(Comunicacao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    public void terminaDS(){
+        sock.close();        
     }
     
-    public void verificapedido() throws SocketException{
+    public void verificapedido() {
+        try {        
         switch(message.get("tipo")){
             case "Servidor":
                 if(message.get("msg").equals("terminar")){
@@ -146,6 +154,10 @@ public class Comunicacao implements myObserver,myObservable{
                
             break;
         }
+            
+        } catch (Exception e) {
+            return;
+        }
     }
     
     public Servidor roundRobin(){
@@ -171,10 +183,15 @@ public class Comunicacao implements myObserver,myObservable{
     }
     
     
-    public void enviaresposta() throws IOException{
-        pkt.setData(resposta.getBytes());
-        pkt.setLength(resposta.length());
-        sock.send(pkt);
+    public synchronized void enviaresposta(){
+        
+        try {
+            pkt.setData(resposta.getBytes());
+            pkt.setLength(resposta.length());
+            sock.send(pkt);
+        } catch (IOException ex) {
+           return;
+        }
     }
     
     public boolean terminaServidor(String ip){

@@ -420,7 +420,9 @@ public class uiTexto implements myObserver{
                                         break;
                                 }
                             }while(op2!=3);
-                   };break;
+                   }else{
+                                System.out.println("Utilizador inexistente!");
+                    };break;
                     case 3:
                         cs.terminarCliente();break;
                 }

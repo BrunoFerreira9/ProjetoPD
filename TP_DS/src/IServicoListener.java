@@ -1,8 +1,9 @@
 
 
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-public interface IServicoListener {
-    public void alteracoesSistema(String alteracao) throws RemoteException;
+public interface IServicoListener extends Remote{
+    public void notificaAlteracoes(String alteracao) throws RemoteException;
 
 }

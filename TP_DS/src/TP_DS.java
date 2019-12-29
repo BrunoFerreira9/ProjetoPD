@@ -1,4 +1,9 @@
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.rmi.Naming;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -7,6 +12,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,12 +36,18 @@ public class TP_DS extends UnicastRemoteObject implements InterfaceServico{
     }
     
     public static void main(String[] args){
-        
+        Scanner sc = new Scanner(System.in);
+        String scann;
         Comunicacao com = new Comunicacao(listservers, numClientes, numbasedados);
+        ThreadRecebePedidos pedidos = null;
+        ThreadPingsParaServidores pings = null;
         try {
             com.criacomunicacao();
-            new ThreadRecebePedidos(com).start();
-            new ThreadPingsParaServidores(listservers).start();
+            pedidos = new ThreadRecebePedidos(com);
+            pings = new ThreadPingsParaServidores(listservers);
+
+            pedidos.start();
+            pings.start();
         } catch (SocketException ex) {
             Logger.getLogger(TP_DS.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -66,6 +78,17 @@ public class TP_DS extends UnicastRemoteObject implements InterfaceServico{
             System.out.println("Erro - " + e);
             System.exit(1);   
         }
+        
+         do
+        {
+            System.out.print("\n-> ");
+            scann = sc.next();
+        }while(!scann.equalsIgnoreCase("sair"));
+        
+         pedidos.desliga();
+         pings.desliga();
+         com.terminaDS();
+         System.exit(0);
 
     }
         @Override
@@ -84,9 +107,25 @@ public class TP_DS extends UnicastRemoteObject implements InterfaceServico{
             for(int i = 0; i < listservers.size(); i++ ){        
                 if(listservers.get(i).isAtivo() && listservers.get(i).getIp().equals(ipServidor))                
                     listservers.get(i).setAtivo(false);
-                    //Como terminar servidor?? enviar mensagem de terminar??
-                        //Sim penso que seja o melhor envia por UDP para esse determinado Servidor, só que é complicado saber qual é se tiveres muitos na mesma maquina
-                        // só se diferenciares pelo porto, vê isso bruno
+                
+                    byte[] data = "terminaServidor".getBytes();
+                    DatagramSocket socket = null; 
+                    DatagramPacket packet = null;
+                    
+                    try {
+                        
+                        socket = new DatagramSocket();
+                        packet = new DatagramPacket( data, data.length,InetAddress.getByName(listservers.get(i).getIp()),listservers.get(i).getPorto());
+                        socket.send (packet);
+
+                    } catch (SocketException ex) {
+                        Logger.getLogger(TP_DS.class.getName()).log(Level.SEVERE, null, ex);
+                    }catch (UnknownHostException ex) {
+                        Logger.getLogger(TP_DS.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(TP_DS.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                           
             }
         }
 
@@ -100,17 +139,16 @@ public class TP_DS extends UnicastRemoteObject implements InterfaceServico{
                 listaObservers.remove(listener);
         }
 
-        public synchronized void notifyListeners(String alteracao) {
+        protected synchronized void notifyListeners(String alteracao) {
             for(int i = 0; i < listaObservers.size(); i++)
-            {
-                IServicoListener listener = listaObservers.get(i);
+            {               
                 try
                 {                      
-                    listener.alteracoesSistema(alteracao);
+                    listaObservers.get(i).notificaAlteracoes(alteracao);
                 }catch(RemoteException e)
                 {
-                    listaObservers.remove(listener);
-                    i--;
+                    System.out.println("Faulty observer: "+e);
+                    listaObservers.remove(i--);
                 }
             }
         }

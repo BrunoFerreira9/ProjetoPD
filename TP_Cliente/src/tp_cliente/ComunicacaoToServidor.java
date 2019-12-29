@@ -96,16 +96,17 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
          
             resposta = reader.readLine();
             HashMap <String,String> message = ResolveMessages(resposta);
-            
+           
             if(message.get("tipo").equals("resposta") && message.get("msg").equals("sucesso")){
                 userLogado = user.get("username");
                 logado = true;
                 tratainformacao();
+                return true;
             }
         } catch (IOException ex) {
             Logger.getLogger(TP_Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return true;
+                return false;
     }
     
     @Override
@@ -130,77 +131,20 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
         mensagem += "utilizador | " + userLogado;
         System.out.println(mensagem);
         HashMap <String,String> pedido = ResolveMessages(mensagem);
-        switch(pedido.get("tipo")){
-            case "criaMusica" :
-                out.println(mensagem);
-                out.flush();
-                return true;
-            case "editaMusica":
-                out.println(mensagem);
-                out.flush();
-                return true;
-            case "eliminaMusica":
-                out.println(mensagem);
-                out.flush();
-                return true;
-            case "ouvirMusica":
-                out.println(mensagem);
-                out.flush();
-                return true;
-            case "addMusPlaylist":
-                out.println(mensagem);
-                out.flush();
-                return true;
-            case "listaMusicas":
-                out.println(mensagem);
-                out.flush();
-                return true;
-            case "filtro":
-                out.println(mensagem);
-                out.flush();
-                return true;
-            default:
-                return false;
-                
-        }
+       
+        out.println(mensagem);
+        out.flush();
+        return true;
     }
 
     @Override
     public boolean trataPlaylist(String mensagem) {
         mensagem += "utilizador | " + userLogado;
         HashMap <String,String> pedido = ResolveMessages(mensagem);
-        switch(pedido.get("tipo")){
-            case "criaPlaylist":
-                out.println(mensagem);
-                out.flush();
-                return true;
-            case "editaPlaylist":
-                out.println(mensagem);
-                out.flush();
-                return true;
-            case "eliminaPlaylist":
-                out.println(mensagem);
-                out.flush();
-                return true;
-            case "ouvirPlaylist":
-                out.println(mensagem);
-                out.flush();
-                return true;
-            case "eliminaMusicaPlaylist":
-                out.println(mensagem);
-                out.flush();
-                return true;
-            case "listaPlaylists":
-                out.println(mensagem);
-                out.flush();
-                return true;
-            case "filtroPlaylist":
-                out.println(mensagem);
-                out.flush();
-                return true;
-            default:
-                return false;
-        }
+       
+        out.println(mensagem);
+        out.flush();
+        return true;
     }
     
 

@@ -16,7 +16,7 @@ class ThreadPingsParaServidores extends Thread {
     private DatagramSocket dtsocket;
     private DatagramPacket dtpack;
     private List<Servidor> listservers;
-
+    boolean terminar = false;
     public ThreadPingsParaServidores(List<Servidor> listservers) {
         try {
             dtsocket = new DatagramSocket(ConstantesDS.portoPingsDS);
@@ -29,13 +29,15 @@ class ThreadPingsParaServidores extends Thread {
             this.listservers = new ArrayList<>();
         this.listservers = listservers;
     }
-    
+    public void desliga()
+    {
+        terminar = true;
+    }
     @Override
     public void run(){
         byte[] data = "ping".getBytes();
-
         
-        while(true){
+        while(!terminar){
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException ex) {

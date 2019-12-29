@@ -163,16 +163,14 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
     public boolean efetuaLogin(HashMap <String,String> user) {
         String query = "Select username from Utilizador where username = \'" + user.get("username") + "\' and password = \'" + user.get("password") + "\' AND ativo=0;";
 
-        
         String resultado = ligacao.executarSelect(query);
-
-        System.out.println(resultado);
+ 
         if (resultado == "ERRO" || resultado == "") {
             System.out.println("Nao existe o utilizador na BD\n");
             return false;
         }
         
-        String update = "UPDATE Utilizador SET ativo = 1 , ipUser = \'"+user.get("ip")+"\' WHERE username = \'" + user.get("username") + "\';";
+        String update = "UPDATE Utilizador SET ativo = 1 ,portoUser = '"+user.get("porto")+"', ipUser = \'"+user.get("ip")+"\' WHERE username = \'" + user.get("username") + "\';";
  
         String resultadoupdate = ligacao.executarUpdate(update);
             

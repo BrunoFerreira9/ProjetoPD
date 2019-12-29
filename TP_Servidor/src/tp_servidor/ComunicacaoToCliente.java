@@ -116,9 +116,14 @@ public class ComunicacaoToCliente implements myObserver {
                 }
 
             } catch (IOException ex) {
-                Logger.getLogger(ComunicacaoToCliente.class.getName()).log(Level.SEVERE, null, ex);
+                try {
+                    socketCliente.close();
+                    return;
+                } catch (IOException ex1) {
+                    return;//Logger.getLogger(LogicaServidor.class.getName()).log(Level.SEVERE, null, ex1);
+                }               
             }
-                System.out.println("Recebi do Cliente: "+ pedido);
+            System.out.println("Recebi do Cliente: "+ pedido);
             HashMap <String,String> user = ResolveMessages(pedido);
             try {
                 trataPedido(user);
@@ -157,6 +162,7 @@ public class ComunicacaoToCliente implements myObserver {
                 break;
             case "login":
                 user.put("ip", socketCliente.getLocalAddress().getHostAddress());
+                user.put("porto", Integer.toString(socketCliente.getPort()));
                 if(servidor.efetuaLogin(user)){                                       
                     pout.println("tipo | resposta ; msg | sucesso ");
                     pout.flush();
