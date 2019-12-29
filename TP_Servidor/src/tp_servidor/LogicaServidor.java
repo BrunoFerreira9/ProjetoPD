@@ -37,12 +37,10 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
     public LogicaServidor(String ipDS, String ipMaquinaBD, Boolean principal) {  
         listaClientes = new ArrayList<>();
         este = this;
-        cds = new ComunicacaoToDS(ipDS);
+        cds = new ComunicacaoToDS(ipDS,this);
         
         try {
             dtsocket = cds.inicializaUDP(principal);
-            pings = new ThreadPings(dtsocket,ipDS);
-            pings.start();
         } catch (IOException ex) {
             Logger.getLogger(LogicaServidor.class.getName()).log(Level.SEVERE, null, ex);
         }

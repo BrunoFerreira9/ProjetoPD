@@ -22,7 +22,7 @@ public class TP_DS extends UnicastRemoteObject implements InterfaceServico{
     public static final int MAX_CHUNCK_SIZE = 10000; //bytes
     public static final int MAX_CHUNK_LENGTH = 512 ;
     
-    Comunicacao com;
+    private static Comunicacao com;
     private static List<Servidor> listservers = new ArrayList<>();
     private static int numClientes ,numbasedados ;
     public static boolean existeprincipal = false;
@@ -38,14 +38,13 @@ public class TP_DS extends UnicastRemoteObject implements InterfaceServico{
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
         String scann;
-        Comunicacao com = new Comunicacao(listservers, numClientes, numbasedados);
+        com = new Comunicacao(listservers, numClientes, numbasedados);
         ThreadRecebePedidos pedidos = null;
         ThreadPingsParaServidores pings = null;
         try {
             com.criacomunicacao();
             pedidos = new ThreadRecebePedidos(com);
             pings = new ThreadPingsParaServidores(listservers);
-
             pedidos.start();
             pings.start();
         } catch (SocketException ex) {
@@ -108,16 +107,11 @@ public class TP_DS extends UnicastRemoteObject implements InterfaceServico{
                 if(listservers.get(i).isAtivo() && listservers.get(i).getIp().equals(ipServidor))                
                     listservers.get(i).setAtivo(false);
                 
-                    byte[] data = "terminaServidor".getBytes();
-                    DatagramSocket socket = null; 
-                    DatagramPacket packet = null;
+                    byte[] data = "tipo | Servidor ; msg | terminar".getBytes();
                     
-                    try {
-                        
-                        socket = new DatagramSocket();
-                        packet = new DatagramPacket( data, data.length,InetAddress.getByName(listservers.get(i).getIp()),listservers.get(i).getPorto());
-                        socket.send (packet);
-
+                    try {         
+                        com.setPacket(new DatagramPacket( data, data.length,InetAddress.getByName(listservers.get(i).getIp()),listservers.get(i).getPorto()));
+                        com.enviamensagem();
                     } catch (SocketException ex) {
                         Logger.getLogger(TP_DS.class.getName()).log(Level.SEVERE, null, ex);
                     }catch (UnknownHostException ex) {

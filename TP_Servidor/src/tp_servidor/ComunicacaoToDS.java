@@ -38,8 +38,11 @@ public class ComunicacaoToDS implements myObserver,myObservable {
     List<myObserver> observers = new ArrayList<>();
     int msg;
     
-    public ComunicacaoToDS(String endereco) {
+    private LogicaServidor log;
+    
+    public ComunicacaoToDS(String endereco,LogicaServidor logica) {
         this.endereco = endereco;
+        log = logica;
      }
      
     public DatagramSocket inicializaUDP(Boolean principal) throws IOException {
@@ -63,7 +66,7 @@ public class ComunicacaoToDS implements myObserver,myObservable {
             HashMap <String,String> teste = ResolveMessages(resposta);
             numBD = Integer.parseInt(teste.get("numbd"));
             princ = principal = teste.get("principal").equalsIgnoreCase("sim");
-            
+            tratainformacao();
         }catch (UnknownHostException e){
             System.err.println ("Unable to resolve host");
         } catch (SocketException ex) {
@@ -88,6 +91,40 @@ public class ComunicacaoToDS implements myObserver,myObservable {
     public int getnumBD(){return numBD;}
     public boolean getprinc(){ return princ; }
 
+    
+    
+    public void tratainformacao(){
+        Thread recebepedidos; 
+        recebepedidos = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String pedidos;
+                DatagramPacket p;
+                boolean termina = true;
+                while(termina){
+                    try {
+                        byte[] recbuf = new byte[BUFSIZE];
+                        p=new DatagramPacket(recbuf,BUFSIZE);
+                        socketUDP.receive(p);
+                        pedidos = new String(p.getData(),0,p.getLength());
+                        if(pedidos.equals("ping")){
+                            socketUDP.send(new DatagramPacket("ativo".getBytes(),"ativo".length(),addr,ConstantesServer.portoPingsDS));
+                        }
+                        if(pedidos.equals("tipo | Servidor ; msg | terminar")){
+                            System.out.println("Vou terminar...");
+                            termina = false;
+                            socketUDP.send(new DatagramPacket("tipo | Servidor ; msg | terminar".getBytes(),"tipo | Servidor ; msg | terminar".length(),addr,portoDS));
+                            log.terminar();
+                        }
+                    } catch (IOException ex) {
+                        Logger.getLogger(ComunicacaoToDS.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        recebepedidos.start();
+    }
+    
     @Override
     public void update(int msg) {
         /*  String mensagem = "";

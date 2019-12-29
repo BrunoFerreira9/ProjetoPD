@@ -67,6 +67,7 @@ public class ComunicacaoToDS implements myObserver,myObservable{
                     }else if(message.get("sucesso").equals("sim")){
                         ipServer = message.get("ip");
                         portoServer = Integer.parseInt(message.get("porto"));
+                        
                         return true;
                     }
                     

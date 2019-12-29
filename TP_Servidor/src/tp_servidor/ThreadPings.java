@@ -8,7 +8,7 @@ import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class ThreadPings extends Thread {
+class ThreadPings extends Thread {  
     private DatagramSocket dtsocket;
     private DatagramPacket dtpacket;
     private DatagramPacket dtpacketDestino;
@@ -29,7 +29,7 @@ class ThreadPings extends Thread {
             try {
                 dtpacket = new DatagramPacket(new byte[ConstantesServer.BUFSIZE], ConstantesServer.BUFSIZE);
                 dtsocket.receive(dtpacket);
-                
+                System.out.println(new String(dtpacket.getData(),0,dtpacket.getLength()));
                 dtpacket = dtpacketDestino;
                 dtsocket.send(dtpacket);
             } catch (IOException ex) {

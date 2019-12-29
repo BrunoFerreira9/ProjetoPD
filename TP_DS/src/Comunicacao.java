@@ -39,7 +39,6 @@ public class Comunicacao implements myObserver,myObservable{
         this.rmi = rmi;
     }
     
-    
     public void criacomunicacao() throws SocketException{
         sock = new DatagramSocket(ConstantesDS.portoDS);
     }
@@ -48,6 +47,9 @@ public class Comunicacao implements myObserver,myObservable{
         return sock;
     }
     
+    public void enviamensagem() throws IOException{
+        sock.send(pkt);
+    }
    
     public void setPacket(DatagramPacket p){
         pkt = p;
@@ -57,6 +59,7 @@ public class Comunicacao implements myObserver,myObservable{
         try {
             sock.receive(pkt);
             dados = new String(pkt.getData(),0,pkt.getLength());
+            System.out.println(dados);
             message = ConstantesDS.ResolveMessages(dados);
         } catch (IOException ex) {
             sock.close();
@@ -129,7 +132,7 @@ public class Comunicacao implements myObserver,myObservable{
                 break;
             case "Cliente":
                 Servidor aux= null;
-                if(listservers.size()==0){
+                if(listservers.isEmpty()){
                     resposta = "tipo | resposta ; sucesso | nao ; msg | Nao existe servidores";
                     break;
                 }
@@ -156,7 +159,6 @@ public class Comunicacao implements myObserver,myObservable{
         }
             
         } catch (Exception e) {
-            return;
         }
     }
     
