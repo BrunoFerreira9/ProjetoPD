@@ -68,6 +68,9 @@ public class ComunicacaoToDS implements myObserver,myObservable{
                         ipServer = message.get("ip");
                         portoServer = Integer.parseInt(message.get("porto"));
                         
+                        msg = ConstantesCliente.TERMINASERVIDOR;
+                        setChanged();
+                        notifyObservers();
                         return true;
                     }
                     
@@ -83,6 +86,7 @@ public class ComunicacaoToDS implements myObserver,myObservable{
         return false;
     }
    
+    
     
     public String getIpServer(){return ipServer;}
     public int getPortoServer(){return portoServer;}
@@ -123,5 +127,40 @@ public class ComunicacaoToDS implements myObserver,myObservable{
     @Override
     public void removeObserver(myObserver obs) {
         observers.remove(obs);
+    }
+    
+    public void tratainformacao(){
+        Thread recebepedidos; 
+        recebepedidos = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                 HashMap <String,String> message;
+                String pedidos;
+                DatagramPacket p;
+                boolean termina = true;
+                while(termina){
+                    try {
+                        byte[] recbuf = new byte[BUFSIZE];
+                        p=new DatagramPacket(recbuf,BUFSIZE);
+                        socketUDP.receive(p);
+                        pedidos = new String(p.getData(),0,p.getLength());    
+                        
+                        message = ResolveMessages(pedidos);
+                        
+                        switch(message.get("msg")){
+                            case "novaLigacao":                                
+                                ipServer = message.get("ip");
+                                portoServer = Integer.parseInt(message.get("porto"));
+                                msg = ConstantesCliente.MUDASERVIDOR;
+                                setChanged();
+                                notifyObservers();                              
+                        }                        
+                    } catch (IOException ex) {
+                        Logger.getLogger(ComunicacaoToDS.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        recebepedidos.start();
     }
 }

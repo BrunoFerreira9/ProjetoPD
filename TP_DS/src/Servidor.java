@@ -1,4 +1,7 @@
 
+import java.util.HashMap;
+
+
 
 public class Servidor {
     private String ip;
@@ -7,15 +10,24 @@ public class Servidor {
     private boolean principal;
     private int nClientes;
     int bd;
+    private HashMap<String,Integer> listaUtilizadores;
     Servidor(String end,int p,boolean a,boolean princ){
         ip = end;
         porto = p;
         ativo =a;
         principal = princ;
-        nClientes=0;
-        
+        nClientes=0;   
+        listaUtilizadores = new HashMap<String,Integer>();
     }
 
+    public void adicionaUtilizador(String ip, Integer porto){
+        listaUtilizadores.put(ip, porto);    
+    }
+
+    public HashMap<String, Integer> getListaUtilizadores() {
+        return listaUtilizadores;
+    }
+    
     public int getBD(){return bd;}
     public void setBD(int BD){bd = BD;}
     

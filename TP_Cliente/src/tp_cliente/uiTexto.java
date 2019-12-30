@@ -309,13 +309,12 @@ public class uiTexto implements myObserver{
                 cs = new ComunicacaoToServidor(cds.getIpServer(),cds.getPortoServer());
                 cs.inicializaTCP();
                 cs.addObserver(this);
+                cds.addObserver(this);
             }
             else
                  existeSocket=false;
         }catch(IOException e){
              Logger.getLogger(TP_Cliente.class.getName()).log(Level.SEVERE, null, e);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(TP_Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         if(existeSocket){
@@ -436,6 +435,7 @@ public class uiTexto implements myObserver{
             case ConstantesCliente.ATUALIZAMUSICAS: apresentaListaMusicas(); break;
             case ConstantesCliente.ATUALIZAPLAYLISTS: apresentaListaPlaylists(); break;
             case ConstantesCliente.TERMINASERVIDOR: System.exit(0); break;
+            case ConstantesCliente.MUDASERVIDOR: cs.restabeleceLigacao(cds.getIpServer(),cds.getPortoServer()); break;
             
         }
     }

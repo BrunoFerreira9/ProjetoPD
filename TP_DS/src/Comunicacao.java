@@ -145,11 +145,13 @@ public class Comunicacao implements myObserver,myObservable{
                     for(Servidor s : listservers){
                         if(s.getIp().equals(servidor.getIp())){
                             s.setnClientes(1);
-                            aux = s;
+                            s.adicionaUtilizador(pkt.getAddress().getHostAddress(),pkt.getPort());
+                            aux = s;                            
                         }
                     }
                     
                 }
+                
                 rmi.notifyListeners("Novo Cliente!");     
                 resposta = "tipo | resposta ; sucesso | sim ; ip | "+aux.getIp()+" ; porto | "+aux.getPorto();
                 System.out.println(resposta);

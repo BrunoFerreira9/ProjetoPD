@@ -40,7 +40,7 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
             this.porto = porto;
     }
     
-    public void inicializaTCP() throws IOException, ClassNotFoundException {
+    public void inicializaTCP() {
         try {
             socketTCP = new Socket(endereco,porto);
             reader  = new BufferedReader(new InputStreamReader(socketTCP.getInputStream()));
@@ -50,6 +50,18 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
             System.out.println("Ocorreu um erro no acesso ao socket"+e);
         }
     }
+    
+    public void restabeleceLigacao(String ip, int porto)  {
+        try {
+            socketTCP = new Socket(ip,porto);
+            reader  = new BufferedReader(new InputStreamReader(socketTCP.getInputStream()));
+            out = new PrintWriter(socketTCP.getOutputStream());
+          
+        } catch(IOException e){
+            System.out.println("Ocorreu um erro no acesso ao socket"+e);
+        }
+    }
+    
     
     @Override
     public boolean efetuaRegisto(HashMap <String,String> user) {

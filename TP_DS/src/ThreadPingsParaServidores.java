@@ -9,6 +9,7 @@ import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -67,7 +68,20 @@ class ThreadPingsParaServidores extends Thread {
                                System.out.println(s.getIp()+" deixou de ser principal");
                                TP_DS.existeprincipal = false;
                            }
+                           
                            s.setAtivo(false);
+                           String dados;
+ 
+                          
+                           Set<String> chaves = s.getListaUtilizadores().keySet();
+                           for(String chave : chaves){
+                                Servidor servidor = roundRobin();
+                                dados = "tipo | Servidor ; msg | novaLigacao ; ip | "+servidor.getIp()+" ; porto | " +servidor.getPorto() ;
+                                byte[] novaData =  dados.getBytes();
+                                dtpack = new DatagramPacket(novaData, novaData.length, InetAddress.getByName(chave), s.getListaUtilizadores().get(chave));
+                                dtsocket.send(dtpack);
+                           }                           
+                           
                            continue;
                         }
                     }
@@ -79,5 +93,27 @@ class ThreadPingsParaServidores extends Thread {
             }
             
         }
+    }
+    
+     public Servidor roundRobin(){
+    
+        int pos = 0;
+        List <Servidor> aux = getlistativos();
+        for(int i = 1; i<aux.size();i++){
+            if(aux.get(i).getnClientes()<aux.get(pos).getnClientes()){
+                pos = i;
+            }
+        }
+        
+        return aux.get(pos);
+    }
+    
+    public List<Servidor> getlistativos() {
+        List<Servidor> aux = new ArrayList<>();
+        for(Servidor s : listservers)
+        {
+            if(s.isAtivo())aux.add(s);
+        }
+        return aux;
     }
 }
