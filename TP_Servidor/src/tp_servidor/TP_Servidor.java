@@ -31,8 +31,7 @@ public class TP_Servidor {
         multicast.start();
         ControloLigacoes ligacoes = new ControloLigacoes(servidores);
         ligacoes.start();
-        
-        
+                
         do
         {
             System.out.print("\n-> ");

@@ -436,6 +436,7 @@ public class uiTexto implements myObserver{
             case ConstantesCliente.ATUALIZAPLAYLISTS: apresentaListaPlaylists(); break;
             case ConstantesCliente.TERMINASERVIDOR: System.exit(0); break;
             case ConstantesCliente.MUDASERVIDOR: cs.restabeleceLigacao(cds.getIpServer(),cds.getPortoServer()); break;
+            case ConstantesCliente.DESLIGOU: cds.enviaPergunta(); break;
             
         }
     }

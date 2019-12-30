@@ -26,7 +26,7 @@ public class ComunicacaoToDS implements myObserver,myObservable{
     
     //mensagem a enviar
     byte[] data = new byte[128];
-    private String dados = "tipo | Cliente";
+    private String dados;
     
     //recebe o ip e porto do servidor a que ligam
     private int portoServer;
@@ -46,9 +46,10 @@ public class ComunicacaoToDS implements myObserver,myObservable{
         HashMap <String,String> message;
         try{
             addr = InetAddress.getByName(endereco);
-            data= dados.getBytes();
-            socketUDP = new DatagramSocket();
             
+            socketUDP = new DatagramSocket();
+            dados = "tipo | Cliente ; msg | ligar";
+            data= dados.getBytes();
             packet = new DatagramPacket( data, data.length,addr,portoDS);
             
             socketUDP.send(packet);
@@ -66,18 +67,15 @@ public class ComunicacaoToDS implements myObserver,myObservable{
                           return false;
                     }else if(message.get("sucesso").equals("sim")){
                         ipServer = message.get("ip");
-                        portoServer = Integer.parseInt(message.get("porto"));
-                        
-                        msg = ConstantesCliente.TERMINASERVIDOR;
-                        setChanged();
-                        notifyObservers();
+                        portoServer = Integer.parseInt(message.get("porto"));                      
+                       
                         return true;
                     }
                     
                     break;
             }
             
-           
+           tratainformacao();
         }catch (UnknownHostException e){
             System.err.println ("Unable to resolve host");
         } catch (SocketException ex) {
@@ -86,7 +84,45 @@ public class ComunicacaoToDS implements myObserver,myObservable{
         return false;
     }
    
-    
+    public void enviaPergunta(){
+        String resposta;
+        HashMap <String,String> message;
+        
+        String dados2 = "tipo | Cliente ; msg | desligou";
+        
+        packet = new DatagramPacket( dados2.getBytes(), dados2.getBytes().length,addr,portoDS);
+            
+        try {
+            socketUDP.send(packet);
+        } catch (IOException ex) {
+            Logger.getLogger(ComunicacaoToDS.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+        byte[] recbuf = new byte[BUFSIZE]; 
+        DatagramPacket receivePacket=new DatagramPacket(recbuf,BUFSIZE);
+        try {
+            socketUDP.receive(receivePacket);
+        } catch (IOException ex) {
+            Logger.getLogger(ComunicacaoToDS.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        resposta = new String(receivePacket.getData(),0,receivePacket.getLength());
+
+        message = ResolveMessages(resposta);
+        switch(message.get("tipo")){
+            case "resposta":
+                if(message.get("msg").equals("novaLigacao")){                    
+                    ipServer = message.get("ip");
+                    portoServer = Integer.parseInt(message.get("porto"));
+
+                    System.out.println("passei aqui");
+                    msg = ConstantesCliente.MUDASERVIDOR;
+                    setChanged();
+                    notifyObservers();
+                   
+                }
+                break;
+        }
+    }
     
     public String getIpServer(){return ipServer;}
     public int getPortoServer(){return portoServer;}
@@ -148,7 +184,8 @@ public class ComunicacaoToDS implements myObserver,myObservable{
                         message = ResolveMessages(pedidos);
                         
                         switch(message.get("msg")){
-                            case "novaLigacao":                                
+                            case "novaLigacao":  
+                                System.out.println("a ui  " + message);
                                 ipServer = message.get("ip");
                                 portoServer = Integer.parseInt(message.get("porto"));
                                 msg = ConstantesCliente.MUDASERVIDOR;

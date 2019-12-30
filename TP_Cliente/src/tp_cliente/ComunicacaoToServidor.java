@@ -255,8 +255,14 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
                                 notifyObservers();
                                 break;
                         }
-                    } catch (IOException ex) {
-                        Logger.getLogger(ComunicacaoToServidor.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {   
+                            return;
+                            //msg = ConstantesCliente.DESLIGOU;
+                            //setChanged();
+                            //notifyObservers();    
+                            
+                        //continue;
+                       // Logger.getLogger(ComunicacaoToServidor.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     
                 }
@@ -266,16 +272,5 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
         });
         recebepedidos.start();
     }
-
-    @Override
-    public boolean trataMusicas(HashMap<String, String> musica) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean trataPlaylist(HashMap<String, String> playlist) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
  
 }

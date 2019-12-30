@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import jdk.nashorn.internal.ir.ContinueNode;
 
 public class Comunicacao implements myObserver,myObservable{
     DatagramSocket sock;
@@ -131,32 +132,41 @@ public class Comunicacao implements myObserver,myObservable{
                 }
                 break;
             case "Cliente":
-                Servidor aux= null;
-                if(listservers.isEmpty()){
-                    resposta = "tipo | resposta ; sucesso | nao ; msg | Nao existe servidores";
-                    break;
-                }
-                if(listservers.size()==1 && listservers.get(0).isAtivo()){
-                    aux = listservers.get(0);
-                    listservers.get(0).setnClientes(1);
-                    
-                }else{ //FAZER ROUND ROBIN PARA SABER QUAL O SERVIDOR A ATRIBUIR!!!!
+                 Servidor aux= null;
+                if(message.get("msg").equals("desligou")){
                     Servidor servidor = roundRobin();
-                    for(Servidor s : listservers){
-                        if(s.getIp().equals(servidor.getIp())){
-                            s.setnClientes(1);
-                            s.adicionaUtilizador(pkt.getAddress().getHostAddress(),pkt.getPort());
-                            aux = s;                            
-                        }
-                    }
                     
+                    resposta = "tipo | resposta ; msg | novaLigacao ; ip | "+servidor.getIp()+" ; porto | " +servidor.getPorto() ;                                              
+                    
+                    System.out.println("asd - " + resposta);
+                                         
+                }else{
+                                       
+                    if(listservers.isEmpty()){
+                        resposta = "tipo | resposta ; sucesso | nao ; msg | Nao existe servidores";
+                        break;
+                    }
+                    if(listservers.size()==1 && listservers.get(0).isAtivo()){
+                        aux = listservers.get(0);
+                        listservers.get(0).setnClientes(1);
+
+                    }else{ //FAZER ROUND ROBIN PARA SABER QUAL O SERVIDOR A ATRIBUIR!!!!
+                        Servidor servidor = roundRobin();
+                        for(Servidor s : listservers){
+                            if(s.getIp().equals(servidor.getIp())){
+                                s.setnClientes(1);
+                                s.adicionaUtilizador(pkt.getAddress().getHostAddress(),pkt.getPort());
+                                aux = s;                            
+                            }
+                        }
+
+                    }
                 }
+                    rmi.notifyListeners("Novo Cliente!");     
+                    resposta = "tipo | resposta ; sucesso | sim ; ip | "+aux.getIp()+" ; porto | "+aux.getPorto();
+                    System.out.println(resposta);
+                    numClientes++;
                 
-                rmi.notifyListeners("Novo Cliente!");     
-                resposta = "tipo | resposta ; sucesso | sim ; ip | "+aux.getIp()+" ; porto | "+aux.getPorto();
-                System.out.println(resposta);
-                numClientes++;
-               
             break;
         }
             
@@ -169,7 +179,7 @@ public class Comunicacao implements myObserver,myObservable{
         int pos = 0;
         List <Servidor> aux = getlistativos();
         for(int i = 1; i<aux.size();i++){
-            if(aux.get(i).getnClientes()<aux.get(pos).getnClientes()){
+            if(aux.get(i).getnClientes() <= aux.get(pos).getnClientes()){
                 pos = i;
             }
         }

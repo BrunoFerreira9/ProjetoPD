@@ -25,5 +25,7 @@ public class ConstantesCliente {
     public static final int ATUALIZAPLAYLISTS = 1;
     public static final int TERMINASERVIDOR = 2;
     public static final int MUDASERVIDOR = 3;
+        public static final int DESLIGOU = 4;
+
     public static final String PATHLOCATION = "C:\\ClientePD";
 }
