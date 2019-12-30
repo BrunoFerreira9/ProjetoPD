@@ -68,7 +68,7 @@ public class ThreadParaMulticast extends Thread {
                 
                 String pedido = new String(dtpack.getData(), 0, dtpack.getLength());
                 System.out.println(pedido);
-                if(principal){
+                if(principal && !pedido.equalsIgnoreCase(novo) && !pedido.equalsIgnoreCase(sair) && !pedido.equalsIgnoreCase(atualizado)){
                     pedido += " ; multicast | sim ; ip | "+dtpack.getAddress().getHostAddress()+" ; porto | "+dtpack.getPort();
                     logica.adicionapedido(pedido);
                 }
@@ -76,7 +76,12 @@ public class ThreadParaMulticast extends Thread {
                     numeroServidores++;
                     if(principal){
                         for(String s: logica.getlistapedidos()){
-                            logica.enviapedidosincronizacao(s);
+                            /*
+                                Falta enviar mensagem UDP para o porto de sincronização do IP do datagrampacket
+                                Fazer thread na lógica do servidor que vai receber os pedidos de sincronização
+                                alterar o envia pedidos para executa pedidos que vai ser chamada pela thread que vai estar a correr
+                            */
+                            //logica.enviapedidosincronizacao(s);
                             logica.removepedido(s);
                         }
                     }
