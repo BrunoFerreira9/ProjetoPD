@@ -76,7 +76,8 @@ public class ThreadParaMulticast extends Thread {
                     continue;
                 }
                 
-                
+                System.out.println("cds"+logica.getCds().getPortoServer()+"dtpack"+dtpack.getPort());
+                System.out.println("cds"+logica.getCds().getIpServer()+"dtpack"+dtpack.getAddress().getHostAddress());
                 if(dtpack.getAddress().getHostAddress().equalsIgnoreCase(InetAddress.getLocalHost().getHostAddress()) && dtpack.getPort() == logica.getCds().getPortoServer()+2)
                 {
                     int aux  = numeroServidores; //Menos o servidor que enviou;
