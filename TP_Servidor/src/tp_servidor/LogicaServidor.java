@@ -33,12 +33,13 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
     List<myObserver> observers = new ArrayList<>();
     int msg;
     String idUser;
+    private List<String> pedidosrecebidos;
                 
     public LogicaServidor(String ipDS, String ipMaquinaBD, Boolean principal) {  
         listaClientes = new ArrayList<>();
         este = this;
         cds = new ComunicacaoToDS(ipDS,this);
-        
+        pedidosrecebidos = new ArrayList<>();
         try {
             dtsocket = cds.inicializaUDP(principal);
         } catch (IOException ex) {
@@ -485,4 +486,8 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
             }
             return idUser;
     }
+    
+    public void adicionapedido(String pedido){ pedidosrecebidos.add(pedido);}
+    public String removepedido(int ped){ return pedidosrecebidos.remove(ped);}
+    public List<String> getlistapedidos(){return pedidosrecebidos;}
 }

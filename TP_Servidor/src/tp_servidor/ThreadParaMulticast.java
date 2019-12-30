@@ -7,6 +7,7 @@ import java.net.MulticastSocket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static tp_servidor.ConstantesServer.ResolveMessages;
@@ -26,7 +27,7 @@ public class ThreadParaMulticast extends Thread {
     
     public ThreadParaMulticast(LogicaServidor log){
         this.logica = log;
-        //this.principal = log.getCds().getprinc();
+        this.principal = log.getCds().getprinc();
         
         try {
             mtsock = new MulticastSocket(ConstantesServer.portoMulticast);
@@ -53,10 +54,11 @@ public class ThreadParaMulticast extends Thread {
             try {
                 dtpack = new DatagramPacket(data, data.length, InetAddress.getByName(ConstantesServer.IPMULTICAST), ConstantesServer.portoMulticast);
                 mtsock.send(dtpack);
-            } catch (IOException ex) {
+            } catch(IOException ex) {
                 Logger.getLogger(ThreadParaMulticast.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        
         
         while(!terminar){
             dtpack = new DatagramPacket(new byte[ConstantesServer.BUFSIZE], ConstantesServer.BUFSIZE);
@@ -68,6 +70,8 @@ public class ThreadParaMulticast extends Thread {
                 
                 if(pedido.equalsIgnoreCase(novo)){
                     numeroServidores++;
+                    List<String> pedidospendentes = logica.getlistapedidos();
+                    System.out.println(logica.getCds().getIpServer()+" "+logica.getCds().getPortoServer());
                     continue;
                 }
                 
