@@ -27,7 +27,8 @@ public class TP_Servidor {
 
         servidores = new LogicaServidor(ipDS,ipMaquinaBD, principal);
         clientSocket = servidores.criaNovoServidor(); 
-
+        ThreadParaMulticast multicast = new ThreadParaMulticast(servidores);
+        multicast.start();
         ControloLigacoes ligacoes = new ControloLigacoes(servidores);
         ligacoes.start();
         

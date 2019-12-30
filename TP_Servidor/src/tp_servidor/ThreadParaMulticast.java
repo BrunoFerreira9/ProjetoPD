@@ -5,6 +5,7 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,15 +17,16 @@ public class ThreadParaMulticast extends Thread {
     private DatagramPacket dtpack;
     private String myIP;
     private ComunicacaoToCliente comunicacaoCliente;
+    private LogicaServidor logica;
     private boolean terminar = false;
     private boolean principal;
     private final String novo = "novo";
     private final String sair = "sair";
     private final String atualizado = "atualizado";
     
-    public ThreadParaMulticast(ComunicacaoToCliente comunicacao, Boolean principal){
-        comunicacaoCliente = comunicacao;
-        this.principal = principal;
+    public ThreadParaMulticast(LogicaServidor log){
+        this.logica = log;
+        //this.principal = log.getCds().getprinc();
         
         try {
             mtsock = new MulticastSocket(ConstantesServer.portoMulticast);
@@ -101,10 +103,30 @@ public class ThreadParaMulticast extends Thread {
                 else{
                     if(pedido.equalsIgnoreCase(atualizado))
                         continue;
-                    pedido += " ; multicast | sim ; ip | "+dtpack.getAddress().getHostAddress()+" ; porto | "+dtpack.getPort();
+                    //pedido += " ; multicast | sim ; ip | "+dtpack.getAddress().getHostAddress()+" ; porto | "+dtpack.getPort();
                     HashMap <String,String> user = ResolveMessages(pedido);
-                    comunicacaoCliente.trataPedido(user);
-                    
+                  //  comunicacaoCliente.trataPedido(user);
+                     switch (user.get("tipo")) {
+                        case "registo":logica.efetuaRegisto(user);break;
+                        case "login":logica.efetuaLogin(user);break;
+                        case "logout":logica.efetuaLogout(user);break;
+                        case "editaMusica":logica.trataMusicas(user);break;
+                        case "eliminaMusica":logica.trataMusicas(user);break;
+                        case "addMusPlaylist":logica.trataMusicas(user);break;
+                        case "criaPlaylist":logica.trataPlaylist(user);break;
+                        case "editaPlaylist":logica.trataPlaylist(user);break;
+                        case "eliminaPlaylist":logica.trataPlaylist(user);break;
+                        case "eliminaMusicaPlaylist":logica.trataPlaylist(user);break;
+                        case "criaMusica":
+                            if(logica.trataMusicas(user)){
+                                Thread downMusica = new ThreadDownload(user.get("ficheiro"),dtpack.getAddress().getHostAddress(),dtpack.getPort());
+                                downMusica.start();
+                            }  
+                        break;
+                        default:
+                            break;
+                    }
+                  
                     data = atualizado.getBytes();
                     dtpack = new DatagramPacket(data, data.length, InetAddress.getByName(ConstantesServer.IPMULTICAST), ConstantesServer.portoMulticast);
                     mtsock.send(dtpack);

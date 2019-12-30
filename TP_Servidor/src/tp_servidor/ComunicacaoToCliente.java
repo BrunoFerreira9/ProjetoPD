@@ -25,7 +25,7 @@ public class ComunicacaoToCliente implements myObserver {
     private int porto;
     private PrintWriter pout = null;
     private BufferedReader in = null;
-    ThreadParaMulticast multicast;
+  //  ThreadParaMulticast multicast;
     private String resposta;
    private  String pedido;
     
@@ -43,8 +43,7 @@ public class ComunicacaoToCliente implements myObserver {
             
         this.endereco = cliente.getInetAddress().getHostName();
         this.porto = servidor.getCds().getPortoServer();
-        multicast = new ThreadParaMulticast(this,servidor.getCds().getprinc());
-        multicast.start();
+        
         try {
             socketEnviaMulticast = new DatagramSocket();
             pout = new PrintWriter(socketCliente.getOutputStream());

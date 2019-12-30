@@ -16,6 +16,8 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -58,6 +60,7 @@ public class ThreadDownload extends Thread{
             System.out.println("Sem permissoes de escrita na directoria " + localDirectory);
             return false;
         }
+        
         return true;
     }
     @Override
