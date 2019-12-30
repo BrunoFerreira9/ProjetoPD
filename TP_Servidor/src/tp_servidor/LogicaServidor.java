@@ -231,7 +231,19 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
                 String resultado1= ligacao.executarInsert(insert);
                 if (resultado1 == "ERRO" || resultado1 == "") { 
                      return false;
+                } 
+                
+                if(musica.containsKey("multicast")){
+                    Thread downMusica;
+                    try {
+                        downMusica = new ThreadDownload(musica.get("ficheiro"),musica.get("ip"),Integer.parseInt(musica.get("porto")));
+                        downMusica.start();
+                    } catch (IOException ex) {
+                        Logger.getLogger(LogicaServidor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
+                
+               
                 msg = ConstantesServer.ATUALIZAMUSICAS;
                 setChanged();
                 notifyObservers();

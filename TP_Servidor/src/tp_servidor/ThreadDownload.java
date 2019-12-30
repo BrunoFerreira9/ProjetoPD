@@ -31,18 +31,21 @@ public class ThreadDownload extends Thread{
     PrintWriter prts;
     int nbytes;
     byte []bufer = new byte[4000];
+    boolean multicast= false;
     
     ThreadDownload(String filename,Socket s) throws IOException{
         localDirectory = new File(ConstantesServer.PATHLOCATION);
         this.fileName = filename;
         socketcliente = s;
         server = new ServerSocket(0);
+        multicast =false;
     }
     ThreadDownload(String filename,String ip,int porto) throws IOException{
         localDirectory = new File(ConstantesServer.PATHLOCATION);
         this.fileName = filename;
         socketcliente = new Socket(ip,porto-2);
         server = new ServerSocket(0);
+        multicast = true;
     }
     
     boolean verificaDiretoria(){

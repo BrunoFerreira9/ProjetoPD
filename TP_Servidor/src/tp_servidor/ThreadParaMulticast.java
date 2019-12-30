@@ -104,7 +104,7 @@ public class ThreadParaMulticast extends Thread {
                 else{
                     if(pedido.equalsIgnoreCase(atualizado))
                         continue;
-                    //pedido += " ; multicast | sim ; ip | "+dtpack.getAddress().getHostAddress()+" ; porto | "+dtpack.getPort();
+                    pedido += " ; multicast | sim ; ip | "+dtpack.getAddress().getHostAddress()+" ; porto | "+dtpack.getPort();
                     HashMap <String,String> user = ResolveMessages(pedido);
                   //  comunicacaoCliente.trataPedido(user);
                      switch (user.get("tipo")) {
@@ -121,12 +121,7 @@ public class ThreadParaMulticast extends Thread {
                         case "editaPlaylist":logica.trataPlaylist(user);break;
                         case "eliminaPlaylist":logica.trataPlaylist(user);break;
                         case "eliminaMusicaPlaylist":logica.trataPlaylist(user);break;
-                        case "criaMusica":
-                            if(logica.trataMusicas(user)){
-                                Thread downMusica = new ThreadDownload(user.get("ficheiro"),dtpack.getAddress().getHostAddress(),dtpack.getPort());
-                                downMusica.start();
-                            }  
-                        break;
+                        case "criaMusica":logica.trataMusicas(user);break;
                         default:
                             break;
                     }
