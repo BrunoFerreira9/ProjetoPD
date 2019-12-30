@@ -86,7 +86,7 @@ public class ComunicacaoToDS implements myObserver,myObservable {
         }
     }
     
-    public String getIpServer(){return ipServer;}
+    public String getIpServer(){return endereco;}
     public int getPortoServer(){return portoServer;}
     public int getnumBD(){return numBD;}
     public boolean getprinc(){ return princ; }
