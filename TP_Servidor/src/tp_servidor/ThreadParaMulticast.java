@@ -108,7 +108,10 @@ public class ThreadParaMulticast extends Thread {
                   //  comunicacaoCliente.trataPedido(user);
                      switch (user.get("tipo")) {
                         case "registo":logica.efetuaRegisto(user);break;
-                        case "login":logica.efetuaLogin(user);break;
+                        case "login":
+                            user.put("ip", dtpack.getAddress().getHostAddress());
+                            user.put("porto", Integer.toString(dtpack.getPort()));
+                            logica.efetuaLogin(user);break;
                         case "logout":logica.efetuaLogout(user);break;
                         case "editaMusica":logica.trataMusicas(user);break;
                         case "eliminaMusica":logica.trataMusicas(user);break;
