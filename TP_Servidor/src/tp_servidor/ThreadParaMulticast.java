@@ -53,7 +53,7 @@ public class ThreadParaMulticast extends Thread {
             //Os servidores não principais dão informação que chegaram ao multicast
             try {
                 dtpack = new DatagramPacket(data, data.length, InetAddress.getByName(ConstantesServer.IPMULTICAST), ConstantesServer.portoMulticast);
-                mtsock.send(dtpack);
+                mtsock.send(dtpack);;
             } catch(IOException ex) {
                 Logger.getLogger(ThreadParaMulticast.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -70,8 +70,10 @@ public class ThreadParaMulticast extends Thread {
                 
                 if(pedido.equalsIgnoreCase(novo)){
                     numeroServidores++;
-                    List<String> pedidospendentes = logica.getlistapedidos();
-                    System.out.println(logica.getCds().getIpServer()+" "+logica.getCds().getPortoServer());
+                    if(principal){
+                        List<String> pedidospendentes = logica.getlistapedidos();
+                        System.out.println(dtpack.getSocketAddress());
+                    }
                     continue;
                 }
                 
