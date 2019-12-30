@@ -33,7 +33,7 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
     List<myObserver> observers = new ArrayList<>();
     int msg;
     String idUser;
-    private List<String> pedidosrecebidos;
+    private ArrayList<String> pedidosrecebidos;
                 
     public LogicaServidor(String ipDS, String ipMaquinaBD, Boolean principal) {  
         listaClientes = new ArrayList<>();
@@ -488,6 +488,30 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
     }
     
     public void adicionapedido(String pedido){ pedidosrecebidos.add(pedido);}
-    public String removepedido(int ped){ return pedidosrecebidos.remove(ped);}
-    public List<String> getlistapedidos(){return pedidosrecebidos;}
+    public void removepedido(String ped){ 
+        for(String s : pedidosrecebidos){
+            if(s.equalsIgnoreCase(ped)){
+                pedidosrecebidos.remove(ped);
+            }
+        }
+    }
+    public ArrayList<String> getlistapedidos(){return pedidosrecebidos;}
+    public void enviapedidosincronizacao(String s) {
+        HashMap <String,String> user = ResolveMessages(s);
+        switch (user.get("tipo")) {
+           case "registo": efetuaRegisto(user);break;
+           case "login": efetuaLogin(user);break;
+           case "logout": efetuaLogout(user);break;
+           case "editaMusica": trataMusicas(user);break;
+           case "eliminaMusica":trataMusicas(user);break;
+           case "addMusPlaylist":trataMusicas(user);break;
+           case "criaPlaylist":trataPlaylist(user);break;
+           case "editaPlaylist":trataPlaylist(user);break;
+           case "eliminaPlaylist":trataPlaylist(user);break;
+           case "eliminaMusicaPlaylist":trataPlaylist(user);break;
+           case "criaMusica":trataMusicas(user);break;
+           default:
+               break;
+       }
+    }
 }

@@ -41,7 +41,7 @@ public class TP_Servidor {
         try{
             servidores.terminaServidor();
             clientSocket.close();
-
+            multicast.terminar();
             ligacoes.desliga();
         }catch (IOException ex) {
             Logger.getLogger(TP_Servidor.class.getName()).log(Level.SEVERE, null, ex);

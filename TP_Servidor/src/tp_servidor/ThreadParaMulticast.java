@@ -7,6 +7,7 @@ import java.net.MulticastSocket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,7 +54,7 @@ public class ThreadParaMulticast extends Thread {
             //Os servidores não principais dão informação que chegaram ao multicast
             try {
                 dtpack = new DatagramPacket(data, data.length, InetAddress.getByName(ConstantesServer.IPMULTICAST), ConstantesServer.portoMulticast);
-                mtsock.send(dtpack);;
+                mtsock.send(dtpack);
             } catch(IOException ex) {
                 Logger.getLogger(ThreadParaMulticast.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -67,12 +68,17 @@ public class ThreadParaMulticast extends Thread {
                 
                 String pedido = new String(dtpack.getData(), 0, dtpack.getLength());
                 System.out.println(pedido);
-                
+                if(principal){
+                    pedido += " ; multicast | sim ; ip | "+dtpack.getAddress().getHostAddress()+" ; porto | "+dtpack.getPort();
+                    logica.adicionapedido(pedido);
+                }
                 if(pedido.equalsIgnoreCase(novo)){
                     numeroServidores++;
                     if(principal){
-                        List<String> pedidospendentes = logica.getlistapedidos();
-                        System.out.println(dtpack.getSocketAddress());
+                        for(String s: logica.getlistapedidos()){
+                            logica.enviapedidosincronizacao(s);
+                            logica.removepedido(s);
+                        }
                     }
                     continue;
                 }
@@ -110,7 +116,6 @@ public class ThreadParaMulticast extends Thread {
                 else{
                     if(pedido.equalsIgnoreCase(atualizado))
                         continue;
-                    pedido += " ; multicast | sim ; ip | "+dtpack.getAddress().getHostAddress()+" ; porto | "+dtpack.getPort();
                     HashMap <String,String> user = ResolveMessages(pedido);
                   //  comunicacaoCliente.trataPedido(user);
                      switch (user.get("tipo")) {

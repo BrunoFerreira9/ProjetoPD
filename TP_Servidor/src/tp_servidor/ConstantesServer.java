@@ -8,6 +8,7 @@ public class ConstantesServer {
     static final int TIMEOUT = 5000;
     static final int portoDS = 5001;
     public static final int portoPingsDS = 5002;
+    public static final int portoSincServer = 5003;
     public static final int portoMulticast = 6000;
     public static final String IPMULTICAST = "230.0.0.0";
     public static final int BUFSIZE = 256;
