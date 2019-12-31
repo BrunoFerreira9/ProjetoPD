@@ -174,6 +174,7 @@ public class ComunicacaoToDS implements myObserver,myObservable{
                 DatagramPacket p;
                 boolean termina = true;
                 while(termina){
+                    System.out.println("ola");
                     try {
                         byte[] recbuf = new byte[BUFSIZE];
                         p=new DatagramPacket(recbuf,BUFSIZE);
@@ -184,7 +185,7 @@ public class ComunicacaoToDS implements myObserver,myObservable{
                         
                         switch(message.get("msg")){
                             case "novaLigacao":  
-                                System.out.println("a ui  " + message);
+                                System.out.println("aqqui  " + message);
                                 ipServer = message.get("ip");
                                 portoServer = Integer.parseInt(message.get("porto"));
                                 msg = ConstantesCliente.MUDASERVIDOR;

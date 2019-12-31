@@ -60,7 +60,7 @@ class ThreadPingsParaServidores extends Thread {
                                 System.out.println(s.getIp()+" passei a ser o principal!");
                                 TP_DS.existeprincipal = true;
                             }
-                            System.out.println("O servidor de IP " + s.getIp() + " enviou ao ping do DS: " + dtpack.getData().toString());
+                            System.out.println("O servidor de IP " + s.getIp() + " e porto "+ s.getPorto()+"  enviou ao ping do DS: " + dtpack.getData().toString());
                         } catch (SocketTimeoutException e) {
                            System.out.println("Deixou de receber ping do servidor "+s.getIp());
                            if(s.isPrincipal()){
@@ -74,10 +74,14 @@ class ThreadPingsParaServidores extends Thread {
  
                           
                            Set<String> chaves = s.getListaUtilizadores().keySet();
+                            System.out.println(chaves);
                            for(String chave : chaves){
                                 Servidor servidor = roundRobin();
+                                System.out.println("-- " + servidor.getPorto());
                                 dados = "tipo | Servidor ; msg | novaLigacao ; ip | "+servidor.getIp()+" ; porto | " +servidor.getPorto() ;
-                                byte[] novaData =  dados.getBytes();
+                                 byte[] novaData =  dados.getBytes();
+                                 System.out.println("-1- " + chave);
+                                 System.out.println("-2- " + s.getListaUtilizadores().get(chave));
                                 dtpack = new DatagramPacket(novaData, novaData.length, InetAddress.getByName(chave), s.getListaUtilizadores().get(chave));
                                 dtsocket.send(dtpack);
                            }                           

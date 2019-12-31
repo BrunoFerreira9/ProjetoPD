@@ -42,6 +42,7 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
     
     public void inicializaTCP() {
         try {
+            System.out.println("ip:" + endereco + " | porto " + porto);
             socketTCP = new Socket(endereco,porto);
             reader  = new BufferedReader(new InputStreamReader(socketTCP.getInputStream()));
             out = new PrintWriter(socketTCP.getOutputStream());
@@ -53,6 +54,7 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
     
     public void restabeleceLigacao(String ip, int porto)  {
         try {
+            System.out.println("estou agora aqui ip:" + ip + " | porto " + porto);
             socketTCP = new Socket(ip,porto);
             reader  = new BufferedReader(new InputStreamReader(socketTCP.getInputStream()));
             out = new PrintWriter(socketTCP.getOutputStream());
@@ -191,8 +193,7 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
                 String pedido;
                 while(logado){
                     try {
-                        pedido = reader.readLine();
-                        //System.out.println("Recebi do Servidor: "+ pedido);
+                        pedido = reader.readLine();                        
                         HashMap <String,String> info = ResolveMessages(pedido);
                         switch(info.get("tipo"))
                         {

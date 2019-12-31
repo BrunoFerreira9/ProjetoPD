@@ -149,6 +149,7 @@ public class Comunicacao implements myObserver,myObservable{
                     if(listservers.size()==1 && listservers.get(0).isAtivo()){
                         aux = listservers.get(0);
                         listservers.get(0).setnClientes(1);
+                         listservers.get(0).adicionaUtilizador(pkt.getAddress().getHostAddress(),pkt.getPort());
 
                     }else{ //FAZER ROUND ROBIN PARA SABER QUAL O SERVIDOR A ATRIBUIR!!!!
                         Servidor servidor = roundRobin();
