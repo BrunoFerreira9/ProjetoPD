@@ -116,6 +116,9 @@ public class ComunicacaoToDS implements myObserver,myObservable {
                             socketUDP.send(new DatagramPacket("tipo | Servidor ; msg | terminar".getBytes(),"tipo | Servidor ; msg | terminar".length(),addr,portoDS));
                             log.terminar();
                         }
+                        if(!pedidos.equals("ping") && !pedidos.equals("tipo | Servidor ; msg | terminar")){
+                            log.executapedidossincronizacao(pedidos);
+                        }
                     } catch (IOException ex) {
                         Logger.getLogger(ComunicacaoToDS.class.getName()).log(Level.SEVERE, null, ex);
                     }

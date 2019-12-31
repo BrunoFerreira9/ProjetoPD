@@ -2,6 +2,7 @@ package tp_servidor;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.SocketTimeoutException;
@@ -22,9 +23,9 @@ public class ThreadParaMulticast extends Thread {
     private LogicaServidor logica;
     private boolean terminar = false;
     private boolean principal;
-    private final String novo = "novo";
-    private final String sair = "sair";
-    private final String atualizado = "atualizado";
+    private String novo = "tipo | novo ; porto | ";
+    private final String sair = "tipo | sair";
+    private final String atualizado = "tipo | actualizado";
     
     public ThreadParaMulticast(LogicaServidor log){
         this.logica = log;
@@ -48,12 +49,13 @@ public class ThreadParaMulticast extends Thread {
     
     @Override
     public void run(){
-        byte[] data = novo.getBytes();
+        byte[] data;
         
         if(!principal){
             //Os servidores não principais dão informação que chegaram ao multicast
+            novo += logica.getCds().getPortoServer();
             try {
-                dtpack = new DatagramPacket(data, data.length, InetAddress.getByName(ConstantesServer.IPMULTICAST), ConstantesServer.portoMulticast);
+                dtpack = new DatagramPacket(novo.getBytes(),novo.length(), InetAddress.getByName(ConstantesServer.IPMULTICAST), ConstantesServer.portoMulticast);
                 mtsock.send(dtpack);
             } catch(IOException ex) {
                 Logger.getLogger(ThreadParaMulticast.class.getName()).log(Level.SEVERE, null, ex);
@@ -67,28 +69,31 @@ public class ThreadParaMulticast extends Thread {
                 mtsock.receive(dtpack);
                 
                 String pedido = new String(dtpack.getData(), 0, dtpack.getLength());
-                System.out.println(pedido);
-                if(principal && !pedido.equalsIgnoreCase(novo) && !pedido.equalsIgnoreCase(sair) && !pedido.equalsIgnoreCase(atualizado)){
+                ///System.out.println(pedido);
+                HashMap <String,String> user = ResolveMessages(pedido);
+                
+                
+                if(!user.get("tipo").equals("novo") && !user.get("tipo").equals("sair") && !user.get("tipo").equals("actualizado")){
+                    
                     pedido += " ; multicast | sim ; ip | "+dtpack.getAddress().getHostAddress()+" ; porto | "+dtpack.getPort();
+                    user = ResolveMessages(pedido);
                     logica.adicionapedido(pedido);
                 }
-                if(pedido.equalsIgnoreCase(novo)){
+                if(user.get("tipo").equals("novo")){
                     numeroServidores++;
                     if(principal){
+                        DatagramSocket dts = new DatagramSocket();
                         for(String s: logica.getlistapedidos()){
-                            /*
-                                Falta enviar mensagem UDP para o porto de sincronização do IP do datagrampacket
-                                Fazer thread na lógica do servidor que vai receber os pedidos de sincronização
-                                alterar o envia pedidos para executa pedidos que vai ser chamada pela thread que vai estar a correr
-                            */
-                            //logica.enviapedidosincronizacao(s);
-                            logica.removepedido(s);
+                            dts.send(new DatagramPacket(s.getBytes(),s.length(),InetAddress.getByName(dtpack.getAddress().getHostAddress()),Integer.parseInt(user.get("porto"))));
+                           // logica.removepedido(s);
                         }
+                        //limpalistapedidos com o .clear
+                        dts.close();
                     }
                     continue;
                 }
                 
-                if(pedido.equalsIgnoreCase(sair)){
+                if(user.get("tipo").equals("sair")){
                     numeroServidores--;
                     continue;
                 }
@@ -104,7 +109,7 @@ public class ThreadParaMulticast extends Thread {
                                 dtpack = new DatagramPacket(new byte[ConstantesServer.BUFSIZE], ConstantesServer.BUFSIZE);
                                 mtsock.receive(dtpack);
                                 pedido = new String(dtpack.getData(), 0, dtpack.getLength());
-                                if(pedido.equalsIgnoreCase(atualizado))
+                                if(user.get("tipo").equals("actualizado"))
                                     aux--;
                                 else
                                     System.out.println("Um dos servidores respondeu mal");
@@ -119,10 +124,9 @@ public class ThreadParaMulticast extends Thread {
                     }while(aux != 0);
                 }
                 else{
-                    if(pedido.equalsIgnoreCase(atualizado))
+                    if(user.get("tipo").equals("actualizado"))
                         continue;
-                    HashMap <String,String> user = ResolveMessages(pedido);
-                  //  comunicacaoCliente.trataPedido(user);
+                     System.out.println(user);
                      switch (user.get("tipo")) {
                         case "registo":logica.efetuaRegisto(user);break;
                         case "login":
@@ -162,5 +166,4 @@ public class ThreadParaMulticast extends Thread {
             Logger.getLogger(ThreadParaMulticast.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
 }

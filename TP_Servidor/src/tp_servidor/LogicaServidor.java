@@ -2,6 +2,7 @@
 package tp_servidor;
 
 import java.io.IOException;
+import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -12,7 +13,9 @@ import java.util.List;
 import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static tp_servidor.ConstantesServer.BUFSIZE;
 import static tp_servidor.ConstantesServer.ResolveMessages;
+import static tp_servidor.ConstantesServer.portoDS;
 
 
 public class LogicaServidor implements InterfaceGestao, myObservable {
@@ -59,7 +62,7 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
        
         try {
             serverSocket = new ServerSocket(cds.getPortoServer());
-           
+           // recebepedidossincronizazao();
         } catch (IOException ex) {
             Logger.getLogger(LogicaServidor.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -496,7 +499,7 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
         }
     }
     public ArrayList<String> getlistapedidos(){return pedidosrecebidos;}
-    public void enviapedidosincronizacao(String s) {
+    public void executapedidossincronizacao(String s) {
         HashMap <String,String> user = ResolveMessages(s);
         switch (user.get("tipo")) {
            case "registo": efetuaRegisto(user);break;
@@ -513,5 +516,39 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
            default:
                break;
        }
+    }
+    
+    public void recebepedidossincronizazao(){
+        Thread recebepedidos; 
+        recebepedidos = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                DatagramSocket socketsinc = null;
+                String pedidos;
+                DatagramPacket p;
+                boolean termina = true;
+                byte[] recbuf = new byte[BUFSIZE];
+                try {
+                    socketsinc = new DatagramSocket(ConstantesServer.portoSincServer);
+                    while(termina){
+                        p=new DatagramPacket(recbuf,BUFSIZE);
+                        socketsinc.receive(p);
+                        pedidos = new String(p.getData(),0,p.getLength());
+                        if(!pedidos.equalsIgnoreCase("termina"))
+                            executapedidossincronizacao(pedidos);
+                        else 
+                            termina = false;
+                    }
+                } catch (SocketException ex) {
+                    Logger.getLogger(LogicaServidor.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(LogicaServidor.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                finally{
+                    socketsinc.close();
+                }
+            }
+        });
+        recebepedidos.start();
     }
 }
