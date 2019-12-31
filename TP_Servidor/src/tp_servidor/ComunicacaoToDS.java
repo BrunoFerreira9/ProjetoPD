@@ -62,7 +62,6 @@ public class ComunicacaoToDS implements myObserver,myObservable {
             socketUDP.receive(receivePacket);
             
             resposta = new String(receivePacket.getData(),0,receivePacket.getLength());
-            System.out.println(resposta);
             HashMap <String,String> teste = ResolveMessages(resposta);
             numBD = Integer.parseInt(teste.get("numbd"));
             princ = principal = teste.get("principal").equalsIgnoreCase("sim");

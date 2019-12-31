@@ -149,10 +149,8 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
             //System.out.println("Nao existe o utilizador na BD\n");
              String queryRegisto = "Insert into Utilizador (username, password, nome, ativo)  values(\'"  + user.get("username") + "\',\'" + user.get("password") + "\', \'" + user.get("nome") + "\',0);";
         
-             System.out.println(queryRegisto);
             String resultadoRegisto = ligacao.executarInsert(queryRegisto);
             if (resultadoRegisto == "ERRO" || resultadoRegisto == "") {
-                System.out.println("Erro ao inserir o utilizador na BD\n");
                 return false;
             }
             return true;
@@ -168,7 +166,6 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
         String resultado = ligacao.executarSelect(query);
  
         if (resultado == "ERRO" || resultado == "") {
-            System.out.println("Nao existe o utilizador na BD\n");
             return false;
         }
         
@@ -177,7 +174,6 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
         String resultadoupdate = ligacao.executarUpdate(update);
             
         if (resultadoupdate == "ERRO" || resultadoupdate == "") {
-            System.out.println("Erro na atualizacao BD\n");
             return false;
         }
        return true;
@@ -190,7 +186,6 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
         String resultado = ligacao.executarSelect(query);
 
         if (resultado == "ERRO" || resultado == "") {
-            System.out.println("Nao existe o utilizador logado na BD\n");
             return false;
         }
         
@@ -199,7 +194,6 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
           String resultadoupdate = ligacao.executarUpdate(update);
 
         if (resultadoupdate == "ERRO" || resultadoupdate == "") {
-            System.out.println("Erro na atualizacao BD\n");
             return false;
         }
        return true;
@@ -280,7 +274,6 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
             String resultadoupdate = ligacao.executarUpdate(update);
 
             if (resultadoupdate == "ERRO" || resultadoupdate == "") {
-                System.out.println("Erro na atualizacao da musica na BD");
                 return false;
             }
             msg = ConstantesServer.ATUALIZAMUSICAS;
@@ -292,9 +285,7 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
                                  
             String query = "Select nome from musica where nome = \'" + musica.get("nome")+"\' AND criadorMusica = \'"+musica.get("utilizador")+"\'";
             
-            System.out.println(query);
             String resultado = ligacao.executarSelect(query);
-            System.out.println(resultado);
             if (resultado == "ERRO" || resultado == "") { //se nao existir
                 return false;            
             }
@@ -361,7 +352,6 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
             String query = "Select * from playlist where nome = \'" + playlist.get("nome")+"\'";
 
             String resultado = ligacao.executarSelect(query);
-            //System.out.print(query);
             if (resultado == "ERRO" || resultado == "") { //se nao existir
 
                 String insert = "Insert into playlist (nome, criadorPlaylist)  values(\'"  + playlist.get("nome") + "\','" + playlist.get("utilizador")+"');";
@@ -391,7 +381,6 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
             String resultadoupdate = ligacao.executarUpdate(update);
 
             if (resultadoupdate == "ERRO" || resultadoupdate == "") {
-                System.out.println("Erro na atualizacao da playlist na BD\n");
                 return false;
             }
             msg = ConstantesServer.ATUALIZAPLAYLISTS;

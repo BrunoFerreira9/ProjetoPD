@@ -74,14 +74,10 @@ class ThreadPingsParaServidores extends Thread {
  
                           
                            Set<String> chaves = s.getListaUtilizadores().keySet();
-                            System.out.println(chaves);
                            for(String chave : chaves){
                                 Servidor servidor = roundRobin();
-                                System.out.println("-- " + servidor.getPorto());
                                 dados = "tipo | Servidor ; msg | novaLigacao ; ip | "+servidor.getIp()+" ; porto | " +servidor.getPorto() ;
                                  byte[] novaData =  dados.getBytes();
-                                 System.out.println("-1- " + chave);
-                                 System.out.println("-2- " + s.getListaUtilizadores().get(chave));
                                 dtpack = new DatagramPacket(novaData, novaData.length, InetAddress.getByName(chave), s.getListaUtilizadores().get(chave));
                                 dtsocket.send(dtpack);
                            }                           

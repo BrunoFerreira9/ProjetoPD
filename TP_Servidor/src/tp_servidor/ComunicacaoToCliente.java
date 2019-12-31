@@ -122,7 +122,6 @@ public class ComunicacaoToCliente implements myObserver {
                     return;//Logger.getLogger(LogicaServidor.class.getName()).log(Level.SEVERE, null, ex1);
                 }               
             }
-            System.out.println("Recebi do Cliente: "+ pedido);
             HashMap <String,String> user = ResolveMessages(pedido);
             try {
                 trataPedido(user);
@@ -187,7 +186,6 @@ public class ComunicacaoToCliente implements myObserver {
                 } 
                 break;
             case "criaMusica":if(servidor.trataMusicas(user)){
-                    System.out.println(user);
                     pout.println("tipo | resposta ; msg | sucesso");
                     pout.flush();
                     Thread downMusica;

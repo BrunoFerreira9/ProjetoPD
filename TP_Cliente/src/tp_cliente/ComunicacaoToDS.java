@@ -67,14 +67,14 @@ public class ComunicacaoToDS implements myObserver,myObservable{
                     }else if(message.get("sucesso").equals("sim")){
                         ipServer = message.get("ip");
                         portoServer = Integer.parseInt(message.get("porto"));                      
-                       
+                        tratainformacao();
                         return true;
                     }
                     
                     break;
             }
             
-           tratainformacao();
+          
         }catch (UnknownHostException e){
             System.err.println ("Unable to resolve host");
         } catch (SocketException ex) {
@@ -112,8 +112,6 @@ public class ComunicacaoToDS implements myObserver,myObservable{
                 if(message.get("msg").equals("novaLigacao")){                    
                     ipServer = message.get("ip");
                     portoServer = Integer.parseInt(message.get("porto"));
-
-                    System.out.println("passei aqui");
                     msg = ConstantesCliente.MUDASERVIDOR;
                     setChanged();
                     notifyObservers();
@@ -174,7 +172,6 @@ public class ComunicacaoToDS implements myObserver,myObservable{
                 DatagramPacket p;
                 boolean termina = true;
                 while(termina){
-                    System.out.println("ola");
                     try {
                         byte[] recbuf = new byte[BUFSIZE];
                         p=new DatagramPacket(recbuf,BUFSIZE);
@@ -185,7 +182,6 @@ public class ComunicacaoToDS implements myObserver,myObservable{
                         
                         switch(message.get("msg")){
                             case "novaLigacao":  
-                                System.out.println("aqqui  " + message);
                                 ipServer = message.get("ip");
                                 portoServer = Integer.parseInt(message.get("porto"));
                                 msg = ConstantesCliente.MUDASERVIDOR;

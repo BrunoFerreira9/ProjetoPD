@@ -60,11 +60,9 @@ public class Comunicacao implements myObserver,myObservable{
         try {
             sock.receive(pkt);
             dados = new String(pkt.getData(),0,pkt.getLength());
-            System.out.println(dados);
             message = ConstantesDS.ResolveMessages(dados);
         } catch (IOException ex) {
             sock.close();
-           // Logger.getLogger(Comunicacao.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }
@@ -137,8 +135,6 @@ public class Comunicacao implements myObserver,myObservable{
                     Servidor servidor = roundRobin();
                     
                     resposta = "tipo | resposta ; msg | novaLigacao ; ip | "+servidor.getIp()+" ; porto | " +servidor.getPorto() ;                                              
-                    
-                    System.out.println("asd - " + resposta);
                                          
                 }else{
                                        
@@ -160,12 +156,10 @@ public class Comunicacao implements myObserver,myObservable{
                                 aux = s;                            
                             }
                         }
-
                     }
                 }
                     rmi.notifyListeners("Novo Cliente!");     
                     resposta = "tipo | resposta ; sucesso | sim ; ip | "+aux.getIp()+" ; porto | "+aux.getPorto();
-                    System.out.println(resposta);
                     numClientes++;
                 
             break;

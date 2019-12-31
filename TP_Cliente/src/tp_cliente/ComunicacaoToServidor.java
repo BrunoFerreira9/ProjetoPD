@@ -42,7 +42,6 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
     
     public void inicializaTCP() {
         try {
-            System.out.println("ip:" + endereco + " | porto " + porto);
             socketTCP = new Socket(endereco,porto);
             reader  = new BufferedReader(new InputStreamReader(socketTCP.getInputStream()));
             out = new PrintWriter(socketTCP.getOutputStream());
@@ -54,7 +53,6 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
     
     public void restabeleceLigacao(String ip, int porto)  {
         try {
-            System.out.println("estou agora aqui ip:" + ip + " | porto " + porto);
             socketTCP = new Socket(ip,porto);
             reader  = new BufferedReader(new InputStreamReader(socketTCP.getInputStream()));
             out = new PrintWriter(socketTCP.getOutputStream());
@@ -74,7 +72,6 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
             out.println(pedido);
             out.flush();
             resposta = reader.readLine();
-            System.out.print(resposta);
                 
                                
         } catch (IOException ex) {
@@ -143,7 +140,6 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
     @Override
     public boolean trataMusicas(String mensagem){
         mensagem += "utilizador | " + userLogado;
-        System.out.println(mensagem);
         HashMap <String,String> pedido = ResolveMessages(mensagem);
        
         out.println(mensagem);
