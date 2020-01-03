@@ -480,12 +480,8 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
     }
     
     public void adicionapedido(String pedido){ pedidosrecebidos.add(pedido);}
-    public void removepedido(String ped){ 
-        for(String s : pedidosrecebidos){
-            if(s.equalsIgnoreCase(ped)){
-                pedidosrecebidos.remove(ped);
-            }
-        }
+    public void limpalistapedidos(){ 
+        pedidosrecebidos.clear();
     }
     public ArrayList<String> getlistapedidos(){return pedidosrecebidos;}
     public void executapedidossincronizacao(String s) {

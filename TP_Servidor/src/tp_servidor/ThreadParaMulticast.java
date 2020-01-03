@@ -79,15 +79,16 @@ public class ThreadParaMulticast extends Thread {
                     user = ResolveMessages(pedido);
                     logica.adicionapedido(pedido);
                 }
+                
+                System.out.println(user);
                 if(user.get("tipo").equals("novo")){
                     numeroServidores++;
                     if(principal){
                         DatagramSocket dts = new DatagramSocket();
                         for(String s: logica.getlistapedidos()){
-                            dts.send(new DatagramPacket(s.getBytes(),s.length(),InetAddress.getByName(dtpack.getAddress().getHostAddress()),Integer.parseInt(user.get("porto"))));
-                           // logica.removepedido(s);
+                           dts.send(new DatagramPacket(s.getBytes(),s.length(),InetAddress.getByName(dtpack.getAddress().getHostAddress()),Integer.parseInt(user.get("porto"))));                
                         }
-                        //limpalistapedidos com o .clear
+                        logica.limpalistapedidos();
                         dts.close();
                     }
                     continue;
