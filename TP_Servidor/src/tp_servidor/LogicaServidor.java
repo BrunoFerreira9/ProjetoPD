@@ -121,14 +121,16 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
         notifyObservers();
             
         for(Socket s : listaClientes) {
-            String queryUpdate = "UPDATE utilizador SET ativo = 0 WHERE ipUser = '"+s.getLocalAddress().getHostAddress()+"'";
-            ligacao.executarUpdate(queryUpdate, this);
-            
-            try {
-                s.close();
-                listaClientes.remove(s);
-            } catch (IOException ex) {
-                Logger.getLogger(LogicaServidor.class.getName()).log(Level.SEVERE, null, ex);
+            if(!s.isClosed()){
+                String queryUpdate = "UPDATE utilizador SET ativo = 0 WHERE ipUser = '"+s.getLocalAddress().getHostAddress()+"'";
+                ligacao.executarUpdate(queryUpdate, this);
+
+                try {
+                    s.close();
+                    listaClientes.remove(s);
+                } catch (IOException ex) {
+                    Logger.getLogger(LogicaServidor.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }
@@ -225,7 +227,7 @@ public class LogicaServidor implements InterfaceGestao, myObservable {
                      return false;
                 } 
                 
-                if(musica.containsKey("multicast")){
+                if(musica.containsKey("multicast") && musica.get("multicast").equals("sim")){
                     Thread downMusica;
                     try {
                         downMusica = new ThreadDownload(musica.get("ficheiro"),musica.get("ip"),Integer.parseInt(musica.get("porto")));

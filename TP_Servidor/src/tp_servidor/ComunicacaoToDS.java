@@ -53,7 +53,7 @@ public class ComunicacaoToDS implements myObserver,myObservable {
             data= dados.getBytes();
             socketUDP = new DatagramSocket();
             portoServer = socketUDP.getLocalPort();
-            
+           // System.out.println(portoServer);
             packet = new DatagramPacket( data, data.length,addr,portoDS);
             socketUDP.send(packet);
             

@@ -133,6 +133,7 @@ public class ComunicacaoToCliente implements myObserver {
             
             if(!user.get("tipo").equalsIgnoreCase("upload") && !user.get("tipo").equalsIgnoreCase("ouvirMusica") && !user.get("tipo").equalsIgnoreCase("termina") && !user.get("tipo").equalsIgnoreCase("ouvirPlaylist") && !user.get("tipo").equalsIgnoreCase("listaMusicas") && !user.get("tipo").equalsIgnoreCase("listaPlaylists") && !user.get("tipo").equalsIgnoreCase("filtro") && !user.get("tipo").equalsIgnoreCase("filtroPlaylist")){
                 //Envia pedido de mudança para o multicast
+                //System.out.println(socketCliente.getPort());
                 byte[] data = pedido.getBytes();
                 try {
                     packetMulticast = new DatagramPacket(data, data.length, InetAddress.getByName(ConstantesServer.IPMULTICAST), ConstantesServer.portoMulticast);

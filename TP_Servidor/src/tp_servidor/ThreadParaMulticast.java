@@ -70,17 +70,15 @@ public class ThreadParaMulticast extends Thread {
                 
                 String pedido = new String(dtpack.getData(), 0, dtpack.getLength());
                 ///System.out.println(pedido);
-                HashMap <String,String> user = ResolveMessages(pedido);
-                
+                HashMap <String,String> user = ResolveMessages(pedido);                
                 
                 if(!user.get("tipo").equals("novo") && !user.get("tipo").equals("sair") && !user.get("tipo").equals("actualizado")){
                     
-                    pedido += " ; multicast | sim ; ip | "+dtpack.getAddress().getHostAddress()+" ; porto | "+dtpack.getPort();
+                    pedido += " ; multicast | sim ; ip | "+dtpack.getAddress().getHostAddress()+" ; porto | "+dtpack.getPort() ;
                     user = ResolveMessages(pedido);
                     logica.adicionapedido(pedido);
                 }
                 
-                System.out.println(user);
                 if(user.get("tipo").equals("novo")){
                     numeroServidores++;
                     if(principal){
@@ -100,9 +98,10 @@ public class ThreadParaMulticast extends Thread {
                 }
                 
                 //System.out.println("cds"+logica.getCds().getPortoServer()+"dtpack"+dtpack.getPort());
-                //System.out.println("cds"+logica.getCds().getIpServer()+"dtpack"+dtpack.getAddress().getHostAddress());
+                
                 if(dtpack.getAddress().getHostAddress().equalsIgnoreCase(InetAddress.getLocalHost().getHostAddress()) && dtpack.getPort() == logica.getCds().getPortoServer()+2)
                 {
+                   //System.out.println("Fui que enviei...");
                     int aux  = numeroServidores; //Menos o servidor que enviou;
                     do {
                         for(int i = 0; i < aux; i++){
@@ -110,6 +109,7 @@ public class ThreadParaMulticast extends Thread {
                                 dtpack = new DatagramPacket(new byte[ConstantesServer.BUFSIZE], ConstantesServer.BUFSIZE);
                                 mtsock.receive(dtpack);
                                 pedido = new String(dtpack.getData(), 0, dtpack.getLength());
+                                user = ResolveMessages(pedido);
                                 if(user.get("tipo").equals("actualizado"))
                                     aux--;
                                 else
@@ -127,7 +127,6 @@ public class ThreadParaMulticast extends Thread {
                 else{
                     if(user.get("tipo").equals("actualizado"))
                         continue;
-                     System.out.println(user);
                      switch (user.get("tipo")) {
                         case "registo":logica.efetuaRegisto(user);break;
                         case "login":

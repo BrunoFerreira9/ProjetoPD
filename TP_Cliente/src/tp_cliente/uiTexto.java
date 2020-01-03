@@ -419,9 +419,11 @@ public class uiTexto implements myObserver{
                             }while(op2!=3);
                         }else{
                             System.out.println("Utilizador inexistente!");
-                    };break;
+                        }
+                        break;
                     case 3:
-                        cs.terminarCliente();break;
+                        cs.terminarCliente();
+                        break;
                 }
             }while(op!=3);
         }
@@ -435,10 +437,6 @@ public class uiTexto implements myObserver{
             case ConstantesCliente.TERMINASERVIDOR: System.exit(0); break;
             case ConstantesCliente.MUDASERVIDOR: cs.restabeleceLigacao(cds.getIpServer(),cds.getPortoServer()); break;
             case ConstantesCliente.DESLIGOU: cds.enviaPergunta(); break;
-            
         }
     }
-
-    
-
 }
