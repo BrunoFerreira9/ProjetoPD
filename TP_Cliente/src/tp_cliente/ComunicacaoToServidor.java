@@ -67,7 +67,6 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
     public boolean efetuaRegisto(HashMap <String,String> user) {
        
         try {
-                      
             pedido = "tipo | registo ; username | "+user.get("username") +" ; password | "+ user.get("password")+" ; nome | "+user.get("nome");
             out.println(pedido);
             out.flush();
@@ -250,6 +249,10 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
                                 msg = ConstantesCliente.TERMINASERVIDOR;
                                 setChanged();
                                 notifyObservers();
+                                break;
+                            case "excepcao":
+                                System.out.println("Ocorreu uma excepção no servidor:\n");
+                                System.out.println(info.get("msg"));
                                 break;
                         }
                     } catch (IOException ex) {   
