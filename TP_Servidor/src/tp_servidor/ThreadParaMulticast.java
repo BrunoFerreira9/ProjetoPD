@@ -98,7 +98,7 @@ public class ThreadParaMulticast extends Thread {
                 }
                 
                 //System.out.println("cds"+logica.getCds().getPortoServer()+"dtpack"+dtpack.getPort());
-                
+                System.out.println(user);
                 if(dtpack.getAddress().getHostAddress().equalsIgnoreCase(InetAddress.getLocalHost().getHostAddress()) && dtpack.getPort() == logica.getCds().getPortoServer()+2)
                 {
                    //System.out.println("Fui que enviei...");
