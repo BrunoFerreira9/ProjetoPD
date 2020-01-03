@@ -66,7 +66,7 @@ public class ComunicacaoToDS implements myObserver,myObservable{
                           return false;
                     }else if(message.get("sucesso").equals("sim")){
                         ipServer = message.get("ip");
-                        portoServer = Integer.parseInt(message.get("porto"));                      
+                        portoServer = Integer.parseInt(message.get("porto"));
                         tratainformacao();
                         return true;
                     }
@@ -90,14 +90,13 @@ public class ComunicacaoToDS implements myObserver,myObservable{
         String dados2 = "tipo | Cliente ; msg | desligou";
         
         packet = new DatagramPacket( dados2.getBytes(), dados2.getBytes().length,addr,portoDS);
-            
         try {
             socketUDP.send(packet);
         } catch (IOException ex) {
             Logger.getLogger(ComunicacaoToDS.class.getName()).log(Level.SEVERE, null, ex);
         }
-            
-        byte[] recbuf = new byte[BUFSIZE]; 
+        
+        byte[] recbuf = new byte[BUFSIZE];
         DatagramPacket receivePacket=new DatagramPacket(recbuf,BUFSIZE);
         try {
             socketUDP.receive(receivePacket);

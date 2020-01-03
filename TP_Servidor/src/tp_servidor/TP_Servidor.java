@@ -9,6 +9,8 @@ import java.util.logging.Logger;
 public class TP_Servidor {
 
     public static void main(String[] args){
+        ThreadParaMulticast multicast = null;
+        ControloLigacoes ligacoes = null;
         Boolean principal = false;
         Scanner sc = new Scanner(System.in);
         String scann;
@@ -27,17 +29,17 @@ public class TP_Servidor {
 
         servidores = new LogicaServidor(ipDS,ipMaquinaBD, principal);
         clientSocket = servidores.criaNovoServidor(); 
-        ThreadParaMulticast multicast = new ThreadParaMulticast(servidores);
+        multicast = new ThreadParaMulticast(servidores);
         multicast.start();
-        ControloLigacoes ligacoes = new ControloLigacoes(servidores);
+        ligacoes = new ControloLigacoes(servidores);
         ligacoes.start();
-                
+
         do
         {
             System.out.print("\n-> ");
             scann = sc.next();
         }while(!scann.equalsIgnoreCase("sair"));
-
+        
         try{
             servidores.terminaServidor();
             clientSocket.close();

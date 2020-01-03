@@ -45,20 +45,21 @@ public class LigacaoToBD {
         return true;
     }
     
-    public String executarInsert(String query)
+    public String executarInsert(String query, LogicaServidor servidor)
     {
         try {
             PreparedStatement ps_query = conn_ligacao.prepareStatement(query);
             ps_query.executeUpdate();
         } catch (SQLException e) {
             System.out.println("ERRO [doInBackground]: " + e.getMessage());
+            servidor.dissipaMensagem("tipo | excepcao ; msg | Erro na base de dados - " + e.toString());
             return "ERRO";
         }
         
         return "RESULTADO";
     }
     
-     public String executarSelect(String query)
+     public String executarSelect(String query, LogicaServidor servidor)
     {
         String s_resposta = "ERRO";
         try {
@@ -73,27 +74,28 @@ public class LigacaoToBD {
 
         }catch(SQLException e){
             System.out.println("ERRO [doInBackground]: " + e.getMessage());
-               return s_resposta;
+            servidor.dissipaMensagem("tipo | excepcao ; msg | Erro na base de dados - " + e.toString());
+            return s_resposta;
         }
         
         return s_resposta;
     }
      
-     public String executarUpdate(String query)
+     public String executarUpdate(String query, LogicaServidor servidor)
     {
         try {
             stmt = conn_ligacao.createStatement();
             stmt.executeUpdate(query);
-
         }catch(SQLException e){
             System.out.println("ERRO [doInBackground]: " + e.getMessage());
-               return "ERRO";
+            servidor.dissipaMensagem("tipo | excepcao ; msg | Erro na base de dados - " + e.toString());
+            return "ERRO";
         }
         
         return "RESULTADO";
     }
     
-    public String executarDelete(String query)
+    public String executarDelete(String query, LogicaServidor servidor)
     {
         
         try {
@@ -103,12 +105,13 @@ public class LigacaoToBD {
             
         }catch(SQLException e){
             System.out.println("ERRO [doInBackground]: " + e.getMessage());
+            servidor.dissipaMensagem("tipo | excepcao ; msg | Erro na base de dados - " + e.toString());
              return "ERRO";
         }
          return "RESULTADO";
     }
     
-    public ArrayList<Musica> getListaMusicas() 
+    public ArrayList<Musica> getListaMusicas(LogicaServidor servidor) 
     {
         try {
             ArrayList<Musica> lista = new ArrayList<>();
@@ -130,12 +133,12 @@ public class LigacaoToBD {
             }
             return lista;
         } catch (SQLException ex) {
-            Logger.getLogger(LigacaoToBD.class.getName()).log(Level.SEVERE, null, ex);
+            servidor.dissipaMensagem("tipo | excepcao ; msg | Erro na base de dados - " + ex.toString());
         }
         return null;
     }
     
-    public ArrayList<Musica> getListaMusicasFiltro(String mensagem) 
+    public ArrayList<Musica> getListaMusicasFiltro(String mensagem, LogicaServidor servidor) 
     {
         HashMap <String,String> musica = ResolveMessages(mensagem);
         
@@ -172,12 +175,12 @@ public class LigacaoToBD {
             }
             return lista;
         } catch (SQLException ex) {
-            Logger.getLogger(LigacaoToBD.class.getName()).log(Level.SEVERE, null, ex);
+            servidor.dissipaMensagem("tipo | excepcao ; msg | Erro na base de dados - " + ex.toString());
         }
         return null;
     }
     
-    public ArrayList<Playlist> getListaPlaylist() 
+    public ArrayList<Playlist> getListaPlaylist(LogicaServidor servidor) 
     {
         try {
 
@@ -194,12 +197,12 @@ public class LigacaoToBD {
             }
             return lista;
         } catch (SQLException ex) {
-            Logger.getLogger(LigacaoToBD.class.getName()).log(Level.SEVERE, null, ex);
+            servidor.dissipaMensagem("tipo | excepcao ; msg | Erro na base de dados - " + ex.toString());
         }
         return null;
     }
     
-    public ArrayList<Playlist> getListaPlaylistFiltro(String mensagem) 
+    public ArrayList<Playlist> getListaPlaylistFiltro(String mensagem, LogicaServidor servidor) 
     {
         HashMap <String,String> play = ResolveMessages(mensagem);
         try {
@@ -219,12 +222,12 @@ public class LigacaoToBD {
             }
             return lista;
         } catch (SQLException ex) {
-            Logger.getLogger(LigacaoToBD.class.getName()).log(Level.SEVERE, null, ex);
+            servidor.dissipaMensagem("tipo | excepcao ; msg | Erro na base de dados - " + ex.toString());
         }
         return null;
     }
     
-    public ArrayList<String> getListaMusicasPlaylist(String playlist) 
+    public ArrayList<String> getListaMusicasPlaylist(String playlist, LogicaServidor servidor) 
     {
         try {
             ArrayList<String> lista = new ArrayList<>();
@@ -232,17 +235,18 @@ public class LigacaoToBD {
             stmt = conn_ligacao.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             
-            while (rs.next()) {                
-                String nome = rs.getString("nome");                
+            while (rs.next()) {
+                String nome = rs.getString("nome");
                 lista.add(nome);
             }
             return lista;
         } catch (SQLException ex) {
-            Logger.getLogger(LigacaoToBD.class.getName()).log(Level.SEVERE, null, ex);
+            servidor.dissipaMensagem("tipo | excepcao ; msg | Erro na base de dados - " + ex.toString());
         }
         return null;
     }
-    public ArrayList<String> getListaFicheirosPlaylist(String playlist) 
+    
+    public ArrayList<String> getListaFicheirosPlaylist(String playlist, LogicaServidor servidor) 
     {
         try {
             ArrayList<String> lista = new ArrayList<>();
@@ -250,13 +254,13 @@ public class LigacaoToBD {
             stmt = conn_ligacao.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             
-            while (rs.next()) {                
-                String nome = rs.getString("ficheiro");                
+            while (rs.next()) {
+                String nome = rs.getString("ficheiro");
                 lista.add(nome);
             }
             return lista;
         } catch (SQLException ex) {
-            Logger.getLogger(LigacaoToBD.class.getName()).log(Level.SEVERE, null, ex);
+            servidor.dissipaMensagem("tipo | excepcao ; msg | Erro na base de dados - " + ex.toString());
         }
         return null;
     }

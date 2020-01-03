@@ -292,7 +292,7 @@ public class uiTexto implements myObserver{
         login.put("username", in.next());
         System.out.println("password");
         login.put("password", in.next());
-       
+        
         return login;
     }
     
@@ -324,22 +324,20 @@ public class uiTexto implements myObserver{
                 op = in.nextInt();
 
                 switch(op){
-
                     case 1:                       
                             cs.efetuaRegisto(dadosRegisto()); break;
                     case 2:
-                            user = dadosLogin();
-                            if(cs.efetuaLogin(user)){
+                        user = dadosLogin();
+                        if(cs.efetuaLogin(user)){
                             apresentaListaMusicas();
                             apresentaListaPlaylists();
-                            logado=true;                      
+                            logado = true;
                             do{
                                 apresentaMenuSecundario();
                                 op2 = in.nextInt();
-                                    
+                                
                                 switch(op2){
-                                    case 1 : 
-
+                                    case 1 :
                                         do{
                                             apresentaListaMusicas();
                                             apresentaMenuMusicas();
@@ -419,8 +417,8 @@ public class uiTexto implements myObserver{
                                         break;
                                 }
                             }while(op2!=3);
-                   }else{
-                                System.out.println("Utilizador inexistente!");
+                        }else{
+                                     System.out.println("Utilizador inexistente!");
                     };break;
                     case 3:
                         cs.terminarCliente();break;
