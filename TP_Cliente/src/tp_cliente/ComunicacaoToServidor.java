@@ -71,13 +71,22 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
             out.println(pedido);
             out.flush();
             resposta = reader.readLine();
-                
-                               
+            HashMap <String,String> message = ResolveMessages(resposta);
+            
+            if(message.get("tipo").equals("resposta") && message.get("msg").equals("sucesso")){
+                System.out.println("Registo do utilizador " + user.get("username") + " concluído!");
+                return true;
+            }else if(message.get("tipo").equalsIgnoreCase("excepcao")){
+                System.out.println("Ocorreu uma excepção no servidor:");
+                System.out.println(message.get("msg"));
+                return false;
+            }
+            
         } catch (IOException ex) {
             Logger.getLogger(TP_Cliente.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
-        return true;
+        return false;
     }
     
     public void terminarCliente(){
@@ -112,11 +121,15 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
                 logado = true;
                 tratainformacao();
                 return true;
+            }else if(message.get("tipo").equalsIgnoreCase("excepcao")){
+                System.out.println("Ocorreu uma excepção no servidor:");
+                System.out.println(message.get("msg"));
+                return false;
             }
         } catch (IOException ex) {
             Logger.getLogger(TP_Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }
-                return false;
+        return false;
     }
     
     @Override
@@ -188,7 +201,7 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
                 String pedido;
                 while(logado){
                     try {
-                        pedido = reader.readLine();                        
+                        pedido = reader.readLine();
                         HashMap <String,String> info = ResolveMessages(pedido);
                         switch(info.get("tipo"))
                         {
@@ -251,7 +264,7 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
                                 notifyObservers();
                                 break;
                             case "excepcao":
-                                System.out.println("Ocorreu uma excepção no servidor:\n");
+                                System.out.println("Ocorreu uma excepção no servidor:");
                                 System.out.println(info.get("msg"));
                                 break;
                         }
@@ -259,7 +272,7 @@ public class ComunicacaoToServidor implements InterfaceGestao, myObservable {
                             return;
                             //msg = ConstantesCliente.DESLIGOU;
                             //setChanged();
-                            //notifyObservers();    
+                            //notifyObservers();
                             
                         //continue;
                        // Logger.getLogger(ComunicacaoToServidor.class.getName()).log(Level.SEVERE, null, ex);

@@ -324,7 +324,7 @@ public class uiTexto implements myObserver{
                 op = in.nextInt();
 
                 switch(op){
-                    case 1:                       
+                    case 1:
                             cs.efetuaRegisto(dadosRegisto()); break;
                     case 2:
                         user = dadosLogin();
@@ -418,7 +418,7 @@ public class uiTexto implements myObserver{
                                 }
                             }while(op2!=3);
                         }else{
-                                     System.out.println("Utilizador inexistente!");
+                            System.out.println("Utilizador inexistente!");
                     };break;
                     case 3:
                         cs.terminarCliente();break;

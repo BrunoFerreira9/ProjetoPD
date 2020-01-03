@@ -19,6 +19,7 @@ public class ConstantesCliente {
             val = t.nextElement().toString();
             messages.put(key, val);
         }
+        
         return messages;
     }
     public static final int ATUALIZAMUSICAS = 0;

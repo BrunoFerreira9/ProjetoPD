@@ -49,7 +49,7 @@ public class ComunicacaoToCliente implements myObserver {
             pout = new PrintWriter(socketCliente.getOutputStream());
             in = new BufferedReader(new InputStreamReader(socketCliente.getInputStream()));
         } catch (IOException ex) {
-            servidor.dissipaMensagem("tipo | excepcao ; msg | Erro ao inicializar os canais de comunicacao de um cliente - " + ex.toString());
+            System.out.println("Erro ao inicializar os canais de comunicacao de um cliente - " + ex.toString());
         }
     
     }
@@ -118,6 +118,7 @@ public class ComunicacaoToCliente implements myObserver {
                 servidor.dissipaMensagem("tipo | excepcao ; msg | Erro ao receber pedido - " + ex.toString());
                 try {
                     socketCliente.close();
+                    servidor.removeCliente(socketCliente);
                     return;
                 } catch (IOException ex1) {
                     servidor.dissipaMensagem("tipo | excepcao ; msg | Erro ao fechar o socket - " + ex1.toString());
@@ -129,6 +130,7 @@ public class ComunicacaoToCliente implements myObserver {
             } catch (IOException ex) {
                 servidor.dissipaMensagem("tipo | excepcao ; msg | Erro ao tratar o pedido - " + ex.toString());
             }
+            
             if(!user.get("tipo").equalsIgnoreCase("upload") && !user.get("tipo").equalsIgnoreCase("ouvirMusica") && !user.get("tipo").equalsIgnoreCase("termina") && !user.get("tipo").equalsIgnoreCase("ouvirPlaylist") && !user.get("tipo").equalsIgnoreCase("listaMusicas") && !user.get("tipo").equalsIgnoreCase("listaPlaylists") && !user.get("tipo").equalsIgnoreCase("filtro") && !user.get("tipo").equalsIgnoreCase("filtroPlaylist")){
                 //Envia pedido de mudança para o multicast
                 byte[] data = pedido.getBytes();
@@ -150,10 +152,15 @@ public class ComunicacaoToCliente implements myObserver {
             case "termina":
                 pout.println("tipo | terminaservidor");
                 pout.flush();
-                terminar = true; break;
+                terminar = true;
+                break;
             case "registo":
                 if(servidor.efetuaRegisto(user)){
                     pout.println("tipo | resposta ; msg | sucesso");
+                    pout.flush();
+                }
+                else{
+                    pout.println("tipo | resposta ; msg | insucesso");
                     pout.flush();
                 }
                 break;
