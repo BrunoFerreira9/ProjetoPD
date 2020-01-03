@@ -116,6 +116,7 @@ public class ComunicacaoToDS implements myObserver,myObservable {
                             log.terminar();
                         }
                         if(!pedidos.equals("ping") && !pedidos.equals("tipo | Servidor ; msg | terminar")){
+                            System.out.println(pedidos);
                             log.executapedidossincronizacao(pedidos);
                         }
                     } catch (IOException ex) {
