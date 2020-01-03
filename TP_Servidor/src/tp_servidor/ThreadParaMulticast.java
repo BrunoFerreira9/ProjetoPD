@@ -50,7 +50,7 @@ public class ThreadParaMulticast extends Thread {
     @Override
     public void run(){
         byte[] data;
-        
+        System.out.println("começei a correr");
         if(!principal){
             //Os servidores não principais dão informação que chegaram ao multicast
             novo += logica.getCds().getPortoServer();
