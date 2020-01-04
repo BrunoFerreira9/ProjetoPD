@@ -5,7 +5,10 @@ import java.net.ServerSocket;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication; 
 
+@SpringBootApplication
 public class TP_Servidor {
 
     public static void main(String[] args){
@@ -33,7 +36,7 @@ public class TP_Servidor {
         multicast.start();
         ligacoes = new ControloLigacoes(servidores);
         ligacoes.start();
-
+        SpringApplication.run(TP_Servidor.class, args);
         do
         {
             System.out.print("\n-> ");
@@ -42,8 +45,8 @@ public class TP_Servidor {
         
         try{
             servidores.terminaServidor();
-            clientSocket.close();
             multicast.terminar();
+            clientSocket.close();
             ligacoes.desliga();
         }catch (IOException ex) {
             Logger.getLogger(TP_Servidor.class.getName()).log(Level.SEVERE, null, ex);

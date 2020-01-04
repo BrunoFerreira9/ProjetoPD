@@ -50,7 +50,6 @@ public class ThreadParaMulticast extends Thread {
     @Override
     public void run(){
         byte[] data;
-        System.out.println("começei a correr");
         if(!principal){
             //Os servidores não principais dão informação que chegaram ao multicast
             novo += logica.getCds().getPortoServer();
@@ -79,6 +78,7 @@ public class ThreadParaMulticast extends Thread {
                     logica.adicionapedido(pedido);
                 }
                 
+                System.out.println(user);
                 if(user.get("tipo").equals("novo")){
                     numeroServidores++;
                     if(principal){
@@ -98,7 +98,6 @@ public class ThreadParaMulticast extends Thread {
                 }
                 
                 //System.out.println("cds"+logica.getCds().getPortoServer()+"dtpack"+dtpack.getPort());
-                System.out.println(user);
                 if(dtpack.getAddress().getHostAddress().equalsIgnoreCase(InetAddress.getLocalHost().getHostAddress()) && dtpack.getPort() == logica.getCds().getPortoServer()+2)
                 {
                    //System.out.println("Fui que enviei...");
@@ -151,19 +150,9 @@ public class ThreadParaMulticast extends Thread {
                     mtsock.send(dtpack);
                 }                               
             } catch(SocketTimeoutException ex){
-                continue; // O Netbeans é chato mas fica aqui isto pq não é ele o programador.
             } catch (IOException ex) {
-                Logger.getLogger(ThreadParaMulticast.class.getName()).log(Level.SEVERE, null, ex);
+                //Logger.getLogger(ThreadParaMulticast.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-     
-        data = sair.getBytes();
-        
-        try {
-            dtpack = new DatagramPacket(data, data.length, InetAddress.getByName(ConstantesServer.IPMULTICAST), ConstantesServer.portoMulticast);
-            mtsock.send(dtpack);
-        } catch (IOException ex) {
-            Logger.getLogger(ThreadParaMulticast.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
