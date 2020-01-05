@@ -10,14 +10,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class TP_Servidor {
-
+    static String ipMaquinaBD;
+    static LogicaServidor servidores = null;
+    
     public static void main(String[] args){
         ThreadParaMulticast multicast = null;
         ControloLigacoes ligacoes = null;
         Boolean principal = false;
         Scanner sc = new Scanner(System.in);
         String scann;
-        String ipMaquinaBD;
         String ipDS; 
 
         if(args.length != 2){
@@ -27,7 +28,6 @@ public class TP_Servidor {
         ipDS = args[0];
         ipMaquinaBD = args[1];
 
-        LogicaServidor servidores = null;
         ServerSocket clientSocket = null;
 
         servidores = new LogicaServidor(ipDS,ipMaquinaBD, principal);
