@@ -78,7 +78,7 @@ public class ThreadParaMulticast extends Thread {
                     logica.adicionapedido(pedido);
                 }
                 
-                System.out.println(user);
+               // System.out.println(user);
                 if(user.get("tipo").equals("novo")){
                     numeroServidores++;
                     if(principal){

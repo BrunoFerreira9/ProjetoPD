@@ -61,7 +61,7 @@ public class ThreadDownload extends Thread{
             try{
                 localFilePath = localDirectory.getCanonicalPath()+File.separator+fileName;
                 localFileOutputStream = new FileOutputStream(localFilePath);
-                System.out.println("Ficheiro " + localFilePath + " criado.");
+              //  System.out.println("Ficheiro " + localFilePath + " criado.");
             }catch(IOException e){
                 if(localFilePath == null){
                     System.out.println("Ocorreu a excepcao {" + e +"} ao obter o caminho canonico para o ficheiro local!");   

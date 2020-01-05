@@ -47,6 +47,7 @@ public class TP_AdministracaoRMI extends UnicastRemoteObject implements IServico
                         default:break;
                 }
             }while(op!=3);
+            //UnicastRemoteObject.unexportObject(servico, true);
             System.exit(0);
         }catch(RemoteException e){
             System.out.println("Erro remoto - " + e);

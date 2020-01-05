@@ -2,9 +2,11 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -35,12 +37,14 @@ public class TP_DS extends UnicastRemoteObject implements InterfaceServico{
         listaObservers = new ArrayList<>();
     }
     
-    public static void main(String[] args){
+    public static void main(String[] args) throws RemoteException{
         Scanner sc = new Scanner(System.in);
         String scann;
         com = new Comunicacao(listservers, numClientes, numbasedados);
         ThreadRecebePedidos pedidos = null;
         ThreadPingsParaServidores pings = null;
+        String registration = null;
+        TP_DS servico = null;
         try {
             com.criacomunicacao();
             pedidos = new ThreadRecebePedidos(com);
@@ -61,11 +65,11 @@ public class TP_DS extends UnicastRemoteObject implements InterfaceServico{
             /*
              * Cria o servico
              */            
-            TP_DS servico = new TP_DS();
+            servico = new TP_DS();
                         
             com.setRmi(servico);
             
-            String registration = "rmi://localhost/"+SERVICE_NAME;            
+            registration = "rmi://localhost/"+SERVICE_NAME;            
             Naming.rebind(registration, (Remote) servico);
                                
             System.out.println("Servico " + SERVICE_NAME + " registado no registry...");
@@ -87,6 +91,17 @@ public class TP_DS extends UnicastRemoteObject implements InterfaceServico{
          pedidos.desliga();
          pings.desliga();
          com.terminaDS();
+         try {                
+            Naming.unbind(registration);
+            // Termina o servico
+            UnicastRemoteObject.unexportObject(servico, true);
+        } catch (NotBoundException ex) {
+            Logger.getLogger(TP_DS.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(TP_DS.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         
+         
          System.exit(0);
 
     }

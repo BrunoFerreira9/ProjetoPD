@@ -36,7 +36,8 @@ public class TP_Servidor {
         multicast.start();
         ligacoes = new ControloLigacoes(servidores);
         ligacoes.start();
-        SpringApplication.run(TP_Servidor.class, args);
+        if(servidores.getCds().getprinc())
+            SpringApplication.run(TP_Servidor.class, args);
         do
         {
             System.out.print("\n-> ");

@@ -98,7 +98,6 @@ public class Comunicacao implements myObserver,myObservable{
                 }
                 else{
                     boolean existe = false;
-                
                     Servidor aux = new Servidor(pkt.getAddress().getHostAddress(),pkt.getPort(),true, (listservers.isEmpty()));
                     Servidor atual = null;
                     for(Servidor s: listservers){
@@ -130,7 +129,7 @@ public class Comunicacao implements myObserver,myObservable{
                 }
                 break;
             case "Cliente":
-                 Servidor aux= null;
+                Servidor aux= null;
                 if(message.get("msg").equals("desligou")){
                     Servidor servidor = roundRobin();
                     
@@ -158,6 +157,7 @@ public class Comunicacao implements myObserver,myObservable{
                         }
                     }
                 }
+                
                     rmi.notifyListeners("Novo Cliente!");     
                     resposta = "tipo | resposta ; sucesso | sim ; ip | "+aux.getIp()+" ; porto | "+aux.getPorto();
                     numClientes++;
