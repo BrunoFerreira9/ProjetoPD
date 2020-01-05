@@ -180,11 +180,6 @@ public class LigacaoToBD {
         return null;
     }
     
-    public boolean executalogin(HashMap<String,String> user){
-        return TP_Servidor.servidores.efetuaLogin(user);
-    }
-    
-    
     public ArrayList<Playlist> getListaPlaylist(LogicaServidor servidor) 
     {
         try {
@@ -268,10 +263,5 @@ public class LigacaoToBD {
             servidor.dissipaMensagem("tipo | excepcao ; msg | Erro na base de dados - " + ex.toString());
         }
         return null;
-    }
-    public String getFicheiroNome(String nomefich) 
-    {
-        String query = "Select ficheiro from musica where nome = \'" +nomefich+"\'";
-        return executarSelect(query, TP_Servidor.servidores);
     }
 }
